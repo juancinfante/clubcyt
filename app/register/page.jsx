@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import logo from '@/public/assets/logo_blue_clubcyt.png'
+import { Input } from '@nextui-org/input';
 
 
 const page = () => {
@@ -68,39 +69,36 @@ const page = () => {
                     <form className='w-full flex flex-col gap-3' onSubmit={handleRegister}>
                         <div className="grid grid-cols-12 gap-3">
                             <div className='relative col-span-12 md:col-span-6'>
-                                <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Nombre</label>
-                                <input type="text" required className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setNombre(e.target.value)} />
+                                <Input type="text" label="Nombre" isClearable required  onChange={(e) => setNombre(e.target.value)} />
                             </div>
                             <div className='relative col-span-12 md:col-span-6'>
-                                <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Apellido</label>
-                                <input type="text" required className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setApellido(e.target.value)} />
+                                <Input type="text" label="Apellido" isClearable onChange={(e) => setApellido(e.target.value)} />
                             </div>
                         </div>
                         <div className='relative w-full'>
-                            <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Email</label>
-                            <input type="email" required className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setEmail(e.target.value)} />
-                        </div>
-                        {
-                                error ? 
-                                <p className='text-xs pt-1 text-red-600'>Email ya esta en uso.</p>
-                                : 
-                                ""
-                            }
-                        <div className='relative w-full'>
-                            <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Contraseña</label>
-                            <input type="password" required className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setPassword(e.target.value)} />
+                            <Input type="email" label="Email" 
+                            isInvalid={error ? "true" : "false"} 
+                            errorMessage={error ? "Email ya esta en uso." : ""}
+                            color={error ? "danger" : ""}
+                            isClearable required  onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className='relative w-full'>
-                            <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Repita contraseña</label>
-                            <input type="password" required className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setPassword2(e.target.value)} />
+                            <Input type="password" label="Contraseña"
+                            isInvalid={errorPassword ? "true" : "false"} 
+                            isClearable required  onChange={(e) => setPassword(e.target.value)} />
+                        </div>
+                        <div className='relative w-full'>
+                            <Input type="password" label="Repite contraseña"
+                            isInvalid={errorPassword ? "true" : "false"} 
+                            isClearable required  onChange={(e) => setPassword2(e.target.value)} />
                         </div>
                         {
                                 errorPassword ? 
-                                <p className='text-xs pt-1 text-red-600'>Las contraseñas no coinciden</p>
+                                <p className='text-xs pt-1 ps-2 text-red-600'>Las contraseñas no coinciden</p>
                                 : 
                                 ""
                             }
-                        <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3'>Ingresar</button>
+                        <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3 rounded-md'>Ingresar</button>
                     </form>
                     <p className='text-xs mt-5'>Ya tienes cuenta? <a href="/login" className='text-indigo-600'>Ingresar</a></p>
                 </div>

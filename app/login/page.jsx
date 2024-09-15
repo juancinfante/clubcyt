@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import logo from '@/public/assets/logo_blue_clubcyt.png'
+import { Input } from '@nextui-org/input';
+import { Spinner } from '@nextui-org/spinner';
 
 const page = () => {
 
@@ -11,11 +13,12 @@ const page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Función para manejar el formulario de login
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true)
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -29,16 +32,18 @@ const page = () => {
 
       if (!res.ok) {
         setError(data.error || 'Error desconocido');
+        setLoading(false)
         return;
       }
-
+      
       // Guardar el token en localStorage o manejar la sesión como prefieras
       localStorage.setItem('usuario', JSON.stringify(data));
-
       // Redirigir a la página principal o donde desees
+      setLoading(false)
       window.location.href = "/" // Cambia a la ruta donde quieras redirigir al usuario después de hacer login
     } catch (error) {
       setError('Error de red');
+      setLoading(false)
     }
   };
 
@@ -60,14 +65,19 @@ const page = () => {
           {error ? <p className='text-xs p-0 text-red-600 mb-2'>{error}</p> : ""}
           <form className='w-full flex flex-col gap-3' onSubmit={handleSubmit}>
             <div className='relative w-full'>
-              <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Email</label>
-              <input type="email" className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setEmail(e.target.value)} />
+              <Input type='email' label="Email" isClearable required
+              onChange={(e) => setEmail(e.target.value)}/>
             </div>
             <div className='relative w-full'>
-              <label className='absolute pl-2 pt-1 text-xs text-gray-500'>Contraseña</label>
-              <input type="password" className='border border-slate-300 w-full pt-5 pb-1 pl-2 text-sm' onChange={(e) => setPassword(e.target.value)} />
+              <Input type='password' label="Contraseña" isClearable required onChange={(e) => setPassword(e.target.value)}/>
             </div>
-            <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3'>Ingresar</button>
+            <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3 rounded-md'>
+              {loading ? 
+              <Spinner color='default' size='sm'/>
+              : 
+              "Ingresar"
+            }
+              </button>
           </form>
           <p className='text-xs mt-5'>No tienes cuenta? <a href="/register" className='text-indigo-600'>Registrate</a></p>
         </div>
