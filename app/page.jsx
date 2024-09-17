@@ -15,10 +15,9 @@ const page = () => {
       <Navbar />
       <Hero />
       <Categorias />
-      <Separador texto={"Todos"}/>
-      <Lista cat={""}/>
+      {/* <Lista cat={""} /> */}
+      <Products />
       <Separador texto={"# Tags"}/>
-      <Tags />
     </>
   )
 }

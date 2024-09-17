@@ -55,9 +55,6 @@ const CardProducto = ({ producto, loading }) => {
           <h1 className='font-semibold'>
             {producto.nombre}
           </h1>
-          <p className='text-sm text-gray-800 font-light line-clamp-2'>
-            {producto.descripcion}
-          </p>
         </div>
       </Link>
       {

@@ -20,6 +20,14 @@ const ProductSchema = new Schema({
         type: String,
         required: true
     },
+    telefono: {
+        type: String,
+        required: true
+    },
+    celular: {
+        type: String,
+        required: true
+    },
     descuento: {
         type: String,
         required: true
@@ -36,7 +44,31 @@ const ProductSchema = new Schema({
         type: String,
         required: true
     },
+    ig: {
+        type: String,
+        required: true
+    },
+    fb: {
+        type: String,
+        required: true
+    },
+    wp: {
+        type: String,
+        required: true
+    },
+    web: {
+        type: String,
+        required: true
+    },
+    video_youtube: {
+        type: String,
+        required: true
+    },
     fotos: {
+        type: [],
+        required: true
+    },
+    tags: {
         type: [],
         required: true
     }

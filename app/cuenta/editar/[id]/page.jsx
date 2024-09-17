@@ -1,10 +1,15 @@
 "use client"
 import Navbar from '@/components/Navbar'
 import Separador from '@/components/Separador'
+import { Input } from '@nextui-org/input'
+import { Select, SelectItem } from '@nextui-org/select'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css';
 
-const page = ({ params }) =>{
+
+const page = ({ params }) => {
 
     const [nombre, setNombre] = useState("")
     const [categoria, setCategoria] = useState("")
@@ -12,13 +17,24 @@ const page = ({ params }) =>{
     const [ubicacion, setUbicacion] = useState("")
     const [descripcion, setDescripcion] = useState("")
     const [descuento, setDescuento] = useState("")
+    const [telefono, setTelefono] = useState("")
+    const [celular, setCelular] = useState("")
+    const [ig, setIg] = useState("")
+    const [fb, setFb] = useState("")
+    const [wp, setWp] = useState("")
+    const [web, setWeb] = useState("")
+    const [video_youtube, setVideoYoutube] = useState("")
     const [logo, setLogo] = useState(null)
     const [portada, setPortada] = useState(null)
-    const [galeria, setGaleria] = useState([null, null, null]) // Tres imágenes para la galería
+    const [galeria, setGaleria] = useState([]) // Tres imágenes para la galería
     const [logoPreview, setLogoPreview] = useState("")
     const [portadaPreview, setPortadaPreview] = useState("")
     const [galeriaPreviews, setGaleriaPreviews] = useState([]);
     const [loading, setLoading] = useState(false)
+
+    // Estado para los tags
+    const [tags, setTags] = useState([]);
+    const [tagInput, setTagInput] = useState("");
 
     const router = useRouter()
 
@@ -33,42 +49,66 @@ const page = ({ params }) =>{
             setUbicacion(data.ubicacion)
             setDescripcion(data.descripcion)
             setDescuento(data.descuento)
+            setIg(data.ig)
+            setWp(data.wp)
+            setFb(data.fb)
+            setWeb(data.web)
+            setTags(data.tags)
+            setVideoYoutube(data.video_youtube)
+            setCelular(data.celular)
+            setTelefono(data.telefono)
             setLogoPreview(data.logo)
             setPortadaPreview(data.portada)
             setGaleriaPreviews(data.fotos)
 
-            console.log(data)
         } catch (error) {
-            console.log(error)            
+            console.log(error)
         }
     }
+
+    // Función para agregar un nuevo tag
+    const handleAddTag = () => {
+        if (tagInput.trim() !== "") {
+            setTags([...tags, tagInput]);
+            setTagInput(""); // Limpiar el input después de agregar
+        }
+    };
+
+    // Función para eliminar un tag
+    const handleRemoveTag = (index) => {
+        const updatedTags = tags.filter((_, i) => i !== index);
+        setTags(updatedTags);
+    };
+
     const handleLogoChange = (e) => {
         const file = e.target.files[0];
         if (!file) return; // Si no hay un archivo, no hacer nada
         setLogo(file); // Actualizar el estado solo si hay un archivo
         setLogoPreview(URL.createObjectURL(file));
     };
-    
+
     const handlePortadaChange = (e) => {
         const file = e.target.files[0];
         if (!file) return; // Si no hay un archivo, no hacer nada
         setPortada(file); // Actualizar el estado solo si hay un archivo
         setPortadaPreview(URL.createObjectURL(file));
     };
-    
-    const handleGaleriaChange = (e, index) => {
-        const file = e.target.files[0];
-        if (!file) return; // Si no hay un archivo, no hacer nada
-    
-        const updatedGaleria = [...galeria];
-        updatedGaleria[index] = file; // Solo cambiar la imagen seleccionada
-        setGaleria(updatedGaleria);
-    
-        const updatedPreviews = [...galeriaPreviews];
-        updatedPreviews[index] = URL.createObjectURL(file);
-        setGaleriaPreviews(updatedPreviews);
+
+    // Función para manejar el cambio de las imágenes de la galería
+    const handleImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        const newPreviews = files.map((file) => URL.createObjectURL(file));
+        setGaleriaPreviews((prev) => [...prev, ...newPreviews]);
+        setGaleria((prev) => [...prev, ...files]); // Guardar archivos para subir a Cloudinary
     };
-    
+
+    // Función para eliminar una imagen del array
+    const handleRemoveImage = (index) => {
+        setGaleriaPreviews((prev) => prev.filter((_, i) => i !== index));
+        setGaleria((prev) => prev.filter((_, i) => i !== index)); // Asegurarse de eliminar también del arreglo de archivos
+    };
+
+
     // Función para subir imágenes a Cloudinary
     const uploadImage = async (image) => {
         const formData = new FormData();
@@ -82,42 +122,64 @@ const page = ({ params }) =>{
         const data = await response.json();
         return data.secure_url; // URL de la imagen subida
     };
-    
+
     // Manejo del formulario
     const handleForm = async (e) => {
         e.preventDefault();
         setLoading(true);
-    
+
         // Solo subir imágenes nuevas
         let logoUrl = logoPreview;
         let portadaUrl = portadaPreview;
         let galeriaUrls = [...galeriaPreviews];
-    
+
         if (logo) {
             logoUrl = await uploadImage(logo);
         }
         if (portada) {
             portadaUrl = await uploadImage(portada);
         }
-        for (let i = 0; i < galeria.length; i++) {
-            if (galeria[i]) {
-                galeriaUrls[i] = await uploadImage(galeria[i]); // Solo subir la imagen que cambió
-            }
-        }
-    
+
+        // Subir las nuevas imágenes de la galería si hay
+        const nuevasGaleriaUrls = await Promise.all(
+            galeria.map(async (file, index) => {
+                const cloudinaryUrl = await uploadImage(file);
+
+                // Reemplazar el blob URL por la URL de Cloudinary en galeriaPreviews
+                setGaleriaPreviews((prev) => {
+                    const newPreviews = [...prev];
+                    // Reemplazamos el blob con la URL retornada de Cloudinary
+                    newPreviews[prev.indexOf(URL.createObjectURL(file))] = cloudinaryUrl;
+                    return newPreviews;
+                });
+
+                return cloudinaryUrl; // Devolver la URL de Cloudinary
+            })
+        );
+
+        // Combinar las imágenes anteriores con las nuevas (reemplazadas correctamente)
+        galeriaUrls = [...galeriaUrls.filter(url => !url.startsWith('blob:')), ...nuevasGaleriaUrls];
+
         // Preparar datos para la actualización del producto
         const updatedProduct = {
             nombre,
             categoria,
             provincia,
             ubicacion,
+            telefono,
+            celular,
+            ig,
+            wp,
+            fb,
+            web,
+            video_youtube,
             descripcion,
             descuento,
             logo: logoUrl,
             portada: portadaUrl,
             fotos: galeriaUrls,
         };
-    
+
         // Actualizar el producto en la base de datos
         try {
             const res = await fetch(`/api/productos/${params.id}`, {
@@ -133,93 +195,242 @@ const page = ({ params }) =>{
         } catch (error) {
             console.log('Error al actualizar el producto:', error);
         }
-    
+
         setLoading(false);
     };
-    
+
+    const categorias = [
+        { key: "hotel", label: "Hotel" },
+        { key: "gastronomia", label: "Gastronomia" },
+        { key: "area comercial", label: "Area Comercial" },
+        { key: "atraccion turistica", label: "Atraccion Turistica" },
+    ];
+
+    const provincias = [
+        { key: "santiago del estero", label: "Santiago del Estero" },
+        { key: "tucuman", label: "Tucuman" },
+        { key: "catamarca", label: "Catamarca" },
+        { key: "salta", label: "Salta" },
+        { key: "jujuy", label: "Jujuy" },
+        { key: "cordoba", label: "Cordoba" },
+        { key: "buenos aires", label: "Buenos Aires" }
+    ];
+
+    const descuentos = [
+        { key: "10%", label: "10%" },
+        { key: "15%", label: "15%" },
+        { key: "20%", label: "20%" },
+        { key: "25%", label: "25%" },
+        { key: "30%", label: "30%" },
+        { key: "35%", label: "35%" },
+        { key: "40%", label: "40%" }
+    ];
+
+    function capitalize(str) {
+        if (!str) return ''; // Verificar que la cadena no esté vacía
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
 
     useEffect(() => {
         fetchProd()
-    },[])
+    }, [])
     return (
-    <>
-        <Navbar />
-        <Separador texto={"Editar producto"}/>
-        <div className="container mx-auto max-w-6xl">
+        <>
+            <Navbar />
+            <Separador texto={"Editar producto"} />
+            <div className="container mx-auto max-w-7xl">
                 <form className='mt-5 p-3 lg:p-0' onSubmit={handleForm}>
                     <div className="grid grid-cols-12 gap-5 mb-4">
-                        <div className="col-span-12 md:col-span-6 flex flex-col">
-                            <label className='mb-2 font-semibold text-xl'>Nombre</label>
-                            <input
-                                value={nombre}
+                        <div className="grid gap-6 col-span-12 lg:col-span-6">
+                            <Input
                                 type="text"
-                                className='col-span-6 border border-slate-300 text-sm p-2'
-                                placeholder='Nombre'
+                                className='w-full'
+                                label="Nombre"
+                                value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
-                        </div>
-                        <div className="col-span-12 md:col-span-6 flex flex-col">
-                            <label className='mb-2 font-semibold text-xl'>Categoria</label>
-                            <select
-                                className='col-span-6 border p-2 rounded outline-none'
-                                value={categoria}
-                                onChange={(e) => setCategoria(e.target.value)}
-                            >
-                               <option value="" disabled>Selecciona</option>
-                                <option value="Hotel">Hotel</option>
-                                <option value="Gastronomia">Gastronomia</option>
-                                <option value="Area Comercial">Area Comercial</option>
-                                <option value="Atraccion Turistica">Atraccion Turistica</option>
-                            </select>
-                        </div>
-                        <div className="col-span-12 md:col-span-6 flex flex-col">
-                            <label className='mb-2 font-semibold text-xl'>Provincia</label>
-                            <select
-                                className='col-span-6 border p-2 rounded outline-none'
-                                value={provincia}
-                                onChange={(e) => setProvincia(e.target.value)}
-                            >
-                                <option value="" disabled>Selecciona</option>
-                                <option value="Santiago del Estero">Santiago del Estero</option>
-                                <option value="Tucuman">Tucuman</option>
-                                <option value="Salta">Salta</option>
-                                <option value="Jujuy">Jujuy</option>
-                            </select>
-                        </div>
-                        <div className="col-span-12 md:col-span-6 flex flex-col">
-                            <label className='mb-2 font-semibold text-xl'>Descuento</label>
-                            <select
-                                className='col-span-6 border p-2 rounded outline-none'
-                                value={descuento}
-                                onChange={(e) => setDescuento(e.target.value)}
-                            >
-                                <option value="" disabled>Selecciona</option>
-                                <option value="10%">10%</option>
-                                <option value="15%">15%</option>
-                                <option value="25%">25%</option>
-                                <option value="40%">40%</option>
-                                <option value="50%">50%</option>
-                            </select>
-                        </div>
-                        <div className="col-span-12 md:col-span-6 flex flex-col">
-                            <label className='mb-2 font-semibold text-xl'>Ubicacion</label>
-                            <input
+                            <Input
                                 type="text"
+                                className='w-full'
+                                label="Ubicacion"
                                 value={ubicacion}
-                                className='col-span-6 border p-2 rounded outline-none'
-                                placeholder='Ubicacion'
                                 onChange={(e) => setUbicacion(e.target.value)}
                             />
-                        </div>
-                        <div className="col-span-12 md:col-span-6 flex flex-col">
-                            <label className='mb-2 font-semibold text-xl'>Descripcion</label>
-                            <textarea
-                                value={descripcion}
-                                type="text"
-                                className='col-span-6 border p-2 rounded outline-none'
-                                placeholder='Descripcion'
-                                onChange={(e) => setDescripcion(e.target.value)}
+                            <Input
+                                type="number"
+                                className='w-full'
+                                label="Telefono"
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
                             />
+                        </div>
+                        <div className="grid gap-5 col-span-12 lg:col-span-6">
+                            {categoria && (
+                                <Select
+                                    label="Categoria"
+                                    defaultSelectedKeys={[categoria.toLocaleLowerCase()]}
+                                    className="w-full"
+                                    onChange={(e) => setCategoria(capitalize(e.target.value))}
+                                >
+                                    {categorias.map((categoria) => (
+                                        <SelectItem key={categoria.key}>
+                                            {categoria.label}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            )}
+                            {provincia && (
+                                <Select
+                                    label="Provincia"
+                                    defaultSelectedKeys={[provincia.toLocaleLowerCase()]}
+                                    onChange={(e) => setProvincia(capitalize(e.target.value))}
+                                    className="w-full"
+                                >
+                                    {provincias.map((provincia) => (
+                                        <SelectItem key={provincia.key}>
+                                            {provincia.label}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            )}
+                            {descuento && (
+                                <Select
+                                    label="Descuento"
+                                    defaultSelectedKeys={[descuento]}
+                                    className="w-full"
+                                    onChange={(e) => setDescuento(e.target.value)}
+                                >
+                                    {descuentos.map((desc) => (
+                                        <SelectItem key={desc.key}>
+                                            {desc.label}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            )}
+                        </div>
+                        <div className="col-span-12 lg:col-span-6">
+                            <Input
+                                type="number"
+                                className='w-full'
+                                label="Celular"
+                                value={celular}
+                                onChange={(e) => setCelular(e.target.value)}
+                            />
+                        </div>
+                        {/* Input para los tags */}
+                        <div className="col-span-12 lg:col-span-6">
+                            <div className="flex">
+                                <Input
+                                    type="text"
+                                    className="flex-grow"
+                                    label="Tags"
+                                    value={tagInput}
+                                    onChange={(e) => setTagInput(e.target.value)}
+                                />
+                                <button
+                                    type="button"
+                                    className="ml-2 px-4 py-2 bg-blue-500 text-white font-bold rounded-md"
+                                    onClick={handleAddTag}
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <div className="mt-2">
+                                {tags.map((tag, index) => (
+                                    <div
+                                        key={index}
+                                        className="inline-flex items-center px-3 py-1 mr-2 mb-2 bg-gray-200 rounded-full"
+                                    >
+                                        <span>#{tag}</span>
+                                        <button
+                                            type="button"
+                                            className="ml-2 text-red-500"
+                                            onClick={() => handleRemoveTag(index)}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="col-span-12 md:col-span-3">
+                            <Input
+                                type="text"
+                                label="Instagram"
+                                onChange={(e) => setIg(e.target.value)}
+                                value={ig}
+                                placeholder="instagram.com/tunegocio"
+                                labelPlacement="outside"
+                                startContent={
+                                    <div className="pointer-events-none flex items-center">
+                                        <span className="text-default-400 text-small">Link:</span>
+                                    </div>
+                                }
+                            />
+                        </div>
+                        <div className="col-span-12 md:col-span-3">
+                            <Input
+                                type="text"
+                                label="Facebook"
+                                onChange={(e) => setFb(e.target.value)}
+                                value={fb}
+                                placeholder="facebook.com/tunegocio"
+                                labelPlacement="outside"
+                                startContent={
+                                    <div className="pointer-events-none flex items-center">
+                                        <span className="text-default-400 text-small">Link:</span>
+                                    </div>
+                                }
+                            />
+                        </div>
+                        <div className="col-span-12 md:col-span-3">
+                            <Input
+                                type="text"
+                                label="Whatsapp"
+                                onChange={(e) => setWp(e.target.value)}
+                                value={wp}
+                                placeholder="link a tu numero"
+                                labelPlacement="outside"
+                                startContent={
+                                    <div className="pointer-events-none flex items-center">
+                                        <span className="text-default-400 text-small">Link:</span>
+                                    </div>
+                                }
+                            />
+                        </div>
+                        <div className="col-span-12 md:col-span-3">
+                            <Input
+                                type="text"
+                                label="Pagina web"
+                                onChange={(e) => setWeb(e.target.value)}
+                                value={web}
+                                placeholder="tupagina.com"
+                                labelPlacement="outside"
+                                startContent={
+                                    <div className="pointer-events-none flex items-center">
+                                        <span className="text-default-400 text-small">Link:</span>
+                                    </div>
+                                }
+                            />
+                        </div>
+                        <div className="col-span-12 md:col-span-3">
+                            <Input
+                                type="text"
+                                label="Video youtube"
+                                onChange={(e) => setVideoYoutube(e.target.value)}
+                                value={video_youtube}
+                                placeholder=""
+                                labelPlacement="outside"
+                                startContent={
+                                    <div className="pointer-events-none flex items-center">
+                                        <span className="text-default-400 text-small">Link:</span>
+                                    </div>
+                                }
+                            />
+                        </div>
+                        <div className="col-span-12 mb-16">
+                            <label>Descripcion</label>
+                            <ReactQuill theme="snow" className='h-full' type="text" value={descripcion} onChange={setDescripcion} />
                         </div>
                         <div className="col-span-12 md:col-span-6"
                             onClick={() => document.querySelector(".input-logo").click()}>
@@ -239,14 +450,29 @@ const page = ({ params }) =>{
                         </div>
                     </div>
                     <div className="grid grid-cols-12 gap-4 mb-4">
-                        <h1 className='col-span-12 mt-5 font-semibold text-xl'>Galeria de imagenes (max 4)</h1>
-                        {[0, 1, 2, 3].map((index) => (
-                            <div key={index} className="col-span-12 md:col-span-6 lg:col-span-3 flex flex-col">
-                                <div className="flex justify-center p-3 h-48 border-2 border-dashed border-black"
-                                    onClick={() => document.querySelector(`.input-${index}`).click()}>
-                                    <input className={`input-${index}`} type="file" onChange={(e) => handleGaleriaChange(e, index)} hidden />
-                                    {galeriaPreviews[index] && <img src={galeriaPreviews[index]} alt={`Vista previa ${index + 1}`} className="mt-2  h-100 w-100 object-cover" />}
-                                </div>
+                        <h1 className='col-span-12 mt-5 text-xl'>Galeria de imagenes</h1>
+                        <div className="col-span-12">
+                            <input
+                                type="file"
+                                multiple
+                                onChange={handleImagesChange}
+                                className="hidden"
+                                id="file-input-galeria"
+                            />
+                            <label htmlFor="file-input-galeria" className="cursor-pointer block text-center border-2 border-dashed border-gray-400 p-5">
+                                <p>Haga clic para seleccionar varias imágenes</p>
+                            </label>
+                        </div>
+                        {galeriaPreviews.map((preview, index) => (
+                            <div key={index} className="relative col-span-6 md:col-span-4 lg:col-span-3 h-44">
+                                <img src={preview} alt={`Imagen ${index + 1}`} className="w-full h-full object-cover" />
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveImage(index)}
+                                    className="absolute top-0 right-0 m-3 bg-red-500 text-white py-2 px-3 rounded-sm"
+                                >
+                                    X
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -256,13 +482,13 @@ const page = ({ params }) =>{
                     >
                         {
                             loading ?
-                                    "Cargando..." : "Guardar"
+                                "Cargando..." : "Guardar"
                         }
                     </button>
                 </form>
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default page
