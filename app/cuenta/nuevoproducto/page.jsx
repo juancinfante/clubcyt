@@ -5,10 +5,14 @@ import Separador from '@/components/Separador'
 import { Input, Textarea } from '@nextui-org/input'
 import { Select, SelectItem } from '@nextui-org/select'
 import { Tooltip } from '@nextui-org/tooltip'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css';
+
+// Importa ReactQuill dinámicamente
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import 'react-quill/dist/quill.snow.css'; // Asegúrate de incluir los estilos de Quill
+
 
 const Page = () => {
     const [nombre, setNombre] = useState("")
@@ -74,7 +78,6 @@ const Page = () => {
 
     const handleForm = async (e) => {
         e.preventDefault();
-        console.log("asdasd")
         setLoading(true)
         try {
             // Subir logo y portada
@@ -123,7 +126,6 @@ const Page = () => {
                 },
                 body: JSON.stringify(formData), // Convertir los datos a JSON
             });
-            console.log(response)
 
             if (response.ok) {
                 alert("Producto creado con éxito!");
@@ -243,7 +245,6 @@ const Page = () => {
                             />
                         </div>
 
-                        {/* Input para los tags */}
                         <div className="col-span-12 lg:col-span-6">
                             <div className="flex">
                                 <Input

@@ -32,7 +32,6 @@ const page = ({ params }) => {
     
             const data = await response.json();
             setProductos(data.productos || []); // Si no hay productos, asegurarse de que sea un array vacío
-            console.log('Productos:', data.productos); // Verifica el contenido de productos aquí
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
         }
