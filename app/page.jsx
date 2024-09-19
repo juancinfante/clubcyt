@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar'
 import Separador from '@/components/Separador'
 import Lista from '@/components/Lista'
 import Tags from '@/components/Tags'
+import ProductsNew from '@/components/ProductsNew'
 
 const page = () => {
 
@@ -14,10 +15,7 @@ const page = () => {
     <>
       <Navbar />
       <Hero />
-      <Categorias />
-      {/* <Lista cat={""} /> */}
       <Products />
-      <Separador texto={"# Tags"}/>
     </>
   )
 }

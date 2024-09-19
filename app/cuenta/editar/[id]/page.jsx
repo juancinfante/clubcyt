@@ -3,10 +3,13 @@ import Navbar from '@/components/Navbar'
 import Separador from '@/components/Separador'
 import { Input } from '@nextui-org/input'
 import { Select, SelectItem } from '@nextui-org/select'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css';
+
+// Importa ReactQuill dinámicamente
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import 'react-quill/dist/quill.snow.css'; // Asegúrate de incluir los estilos de Quill
 
 
 const page = ({ params }) => {
@@ -175,6 +178,7 @@ const page = ({ params }) => {
             video_youtube,
             descripcion,
             descuento,
+            tags,
             logo: logoUrl,
             portada: portadaUrl,
             fotos: galeriaUrls,

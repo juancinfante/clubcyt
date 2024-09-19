@@ -8,7 +8,6 @@ const page = () => {
   return (
     <>
         <Navbar/>
-        <Separador texto={"Buscar:"}/>
         <Products />
     </>
 )

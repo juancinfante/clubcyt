@@ -340,7 +340,10 @@ const Page = () => {
                             <Input
                                 type="text"
                                 label="Video youtube"
-                                onChange={(e) => setVideoYoutube(e.target.value)}
+                                onChange={(e) => {
+                                    const urlParams = new URL(e.target.value).searchParams;
+                                    setVideoYoutube(urlParams.get('v'));
+                                }}
                                 placeholder=""
                                 labelPlacement="outside"
                                 startContent={

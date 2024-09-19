@@ -11,10 +11,6 @@ const Navbar = () => {
 
     const [usuario, setUsuario] = useState(null);
 
-    const router = useRouter()
-
-    const pathname = usePathname();
-
     const handleSalir = () => {
         localStorage.removeItem('usuario');
         window.location.href('/')
@@ -29,7 +25,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className="container mx-auto max-w-7xl p-2">
+        <div className="container mx-auto max-w-7xl ps-3 ">
             <nav className='flex justify-between items-center  py-4 '>
                 <Link href="/">
                     <Image src={logo}
@@ -40,7 +36,6 @@ const Navbar = () => {
                     <Link href="/" className='hidden md:block'>Inicio</Link>
                     <Link href="/productos" className='hidden md:block'>Productos</Link>
                     <Link href="/productos" className='hidden md:block'>Nosotros</Link>
-                    <Link href="/productos" className='hidden md:block'>Contacto</Link>
                     {
                         usuario == null ?
                             <li>
@@ -76,20 +71,11 @@ const Navbar = () => {
                                     <DropdownItem key="new">
                                         <Link href="/">Nosotros</Link>
                                     </DropdownItem>
-                                    <DropdownItem key="new">
-                                        <Link href="/">Contacto</Link>
-                                    </DropdownItem>
                                 </DropdownMenu>
                                 :
                                 <DropdownMenu aria-label="Static Actions">
                                     <DropdownItem key="new">
-                                        <Link href="/productos">Productos</Link>
-                                    </DropdownItem>
-                                    <DropdownItem key="new">
                                         <Link href="/">Nosotros</Link>
-                                    </DropdownItem>
-                                    <DropdownItem key="new">
-                                        <Link href="/">Contacto</Link>
                                     </DropdownItem>
                                     <DropdownItem key="copy">
                                         <Link href={`/cuenta/${usuario._id}`} >Cuenta</Link>

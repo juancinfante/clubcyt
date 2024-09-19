@@ -7,13 +7,20 @@ export async function GET(request) {
 
     const { searchParams } = new URL(request.url);
     const text = searchParams.get('text') || "";
+    const tag = searchParams.get('text') || "";
     const categoria = searchParams.get('categoria') || "";
     const provincia = searchParams.get('provincia') || "";
     const page = parseInt(searchParams.get('page')) || 1; // Página actual, por defecto 1
     const limit = parseInt(searchParams.get('limit')) || 10; // Límite de productos por página, por defecto 10
 
-    const query = {
-        ...(text && { nombre: { $regex: text, $options: 'i' } }), // Búsqueda de texto en nombre
+     // Crear la consulta para buscar por nombre o tags
+     const query = {
+        ...(text && {
+            $or: [
+                { nombre: { $regex: text, $options: 'i' } }, // Búsqueda en nombre
+                { tags: { $elemMatch: { $regex: text, $options: 'i' } } } // Búsqueda en tags (arreglo)
+            ]
+        }),
         ...(categoria && { categoria }), // Filtrar por categoría
         ...(provincia && { provincia })  // Filtrar por provincia
     };
@@ -35,6 +42,7 @@ export async function GET(request) {
         totalProductos,
     });
 }
+
 
 export async function POST(request) {
     connectDB()
