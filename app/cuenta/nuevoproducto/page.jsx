@@ -169,6 +169,22 @@ const Page = () => {
         setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
     };
 
+    function getYouTubeVideoID(url) {
+        let videoID = '';
+
+        // Si la URL es del tipo 'https://www.youtube.com/watch?v=VIDEO_ID'
+        if (url.includes('youtube.com')) {
+            const urlParams = new URL(url).searchParams;
+            videoID = urlParams.get('v');
+        }
+
+        // Si la URL es del tipo 'https://youtu.be/VIDEO_ID'
+        else if (url.includes('youtu.be')) {
+            videoID = url.split('/').pop().split('?')[0]; // Obtiene el video ID
+        }
+
+        return videoID;
+    }
 
     const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica"]
     const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
@@ -198,7 +214,7 @@ const Page = () => {
                                 type="number"
                                 className='w-full'
                                 label="Telefono"
-                            onChange={(e) => setTelefono(e.target.value)}
+                                onChange={(e) => setTelefono(e.target.value)}
                             />
                         </div>
                         <div className="grid gap-5 col-span-12 lg:col-span-6">
@@ -340,10 +356,7 @@ const Page = () => {
                             <Input
                                 type="text"
                                 label="Video youtube"
-                                onChange={(e) => {
-                                    const urlParams = new URL(e.target.value).searchParams;
-                                    setVideoYoutube(urlParams.get('v'));
-                                }}
+                                onChange={(e) => {setVideoYoutube(getYouTubeVideoID(e.target.value));}}
                                 placeholder=""
                                 labelPlacement="outside"
                                 startContent={
