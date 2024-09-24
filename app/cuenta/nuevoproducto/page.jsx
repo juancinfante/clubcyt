@@ -25,11 +25,10 @@ const Page = () => {
     const [portada, setPortada] = useState(null)
     const [telefono, setTelefono] = useState(null)
     const [celular, setCelular] = useState(null)
-    const [ig, setIg] = useState(null)
-    const [fb, setFb] = useState(null)
-    const [wp, setWp] = useState(null)
-    const [web, setWeb] = useState(null)
-    const [video_youtube, setVideoYoutube] = useState(null)
+    const [ig, setIg] = useState("")
+    const [fb, setFb] = useState("")
+    const [web, setWeb] = useState("")
+    const [video_youtube, setVideoYoutube] = useState("")
     const [logoPreview, setLogoPreview] = useState("https://img.freepik.com/premium-vector/image-upload-icon_192037-7840.jpg")
     const [portadaPreview, setPortadaPreview] = useState("https://img.freepik.com/premium-vector/image-upload-icon_192037-7840.jpg")
     const [logoUrl, setLogoUrl] = useState(null)
@@ -40,6 +39,8 @@ const Page = () => {
 
     const [imagenes, setImagenes] = useState([]);
     const [previews, setPreviews] = useState([]);
+
+    const [errores, setErrores] = useState([]);
 
     // Estado para los tags
     const [tags, setTags] = useState([]);
@@ -78,7 +79,25 @@ const Page = () => {
 
     const handleForm = async (e) => {
         e.preventDefault();
-        setLoading(true)
+        setLoading(true);
+        const Nerrores = [];
+
+        // Validaciones
+        if (!nombre) Nerrores.push("nombre");
+        if (!ubicacion) Nerrores.push("ubicacion");
+        if (!descuento) Nerrores.push("descuento");
+        if (!categoria) Nerrores.push("categoria");
+        if (!provincia) Nerrores.push("provincia");
+        if (!celular) Nerrores.push("celular");
+        // Agrega más validaciones para otros campos que consideres requeridos
+
+        // Si hay errores, no enviar el formulario y mostrar los errores
+        if (Nerrores.length > 0) {
+            setErrores(Nerrores);
+            alert("Por favor completa todos los campos obligatorios: " + Nerrores.join(", "));
+            setLoading(false);
+            return; // Salir de la función si hay errores
+        }
         try {
             // Subir logo y portada
             const uploadedLogoUrl = logo ? await uploadImage(logo) : null;
@@ -109,7 +128,6 @@ const Page = () => {
                 celular,
                 ig,
                 fb,
-                wp,
                 web,
                 video_youtube,
                 tags,
@@ -202,13 +220,28 @@ const Page = () => {
                                 type="text"
                                 className='w-full'
                                 label="Nombre"
-                                onChange={(e) => setNombre(e.target.value)}
+                                onChange={(e) => {
+
+                                    setErrores(errores.filter(item => item !== "nombre"));
+                                    setNombre(e.target.value)
+                                }
+                                }
+                                isInvalid={errores.includes("nombre") ? true : false}
+                                errorMessage="Ingresa el nombre"
                             />
                             <Input
                                 type="text"
                                 className='w-full'
                                 label="Ubicacion"
-                                onChange={(e) => setUbicacion(e.target.value)}
+                                onChange={(e) => {
+
+                                    setErrores(errores.filter(item => item !== "ubicacion"));
+                                    setUbicacion(e.target.value)
+                                }
+                                }
+                                isInvalid={errores.includes("ubicacion") ? true : false}
+                                errorMessage="Ingresa la ubicacion"
+
                             />
                             <Input
                                 type="number"
@@ -221,7 +254,14 @@ const Page = () => {
                             <Select
                                 label="Descuento"
                                 className="w-full"
-                                onChange={(e) => setDescuento(e.target.value)}
+                                onChange={(e) => {
+
+                                    setErrores(errores.filter(item => item !== "descuento"));
+                                    setDescuento(e.target.value)
+                                }
+                                }
+                                isInvalid={errores.includes("descuento") ? true : false}
+                                errorMessage="Selecciona el descuento"
                             >
                                 {descuentos.map((desc) => (
                                     <SelectItem key={desc}>
@@ -232,7 +272,14 @@ const Page = () => {
                             <Select
                                 label="Categoria"
                                 className="w-full"
-                                onChange={(e) => setCategoria(e.target.value)}
+                                onChange={(e) => {
+
+                                    setErrores(errores.filter(item => item !== "categoria"));
+                                    setCategoria(e.target.value)
+                                }
+                                }
+                                isInvalid={errores.includes("categoria") ? true : false}
+                                errorMessage="Selecciona la categoria"
                             >
                                 {categorias.map((cat) => (
                                     <SelectItem key={cat}>
@@ -243,7 +290,14 @@ const Page = () => {
                             <Select
                                 label="Provincia"
                                 className="w-full"
-                                onChange={(e) => setProvincia(e.target.value)}
+                                onChange={(e) => {
+
+                                    setErrores(errores.filter(item => item !== "provincia"));
+                                    setProvincia(e.target.value)
+                                }
+                                }
+                                isInvalid={errores.includes("provincia") ? true : false}
+                                errorMessage="Selecciona la provincia"
                             >
                                 {provincias.map((prov) => (
                                     <SelectItem key={prov}>
@@ -257,7 +311,14 @@ const Page = () => {
                                 type="number"
                                 className='w-full'
                                 label="Celular"
-                                onChange={(e) => setCelular(e.target.value)}
+                                onChange={(e) => {
+
+                                    setErrores(errores.filter(item => item !== "celular"));
+                                    setCelular(e.target.value)
+                                }
+                                }
+                                isInvalid={errores.includes("celular") ? true : false}
+                                errorMessage="Selecciona el celular"
                             />
                         </div>
 
@@ -269,6 +330,7 @@ const Page = () => {
                                     label="Tags"
                                     value={tagInput}
                                     onChange={(e) => setTagInput(e.target.value)}
+                                    description="Ingresa uno a la vez."
                                 />
                                 <button
                                     type="button"
@@ -327,20 +389,6 @@ const Page = () => {
                         <div className="col-span-4">
                             <Input
                                 type="text"
-                                label="Whatsapp"
-                                onChange={(e) => setWp(e.target.value)}
-                                placeholder="link a tu numero"
-                                labelPlacement="outside"
-                                startContent={
-                                    <div className="pointer-events-none flex items-center">
-                                        <span className="text-default-400 text-small">Link:</span>
-                                    </div>
-                                }
-                            />
-                        </div>
-                        <div className="col-span-4">
-                            <Input
-                                type="text"
                                 label="Pagina web"
                                 onChange={(e) => setWeb(e.target.value)}
                                 placeholder="tupagina.com"
@@ -356,7 +404,7 @@ const Page = () => {
                             <Input
                                 type="text"
                                 label="Video youtube"
-                                onChange={(e) => {setVideoYoutube(getYouTubeVideoID(e.target.value));}}
+                                onChange={(e) => { setVideoYoutube(getYouTubeVideoID(e.target.value)); }}
                                 placeholder=""
                                 labelPlacement="outside"
                                 startContent={

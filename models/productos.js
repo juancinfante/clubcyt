@@ -22,7 +22,6 @@ const ProductSchema = new Schema({
     },
     telefono: {
         type: String,
-        required: true
     },
     celular: {
         type: String,
@@ -46,23 +45,15 @@ const ProductSchema = new Schema({
     },
     ig: {
         type: String,
-        required: true
     },
     fb: {
         type: String,
-        required: true
-    },
-    wp: {
-        type: String,
-        required: true
     },
     web: {
         type: String,
-        required: true
     },
     video_youtube: {
         type: String,
-        required: true
     },
     fotos: {
         type: [],
