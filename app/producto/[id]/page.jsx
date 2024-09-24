@@ -30,10 +30,10 @@ export default async function page({ params }) {
                         <div className="w-full">
                             <p className='text-md mt-2 text-gray-600 w-full' dangerouslySetInnerHTML={insertarHTML(producto.descripcion)}></p>
                         </div>
-                        
+
                         {producto.video_youtube != "" ?
                             <div className="w-full my-6">
-                                <iframe style={{width: "100%", height: "300px"}} src={`https://www.youtube.com/embed/${producto.video_youtube}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                <iframe style={{ width: "100%", height: "300px" }} src={`https://www.youtube.com/embed/${producto.video_youtube}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                             </div>
                             :
                             ""}
@@ -52,33 +52,39 @@ export default async function page({ params }) {
                             <p className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full w-12 text-center mt-2'>{producto.descuento}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-5">
-                            <div className="col-span-2 md:col-span-1">
-                                <div className="w-full">
-                                    <h1 className='font-semibold text-2xl'>Telefono:</h1>
-                                    <p className='text-md mt-2 text-gray-600'>{producto.telefono}</p>
-                                </div>
-                            </div>
-                            <div className="col-span-2 md:col-span-1">
-                                <div className="w-full">
-                                    <h1 className='font-semibold text-2xl'>Celular:</h1>
-                                    <p className='text-md mt-2 text-gray-600'>{producto.celular}</p>
-                                </div>
-                            </div>
+                            {
+                                producto.telefono != "" ?
+                                    <div className="col-span-2 md:col-span-1">
+                                        <div className="w-full">
+                                            <h1 className='font-semibold text-2xl'>Telefono:</h1>
+                                            <p className='text-md mt-2 text-gray-600'>{producto.telefono}</p>
+                                        </div>
+                                    </div>
+                                    :
+                                    ""
+                            }
                         </div>
                         <div className="w-full">
                             <h1 className='font-semibold text-2xl mb-2'>Redes:</h1>
                             <div className="flex gap-3">
-                                <a href={producto.wp}>
+                                <a href={`https://api.whatsapp.com/send?phone=54${producto.celular}`}>
                                     <Wp className="w-10 h-10" />
                                 </a>
+                                {producto.fb != "" ? 
                                 <a href={producto.fb}>
                                     <Fb className="w-10 h-10" />
                                 </a>
+                                : 
+                                ""}
+                                {producto.ig != "" ? 
                                 <a href={producto.ig}>
-                                    <Ig className="w-10 h-10" />
+                                    <Fb className="w-10 h-10" />
                                 </a>
+                                : 
+                                ""}
                             </div>
                         </div>
+                        {producto.web != "" ? 
                         <div className="w-full">
                             <h1 className='font-semibold text-2xl mb-2'>Pagina web:</h1>
                             <div className="flex">
@@ -88,6 +94,8 @@ export default async function page({ params }) {
                                 </a>
                             </div>
                         </div>
+                        : 
+                        ""}
                     </div>
                 </div>
             </div >
