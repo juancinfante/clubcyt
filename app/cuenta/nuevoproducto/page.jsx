@@ -8,7 +8,7 @@ import { Tooltip } from '@nextui-org/tooltip'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-
+import Swal from 'sweetalert2'
 // Importa ReactQuill dinámicamente
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css'; // Asegúrate de incluir los estilos de Quill
@@ -80,6 +80,8 @@ const Page = () => {
     const handleForm = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        
         const Nerrores = [];
 
         // Validaciones
@@ -94,7 +96,10 @@ const Page = () => {
         // Si hay errores, no enviar el formulario y mostrar los errores
         if (Nerrores.length > 0) {
             setErrores(Nerrores);
-            alert("Por favor completa todos los campos obligatorios: " + Nerrores.join(", "));
+            Swal.fire({
+                icon: "warning",
+                text: "Completa los campos obligatorios!",
+              });
             setLoading(false);
             return; // Salir de la función si hay errores
         }
@@ -146,10 +151,16 @@ const Page = () => {
             });
 
             if (response.ok) {
-                alert("Producto creado con éxito!");
+                Swal.fire({
+                    icon: "success",
+                    text: "Producto creado con exito!",
+                  });
                 router.back()
             } else {
-                alert("Hubo un error al crear el producto.");
+                Swal.fire({
+                    icon: "warning",
+                    text: "Hubo un error al crear el producto.",
+                  });
             }
             setLoading(false)
         } catch (error) {
@@ -318,7 +329,7 @@ const Page = () => {
                                 }
                                 }
                                 isInvalid={errores.includes("celular") ? true : false}
-                                errorMessage="Selecciona el celular"
+                                errorMessage="Ingresá el código de área sin 0 y el número de línea sin 15"
                             />
                         </div>
 
