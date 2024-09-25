@@ -328,6 +328,7 @@ const page = ({ params }) => {
                                 label="Celular"
                                 value={celular}
                                 onChange={(e) => setCelular(e.target.value)}
+                                description="Ingresá el código de área sin 0 y el número de línea sin 15"
                             />
                         </div>
                         {/* Input para los tags */}
@@ -339,6 +340,7 @@ const page = ({ params }) => {
                                     label="Tags"
                                     value={tagInput}
                                     onChange={(e) => setTagInput(e.target.value)}
+                                    description="Palabras clave que ayudan en la busqueda de tu producto. Ej: restaurante, anteojo, patio, etc"
                                 />
                                 <button
                                     type="button"

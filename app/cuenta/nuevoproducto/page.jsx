@@ -331,7 +331,8 @@ const Page = () => {
                                 }
                                 }
                                 isInvalid={errores.includes("celular") ? true : false}
-                                errorMessage="Ingresá el código de área sin 0 y el número de línea sin 15"
+                                errorMessage="El celular es requerido"
+                                description="Ingresá el código de área sin 0 y el número de línea sin 15"
                             />
                         </div>
 
@@ -343,7 +344,7 @@ const Page = () => {
                                     label="Tags"
                                     value={tagInput}
                                     onChange={(e) => setTagInput(e.target.value)}
-                                    description="Ingresa uno a la vez."
+                                    description="Palabras clave que ayudan en la busqueda de tu producto. Ej: restaurante, anteojo, patio, etc"
                                 />
                                 <button
                                     type="button"
