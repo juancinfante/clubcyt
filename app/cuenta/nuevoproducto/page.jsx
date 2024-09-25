@@ -9,6 +9,8 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
+import { Spinner } from '@nextui-org/spinner';
+
 // Importa ReactQuill dinámicamente
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css'; // Asegúrate de incluir los estilos de Quill
@@ -482,7 +484,7 @@ const Page = () => {
                     >
                         {
                             loading ?
-                                "Cargando..." : "CREAR PRODUCTO"
+                            <Spinner color='default' size='sm'/> : "CREAR PRODUCTO"
                         }
                     </button>
                 </form>

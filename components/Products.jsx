@@ -61,7 +61,7 @@ const Products = () => {
   const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
 
   return (
-    <div className="container max-w-7xl mx-auto mt-5 p-3">
+    <div className="container max-w-7xl mx-auto px-3">
       <Categorias setCategoria={setCategoria} />
 
       <div className="flex flex-col mb-5">

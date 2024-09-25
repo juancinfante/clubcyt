@@ -6,6 +6,8 @@ import { Select, SelectItem } from '@nextui-org/select'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { Spinner } from '@nextui-org/spinner';
+import Swal from 'sweetalert2'
 
 // Importa ReactQuill dinámicamente
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -194,10 +196,17 @@ const page = ({ params }) => {
                 body: JSON.stringify(updatedProduct),
             });
             const data = await res.json();
-            alert("Producto actualizado!")
+            Swal.fire({
+                icon: "success",
+                text: "Producto actualizado!",
+              });
             router.back()
         } catch (error) {
             console.log('Error al actualizar el producto:', error);
+            Swal.fire({
+                icon: "warning",
+                text: "Error al actualizar el producto.",
+              });
         }
 
         setLoading(false);
@@ -486,7 +495,7 @@ const page = ({ params }) => {
                     >
                         {
                             loading ?
-                                "Cargando..." : "Guardar"
+                            <Spinner color='default' size='sm'/> : "Guardar"
                         }
                     </button>
                 </form>

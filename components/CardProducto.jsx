@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React from 'react'
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
+import Swal from 'sweetalert2';
 
 const CardProducto = ({ producto, loading }) => {
   const router = useRouter()
@@ -21,28 +22,43 @@ const CardProducto = ({ producto, loading }) => {
   }
 
   const handleDelete = async (id) => {
-    const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este producto?');
-    if (!confirmDelete) return;
-
-    try {
-      const res = await fetch(`/api/productos/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (res.ok) {
-        alert('Producto eliminado con éxito');
-        // router.refresh(); // Refrescar la página o lista de productos
-        window.location.href = window.location.href
-      } else {
-        const data = await res.json();
-        console.error('Error al eliminar el producto:', data.error);
-        alert('Error al eliminar el producto');
+    Swal.fire({
+      title: "Eliminar producto?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/api/productos/${id}`, {
+            method: 'DELETE',
+          });
+    
+          if (res.ok) {
+            Swal.fire({
+              title: "Tu producto fue eliminado.",
+              icon: "success"
+            });
+            // router.refresh(); // Refrescar la página o lista de productos
+            setTimeout(() => {
+              // Código que quieres retardar
+              window.location.href = window.location.href
+            }, 1500);
+          } else {
+            const data = await res.json();
+            console.error('Error al eliminar el producto:', data.error);
+            alert('Error al eliminar el producto');
+          }
+        } catch (error) {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al eliminar el producto');
+        }
       }
-    } catch (error) {
-      console.error('Error en la petición:', error);
-      alert('Hubo un error al eliminar el producto');
-    }
+    });
   };
+
   return (
     <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "col-span-12 md:col-span-4 lg:col-span-3 rounded-xl overflow-hidden"}>
       <Link href={`/producto/${producto._id}`}>
