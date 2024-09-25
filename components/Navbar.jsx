@@ -34,7 +34,6 @@ const Navbar = () => {
                 </Link>
                 <ul className='flex gap-4 justify-center items-center'>
                     <Link href="/" className='hidden md:block'>Inicio</Link>
-                    <Link href="/productos" className='hidden md:block'>Productos</Link>
                     <Link href="/productos" className='hidden md:block'>Nosotros</Link>
                     {
                         usuario == null ?
@@ -66,7 +65,6 @@ const Navbar = () => {
                                         <Link href="/login">Ingresar</Link>
                                     </DropdownItem>
                                     <DropdownItem key="new">
-                                        <Link href="/productos">Productos</Link>
                                     </DropdownItem>
                                     <DropdownItem key="new">
                                         <Link href="/">Nosotros</Link>

@@ -13,10 +13,10 @@ const CardProducto = ({ producto, loading }) => {
   if (loading) {
     // Mostrar skeletons cuando loading sea true
     return (
-      <div className={pathName != "/" ? "col-span-4 rounded-xl overflow-hidden shadow-md" : "col-span-3 rounded-xl overflow-hidden shadow-md"}>
-        <Skeleton height={200} width={300} />
-        <Skeleton height={20} width={300} style={{ marginTop: 10 }} />
-        <Skeleton height={20} width={300} style={{ marginTop: 5 }} />
+      <div className={pathName != "/" ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden shadow-md" : "col-span-12 sm:col-span-6 md:col-span-3 rounded-xl overflow-hidden shadow-md"}>
+        <Skeleton height={200} />
+        <Skeleton height={20} style={{ marginTop: 10 }} />
+        <Skeleton height={20} style={{ marginTop: 5 }} />
       </div>
     );
   }
