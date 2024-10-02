@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import logo from '@/public/assets/logo_blue_clubcyt.png'
 import { Input } from '@nextui-org/input';
 
-
 const page = () => {
     const [error, setError] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
@@ -15,39 +14,122 @@ const page = () => {
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
 
-    // Función para manejar el formulario de registro
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        if (password == password2) {
-            try {
-                const res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ nombre, apellido, email, password }),
-                });
-                console.log(res.status)
-                const data = await res.json();
 
-                // Verifica si el email ya está en uso
-                if (data.emailExists) {
-                    setError(true);
-                    return;
-                }
+    async function sendEmail({ email, nombre, id }) {
+        const response = await fetch('/api/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: email,
+            subject: 'Club Cyt - Verificar email',
+            html: `<!DOCTYPE html>
+<html>
 
-                // Guardar los datos del usuario en localStorage o manejar la sesión
-                localStorage.setItem('usuario', JSON.stringify(data));
-
-                // Redirigir a la página principal o donde desees
-                window.location.href = "/welcome"; // Cambia a la ruta deseada
-            } catch (error) {
-                console.log(error);
-            }
-        } else {
-            setErrorPassword(true)
+<head>
+    <style>
+        .main {
+            padding: 20px;
+            font-family: Arial, sans-serif;
         }
-    };
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .paragraph {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body class="main">
+    <div class="container">
+        <img src="https://clubcyt.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo_blue_clubcyt.d8834c86.png&w=256&q=75"
+            width="170" height="50" alt="Club C&T" class="logo" />
+        <p class="paragraph">Hola ${nombre},</p>
+        <p class="paragraph">Bienvenid@ a Club C&T, haz click en el botón de abajo para verificar tu correo.</p>
+        <div class="btn-container">
+            <a href="http://localhost:3000/welcome/${id}">Verificar correo</a>
+        </div>
+    </div>
+</body>
+
+</html>`
+          }),
+        });
+      
+        const data = await response.json();
+        if (response.ok) {
+          alert('Correo enviado con éxito');
+          console.log(data)
+        } else {
+          alert('Error al enviar el correo');
+          console.log(data)
+        }
+      }
+
+    // Función para manejar el formulario de registro
+const handleRegister = async (e) => {
+    e.preventDefault();
+    if (password === password2) {
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nombre, apellido, email, password }),
+            });
+
+            console.log(res.status);
+            const data = await res.json();
+
+            // Verifica si el email ya está en uso
+            if (data.emailExists) {
+                setError(true);
+                return;
+            }
+            
+            const id = data._id;
+
+            console.log('Email a enviar:', email);
+            sendEmail({ email, nombre, id })
+
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        setErrorPassword(true);
+    }
+};
+
 
     useEffect(() => {
         if (localStorage.getItem("usuario")) {
@@ -56,7 +138,6 @@ const page = () => {
     }, [])
 
     return (
-       
         <div className="grid grid-cols-12 justify-center items-center h-screen">
             <div className="col-span-12 md:col-span-6 flex justify-center">
                 <div className="bg-white p-9 rounded-xl w-96">

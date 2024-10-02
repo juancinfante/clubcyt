@@ -18,3 +18,28 @@ export async function GET(request, { params }) {
         return NextResponse.json({ message: error.message }, { status: 400 });
     }
 }
+
+export async function PUT(req, { params }) {
+    await connectDB(); // Conectar a la base de datos
+
+    const { id } = params; // Extrae el id desde los params de la URL
+    const data = await req.json(); // Obtiene los datos enviados en el cuerpo de la petición
+
+    try {
+        // Actualiza el producto con el ID proporcionado con los datos del cuerpo de la petición
+        const userUpdate = await Usuario.findByIdAndUpdate(id, data, {
+            new: true, // Devuelve el documento actualizado
+            runValidators: true, // Ejecuta las validaciones del modelo en los datos actualizados
+        });
+
+        if (!userUpdate) {
+            return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+        }
+
+        console.log(userUpdate)
+        return NextResponse.json(userUpdate);
+    } catch (error) {
+        console.error('Error al actualizar el usuario:', error);
+        return NextResponse.json({ error: 'Error al actualizar el usuario' }, { status: 500 });
+    }
+}

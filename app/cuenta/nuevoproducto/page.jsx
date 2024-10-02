@@ -17,6 +17,7 @@ import 'react-quill/dist/quill.snow.css'; // Asegúrate de incluir los estilos d
 
 
 const Page = () => {
+
     const [nombre, setNombre] = useState("")
     const [categoria, setCategoria] = useState("")
     const [provincia, setProvincia] = useState("")
@@ -83,7 +84,7 @@ const Page = () => {
         e.preventDefault();
         setLoading(true);
 
-        
+
         const Nerrores = [];
 
         // Validaciones
@@ -101,7 +102,7 @@ const Page = () => {
             Swal.fire({
                 icon: "warning",
                 text: "Completa los campos obligatorios!",
-              });
+            });
             setLoading(false);
             return; // Salir de la función si hay errores
         }
@@ -156,13 +157,13 @@ const Page = () => {
                 Swal.fire({
                     icon: "success",
                     text: "Producto creado con exito!",
-                  });
+                });
                 router.back()
             } else {
                 Swal.fire({
                     icon: "warning",
                     text: "Hubo un error al crear el producto.",
-                  });
+                });
             }
             setLoading(false)
         } catch (error) {
@@ -485,10 +486,11 @@ const Page = () => {
                     >
                         {
                             loading ?
-                            <Spinner color='default' size='sm'/> : "CREAR PRODUCTO"
+                                <Spinner color='default' size='sm' /> : "CREAR PRODUCTO"
                         }
                     </button>
                 </form>
+                <button>Publicar producto</button>
             </div>
         </>
     );
