@@ -37,10 +37,14 @@ const page = () => {
       }
       
       // Guardar el token en localStorage o manejar la sesión como prefieras
-      localStorage.setItem('usuario', JSON.stringify(data));
       // Redirigir a la página principal o donde desees
+      if(data.verificado){
+        localStorage.setItem('usuario', JSON.stringify(data));
+        window.location.href = "/"
+      }else{
+        window.location.href = "/verificar-correo"
+      }
       setLoading(false)
-      window.location.href = "/" // Cambia a la ruta donde quieras redirigir al usuario después de hacer login
     } catch (error) {
       setError('Error de red');
       setLoading(false)

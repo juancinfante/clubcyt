@@ -17,7 +17,7 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Email o contraseña incorrecto' }, { status: 401 });
         }
 
-        return NextResponse.json({ message: 'Login exitoso', _id: user._id });
+        return NextResponse.json({ message: 'Login exitoso', _id: user._id, verificado: user.email_verificado });
     } catch (error) {
         return NextResponse.json({ error: 'Error en el servidor' }, { status: 500 });
     }
