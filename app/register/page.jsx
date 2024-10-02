@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import logo from '@/public/assets/logo_blue_clubcyt.png'
 import { Input } from '@nextui-org/input';
+import { Spinner } from '@nextui-org/spinner';
 
 const page = () => {
     const [error, setError] = useState(false);
@@ -14,17 +15,18 @@ const page = () => {
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
 
+    const [loading, setLoading] = useState(false);
 
     async function sendEmail({ email, nombre, id }) {
         const response = await fetch('/api/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: email,
-            subject: 'Club Cyt - Verificar email',
-            html: `<!DOCTYPE html>
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                to: email,
+                subject: 'Club Cyt - Verificar email',
+                html: `<!DOCTYPE html>
 <html>
 
 <head>
@@ -80,55 +82,52 @@ const page = () => {
 </body>
 
 </html>`
-          }),
+            }),
         });
-      
+
         const data = await response.json();
         if (response.ok) {
-          alert('Correo enviado con éxito');
-          console.log(data)
+            setLoading(false)
+            window.location.href = "/verificar-correo"
         } else {
-          alert('Error al enviar el correo');
-          console.log(data)
+            alert('Error al enviar el correo');
+            setLoading(false)
         }
-      }
+    }
 
     // Función para manejar el formulario de registro
-const handleRegister = async (e) => {
-    e.preventDefault();
-    if (password === password2) {
-        try {
-            const res = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ nombre, apellido, email, password }),
-            });
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        if (password === password2) {
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nombre, apellido, email, password }),
+                });
 
-            console.log(res.status);
-            const data = await res.json();
+                console.log(res.status);
+                const data = await res.json();
 
-            // Verifica si el email ya está en uso
-            if (data.emailExists) {
-                setError(true);
-                return;
+                // Verifica si el email ya está en uso
+                if (data.emailExists) {
+                    setError(true);
+                    return;
+                }
+
+                const id = data._id;
+                sendEmail({ email, nombre, id })
+
+            } catch (error) {
+                console.log(error);
             }
-            
-            const id = data._id;
-
-            console.log('Email a enviar:', email);
-            sendEmail({ email, nombre, id })
-
-
-
-        } catch (error) {
-            console.log(error);
+        } else {
+            setErrorPassword(true);
         }
-    } else {
-        setErrorPassword(true);
-    }
-};
+    };
 
 
     useEffect(() => {
@@ -150,36 +149,44 @@ const handleRegister = async (e) => {
                     <form className='w-full flex flex-col gap-3' onSubmit={handleRegister}>
                         <div className="grid grid-cols-12 gap-3">
                             <div className='relative col-span-12 md:col-span-6'>
-                                <Input type="text" label="Nombre" isClearable required  onChange={(e) => setNombre(e.target.value)} />
+                                <Input type="text" label="Nombre" isClearable required onChange={(e) => setNombre(e.target.value)} />
                             </div>
                             <div className='relative col-span-12 md:col-span-6'>
                                 <Input type="text" label="Apellido" isClearable onChange={(e) => setApellido(e.target.value)} />
                             </div>
                         </div>
                         <div className='relative w-full'>
-                            <Input type="email" label="Email" 
-                            isInvalid={error ? "true" : "false"} 
-                            errorMessage={error ? "Email ya esta en uso." : ""}
-                            color={error ? "danger" : ""}
-                            isClearable required  onChange={(e) => setEmail(e.target.value)} />
+                            <Input type="email" label="Email"
+                                isInvalid={error ? "true" : "false"}
+                                errorMessage={error ? "Email ya esta en uso." : ""}
+                                color={error ? "danger" : ""}
+                                isClearable required onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className='relative w-full'>
                             <Input type="password" label="Contraseña"
-                            isInvalid={errorPassword ? "true" : "false"} 
-                            isClearable required  onChange={(e) => setPassword(e.target.value)} />
+                                isInvalid={errorPassword ? "true" : "false"}
+                                isClearable required onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <div className='relative w-full'>
                             <Input type="password" label="Repite contraseña"
-                            isInvalid={errorPassword ? "true" : "false"} 
-                            isClearable required  onChange={(e) => setPassword2(e.target.value)} />
+                                isInvalid={errorPassword ? "true" : "false"}
+                                isClearable required onChange={(e) => setPassword2(e.target.value)} />
                         </div>
                         {
-                                errorPassword ? 
+                            errorPassword ?
                                 <p className='text-xs pt-1 ps-2 text-red-600'>Las contraseñas no coinciden</p>
-                                : 
+                                :
                                 ""
+                        }
+
+                        <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3 rounded-md'>
+                            {
+                                loading ?
+                                    <Spinner color='default' size='sm' />
+                                    : "Ingresar"
                             }
-                        <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3 rounded-md'>Ingresar</button>
+                        </button>
+
                     </form>
                     <p className='text-xs mt-5'>Ya tienes cuenta? <a href="/login" className='text-indigo-600'>Ingresar</a></p>
                 </div>
