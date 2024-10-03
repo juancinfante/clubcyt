@@ -76,7 +76,7 @@ const page = () => {
         <p class="paragraph">Hola ${nombre},</p>
         <p class="paragraph">Bienvenid@ a Club C&T, haz click en el botón de abajo para verificar tu correo.</p>
         <div class="btn-container">
-            <a href="http://localhost:3000/welcome/${id}">Verificar correo</a>
+            <a href="https://clubcyt.vercel.app/welcome/${id}">Verificar correo</a>
         </div>
     </div>
 </body>
