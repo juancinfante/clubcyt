@@ -22,7 +22,13 @@ const UsuarioSchema = new Schema({
         required : true,
         default: false
     },
-
+    suscripto:{
+        type: Boolean,
+        default: false
+    },
+    qrcode:{
+        type: String,
+    },
 })
 
 const Usuario = models.Usuarios || model("Usuarios", UsuarioSchema);

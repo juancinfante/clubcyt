@@ -16,12 +16,37 @@ const Navbar = () => {
         window.location.href('/')
     }
 
-    useEffect(() => {
-        // Este código solo se ejecuta en el navegador
-        const usuarioGuardado = localStorage.getItem('usuario');
-        if (usuarioGuardado) {
-            setUsuario(JSON.parse(usuarioGuardado));
+    const fetchUsuario = async (idUsuario) => {
+        try {
+            // Realizamos la solicitud GET al endpoint que maneja la función GET en el backend
+            const response = await fetch(`/api/usuarios/${idUsuario}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            // Verificamos si la respuesta fue exitosa
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData.error);
+                return;
+            }
+
+            // Convertimos la respuesta a JSON
+            const data = await response.json();
+            setUsuario(data)
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
         }
+    }
+
+    useEffect(() => {
+        if(localStorage.getItem('usuario') !== null){
+            const { _id } = JSON.parse(localStorage.getItem('usuario'));
+            fetchUsuario(_id)
+        }
+        
     }, []);
 
     return (
@@ -33,48 +58,48 @@ const Navbar = () => {
                         height={50} style={{ marginTop: 5 }} priority alt='logo' />
                 </Link>
                 <ul className='flex gap-4 justify-center items-center'>
-                    <Link href="/" className='hidden md:block'>Inicio</Link>
-                    <Link href="/productos" className='hidden md:block'>Nosotros</Link>
                     {
                         usuario == null ?
-                            <li>
-                                <Link href="/login" className='hidden md:block'>login</Link>
-                            </li>
-                            :
                             <>
+                                <Link href="/pagoexitoso" className='hidden md:block bg-yellow-300 px-2 py-1 rounded-md'>SUSCRIBITE</Link>
                                 <li>
-                                    <Link href={`/cuenta/${usuario._id}`} className='hidden md:block' >Cuenta</Link>
-                                </li>
-                                <li>
-                                    <Link href="" onClick={handleSalir} className='hidden md:block'>Salir</Link>
+                                    <Link href="/login" className='hidden md:block'>INICIA SESION</Link>
                                 </li>
                             </>
+                            :
+                            ""
                     }
                     <Dropdown className=''>
                         <DropdownTrigger>
                             <button
                                 variant="bordered"
                             >
-                                <MenuSvg className="w-10 h-10 block md:hidden" />
+                                {
+                                    usuario == null ?
+                                        <MenuSvg className="w-10 h-10 md:hidden" />
+                                        :
+                                        <p className='bg-gray-300 rounded-full px-3 py-2 me-2'>JU</p>
+                                }
                             </button>
                         </DropdownTrigger>
                         {
                             usuario == null ?
                                 <DropdownMenu aria-label="Static Actions">
-                                    <DropdownItem key="new">
-                                        <Link href="/login">Ingresar</Link>
+                                    <DropdownItem key="new2" className='bg-yellow-300'>
+                                        <Link href="/pagoexitoso">SUSCRIBIRSE</Link>
                                     </DropdownItem>
                                     <DropdownItem key="new">
-                                    </DropdownItem>
-                                    <DropdownItem key="new">
-                                        <Link href="/">Nosotros</Link>
+                                        <Link href="/login">INICIAR SESIÓN</Link>
                                     </DropdownItem>
                                 </DropdownMenu>
                                 :
                                 <DropdownMenu aria-label="Static Actions">
-                                    <DropdownItem key="new">
-                                        <Link href="/">Nosotros</Link>
-                                    </DropdownItem>
+                                    {usuario.suscripto == false ?
+                                        <DropdownItem key="new2" className='bg-yellow-300'>
+                                            <Link href="/pagoexitoso">SUSCRIBIRSE</Link>
+                                        </DropdownItem>
+                                        :
+                                        ""}
                                     <DropdownItem key="copy">
                                         <Link href={`/cuenta/${usuario._id}`} >Cuenta</Link>
                                     </DropdownItem>

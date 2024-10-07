@@ -1,38 +1,36 @@
-import Image from 'next/image'
 import React from 'react'
 import Food from '../public/assets/food.svg'
-import Peluqueria from '../public/assets/barber-shop.svg'
 import Comercio from '../public/assets/comercio.svg'
 import Obrasocial from '../public/assets/obrasocial.svg'
 import Turismo from '../public/assets/turismo.svg'
 import Eventos from '../public/assets/eventos.svg'
-import Optica from '../public/assets/optica.svg'
 import Hotel from '../public/assets/hotel.svg'
-import Link from 'next/link'
-
+import Tourism from '../public/assets/tourism.svg'
+import Discount from '../public/assets/discount.svg'
+import Museum from '../public/assets/museum.svg'
 
 const Categorias = ({ setCategoria }) => {
     return (
         <>
             <div className="container mx-auto max-w-7xl px-2 mb-4">
                 <div className="flex justify-between gap-7 overflow-scroll md:overflow-hidden custom-scrollbar">
+                        <div onClick={() => setCategoria("Hotel")} className='flex flex-col items-center mb-3'>
+                            <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
+                                <Hotel className="w-full h-full" />
+                            </div>
+                            <p className='text-xs mt-2'>Hoteles</p>
+                        </div>
                         <div onClick={() => setCategoria("Gastronomia")} className='flex flex-col items-center mb-3'>
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
                                 <Food className="w-full h-full" />
                             </div>
                             <p className='text-xs mt-2'>Gastronomia</p>
                         </div>
-                        <div onClick={() => setCategoria("Hotel")} className='flex flex-col items-center mb-3'>
+                        <div onClick={() => setCategoria("Area Comercial")} className='flex flex-col items-center mb-3'>
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
-                                <Hotel className="w-full h-full" />
+                                <Comercio className="w-full h-full" />
                             </div>
-                            <p className='text-xs mt-2'>Hotel</p>
-                        </div>
-                        <div onClick={() => setCategoria("Peluqueria")} className='flex flex-col items-center mb-3'>
-                            <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
-                                <Peluqueria className="w-full h-full" />
-                            </div>
-                            <p className='text-xs mt-2'>Peluqueria</p>
+                            <p className='text-xs mt-2'>Area Comercial</p>
                         </div>
                         <div onClick={() => setCategoria("Area Turistica")} className='flex flex-col items-center mb-3'>
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
@@ -46,25 +44,26 @@ const Categorias = ({ setCategoria }) => {
                             </div>
                             <p className='text-xs mt-2'>Eventos</p>
                         </div>
-                        <div onClick={() => setCategoria("Area Comercial")} className='flex flex-col items-center mb-3'>
-                            <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
-                                <Comercio className="w-full h-full" />
-                            </div>
-                            <p className='text-xs mt-2'>Area Comercial</p>
-                        </div>
-                        <div onClick={() => setCategoria("Optica")} className='flex flex-col items-center mb-3'>
+                        <div onClick={() => setCategoria("Obra social")} className='flex flex-col items-center mb-3'>
 
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
-                                <Optica className="w-full h-full" />
+                                <Tourism className="w-full h-full" />
                             </div>
-                            <p className='text-xs mt-2'>Optica</p>
+                            <p className='text-xs mt-2'>Turismo</p>
                         </div>
                         <div onClick={() => setCategoria("Obra social")} className='flex flex-col items-center mb-3'>
 
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
-                                <Obrasocial className="w-full h-full" />
+                                <Museum className="w-full h-full" />
                             </div>
-                            <p className='text-xs mt-2'>Obra social</p>
+                            <p className='text-xs mt-2'>Museos</p>
+                        </div>
+                        <div onClick={() => setCategoria("Obra social")} className='flex flex-col items-center mb-3'>
+
+                            <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
+                                <Discount className="w-full h-full" />
+                            </div>
+                            <p className='text-xs mt-2'>Promociones</p>
                         </div>
                 </div>
             </div>

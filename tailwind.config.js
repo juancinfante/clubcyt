@@ -2,11 +2,11 @@ const {nextui} = require('@nextui-org/theme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: ["class"],
-    content: [
+  content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/components/(dropdown|input|select|spinner|popover|menu|divider|button|ripple|listbox|scroll-shadow).js"
+    "./node_modules/@nextui-org/theme/dist/components/(dropdown|input|modal|select|spinner|popover|menu|divider|button|ripple|listbox|scroll-shadow).js"
   ],
   theme: {
   	extend: {

@@ -218,14 +218,14 @@ const Page = () => {
         return videoID;
     }
 
-    const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica"]
+    const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica", "Museo", "Turismo", "Promocion"]
     const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
     const descuentos = ["10%", "15%", "20%", "25%", "30%", "35%", "40%"]
 
     return (
         <>
             <Navbar />
-            <Separador texto={"Nuevo producto"} />
+            <Separador texto={"Agregar comercio"} />
             <div className="container mx-auto max-w-7xl">
                 <form className='mt-5 p-3 lg:p-0' onSubmit={handleForm}>
                     <div className="grid grid-cols-12 gap-5 mb-4">
@@ -486,11 +486,10 @@ const Page = () => {
                     >
                         {
                             loading ?
-                                <Spinner color='default' size='sm' /> : "CREAR PRODUCTO"
+                                <Spinner color='default' size='sm' /> : "CREAR COMERCIO"
                         }
                     </button>
                 </form>
-                <button>Publicar producto</button>
             </div>
         </>
     );

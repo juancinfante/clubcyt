@@ -4,7 +4,6 @@ import { NextResponse } from "next/server"// Asegúrate de tener la ruta correct
 
 export async function GET(request, { params }) {
     connectDB();
-    console.log(params)
     try {
         const { id } = params; // Obtener el ID de los parámetros de la URL
         const usuario = await Usuario.findById(id); // Buscar el usuario por su ID

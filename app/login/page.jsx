@@ -29,7 +29,7 @@ const page = () => {
       });
 
       const data = await res.json();
-
+      
       if (!res.ok) {
         setError(data.error || 'Error desconocido');
         setLoading(false)
@@ -38,11 +38,9 @@ const page = () => {
       
       // Guardar el token en localStorage o manejar la sesión como prefieras
       // Redirigir a la página principal o donde desees
-      if(data.verificado){
+      if(data){
         localStorage.setItem('usuario', JSON.stringify(data));
         window.location.href = "/"
-      }else{
-        window.location.href = "/verificar-correo"
       }
       setLoading(false)
     } catch (error) {

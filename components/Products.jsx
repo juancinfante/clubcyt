@@ -57,7 +57,7 @@ const Products = () => {
     }
   };
 
-  const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica"]
+  const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica","Eventos", "Turismo", "Museos", "Promociones"]
   const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
 
   return (
