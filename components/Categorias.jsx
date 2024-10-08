@@ -30,13 +30,13 @@ const Categorias = ({ setCategoria }) => {
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
                                 <Comercio className="w-full h-full" />
                             </div>
-                            <p className='text-xs mt-2'>Area Comercial</p>
+                            <p className='text-xs mt-2 text-center'>Area Comercial</p>
                         </div>
                         <div onClick={() => setCategoria("Area Turistica")} className='flex flex-col items-center mb-3'>
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
                                 <Turismo className="w-full h-full" />
                             </div>
-                            <p className='text-xs mt-2'>Area Turistica</p>
+                            <p className='text-xs mt-2 text-center'>Area Turistica</p>
                         </div>
                         <div onClick={() => setCategoria("Eventos")} className='flex flex-col items-center mb-3'>
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">

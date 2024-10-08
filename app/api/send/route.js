@@ -3,7 +3,6 @@ import nodemailer from 'nodemailer';
 export async function POST(req) {
   try {
     const { to, subject, html } = await req.json(); // Parsear el JSON del body
-    console.log(to, subject, html)
     // Configurar Nodemailer (puedes usar Gmail u otro servicio)
     const transporter = nodemailer.createTransport({
       service: 'gmail',

@@ -1,10 +1,19 @@
+"use client"
 import Navbar from '@/components/Navbar'
 import Community from '@/public/assets/community.svg'
+import { useEffect, useState } from 'react';
 
 const page = () => {
 
-    const defaultContent =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        // Asegurarse de que el código se ejecute solo en el cliente
+        const storedUser = localStorage.getItem("usuario");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
     return (
         <>
@@ -35,7 +44,7 @@ const page = () => {
                         <div className="mt-8 flex gap-4 justify-start">
 
                             <a
-                                href="/pagoexitoso"
+                                href={user ? "/pagoexitoso" : "/login"}
                                 className="block w-full rounded border border-yellow-300 bg-yellow-300 px-3 py-3 md:px-12 md:py-3 text-sm font-medium  shadow hover:text-gray-700 focus:outline-none focus:ring sm:w-auto"
                             >
                                 Suscríbite
