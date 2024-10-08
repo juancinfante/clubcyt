@@ -50,7 +50,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className="container mx-auto max-w-7xl ps-3 ">
+        <div className="container mx-auto max-w-6xl ps-3">
             <nav className='flex justify-between items-center  py-4 '>
                 <Link href="/">
                     <Image src={logo}
@@ -61,9 +61,9 @@ const Navbar = () => {
                     {
                         usuario == null ?
                             <>
-                                <Link href="/pagoexitoso" className='hidden md:block bg-yellow-300 px-2 py-1 rounded-md'>SUSCRIBITE</Link>
+                                <Link href="/suscribirse" className='hidden md:block bg-yellow-300 px-3 py-1 rounded-full'>Suscríbite</Link>
                                 <li>
-                                    <Link href="/login" className='hidden md:block'>INICIA SESION</Link>
+                                    <Link href="/login" className='hidden md:block'>Iniciar sesión</Link>
                                 </li>
                             </>
                             :
@@ -78,18 +78,18 @@ const Navbar = () => {
                                     usuario == null ?
                                         <MenuSvg className="w-10 h-10 md:hidden" />
                                         :
-                                        <p className='bg-gray-300 rounded-full px-3 py-2 me-2'>JU</p>
+                                        <p className='bg-gray-300 rounded-full px-3 py-2 me-2'>CC</p>
                                 }
                             </button>
                         </DropdownTrigger>
                         {
                             usuario == null ?
                                 <DropdownMenu aria-label="Static Actions">
-                                    <DropdownItem key="new2" className='bg-yellow-300'>
-                                        <Link href="/pagoexitoso">SUSCRIBIRSE</Link>
+                                    <DropdownItem key="new2" className='bg-yellow-300 w-full'>
+                                        <Link href="/suscribirse" className='w-full'>Suscríbite</Link>
                                     </DropdownItem>
                                     <DropdownItem key="new">
-                                        <Link href="/login">INICIAR SESIÓN</Link>
+                                        <Link href="/login">Iniciar sesión</Link>
                                     </DropdownItem>
                                 </DropdownMenu>
                                 :

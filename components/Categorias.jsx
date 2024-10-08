@@ -12,7 +12,7 @@ import Museum from '../public/assets/museum.svg'
 const Categorias = ({ setCategoria }) => {
     return (
         <>
-            <div className="container mx-auto max-w-7xl px-2 mb-4">
+            <div className="container mx-auto max-w-6xl px-2 mb-4">
                 <div className="flex justify-between gap-7 overflow-scroll md:overflow-hidden custom-scrollbar">
                         <div onClick={() => setCategoria("Hotel")} className='flex flex-col items-center mb-3'>
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">

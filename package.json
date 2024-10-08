@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mercadopago/sdk-react": "^0.0.19",
+    "@nextui-org/accordion": "^2.0.40",
     "@nextui-org/dropdown": "^2.1.29",
     "@nextui-org/input": "^2.2.5",
     "@nextui-org/modal": "^2.0.41",
