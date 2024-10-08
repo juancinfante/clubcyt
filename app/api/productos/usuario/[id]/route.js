@@ -46,7 +46,8 @@ export async function GET(req, { params }) {
                 portada: producto.portada,
                 fotos: producto.fotos,
                 logo: producto.logo,
-                __v: producto.__v
+                __v: producto.__v,
+                activado: producto.activado
             }))
         };
 

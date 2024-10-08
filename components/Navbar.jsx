@@ -50,7 +50,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className="container mx-auto max-w-6xl ps-3">
+        <div className="container mx-auto max-w-6xl ps-3 lg:p-0">
             <nav className='flex justify-between items-center  py-4 '>
                 <Link href="/">
                     <Image src={logo}

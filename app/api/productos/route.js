@@ -13,8 +13,9 @@ export async function GET(request) {
     const page = parseInt(searchParams.get('page')) || 1; // Página actual, por defecto 1
     const limit = parseInt(searchParams.get('limit')) || 10; // Límite de productos por página, por defecto 10
 
-     // Crear la consulta para buscar por nombre o tags
+     // Crear la consulta para buscar por nombre o tags y productos activados
      const query = {
+        activado: true,
         ...(text && {
             $or: [
                 { nombre: { $regex: text, $options: 'i' } }, // Búsqueda en nombre

@@ -38,6 +38,7 @@ const QrCodeGenerator = () => {
             console.error('Error al realizar la solicitud:', error);
         }
     }
+
     useEffect(() => {
         if (localStorage.getItem('usuario') == null) {
             router.push('/login')

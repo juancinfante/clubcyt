@@ -62,7 +62,11 @@ const ProductSchema = new Schema({
     tags: {
         type: [],
         required: true
-    }
+    },
+    activado: {
+        type: Boolean,
+        default: false
+    },
 })
 
 const Producto = models.Productos || model("Productos", ProductSchema);

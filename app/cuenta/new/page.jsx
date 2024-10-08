@@ -226,7 +226,7 @@ const Page = () => {
         <>
             <Navbar />
             <Separador texto={"Agregar comercio"} />
-            <div className="container mx-auto max-w-7xl">
+            <div className="container mx-auto max-w-6xl">
                 <form className='mt-5 p-3 lg:p-0' onSubmit={handleForm}>
                     <div className="grid grid-cols-12 gap-5 mb-4">
                         <div className="grid gap-6 col-span-12 lg:col-span-6">

@@ -132,9 +132,6 @@ const Products = () => {
               →
             </button>
           </>
-          {/* :
-              <Link href={'/productos'} className="bg-indigo-500 text-white px-4 py-2 rounded-full">VER MÁS</Link>
-            } */}
         </div>
       </div>
     </div>

@@ -86,7 +86,7 @@ const page = ({ params }) => {
         <>
             <Navbar />
             <Separador texto={"Cuenta"} />
-            <div className="container max-w-7xl mx-auto px-3">
+            <div className="container max-w-6xl mx-auto px-3 lg:p-0">
                 <div className="grid grid-cols-12 gap-6 mt-5 py-4">
                     <div className="col-span-12 md:col-span-3 h-80 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center">
                         <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
@@ -102,7 +102,7 @@ const page = ({ params }) => {
                             onClick={handleOpenModal} 
                             className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</button>
                         }
-                        <Link href="/cuenta/nuevoproducto" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
+                        <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
                         <button className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar</button>
                     </div>
                     <div className="col-span-12 md:col-span-9">

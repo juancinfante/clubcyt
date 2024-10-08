@@ -35,7 +35,7 @@ const CardProducto = ({ producto, loading }) => {
           const res = await fetch(`/api/productos/${id}`, {
             method: 'DELETE',
           });
-    
+
           if (res.ok) {
             Swal.fire({
               title: "Tu producto fue eliminado.",
@@ -59,6 +59,45 @@ const CardProducto = ({ producto, loading }) => {
     });
   };
 
+  const handleComercio = async (producto) => {
+    Swal.fire({
+      title: `Deseas activar ${producto.nombre} ? `,
+      showDenyButton: true,
+      confirmButtonText: "SI",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        let timerInterval;
+        Swal.fire({
+          html: "Redirigiendo...",
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen: () => {
+            localStorage.setItem("id_producto",producto._id);
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              // timer.textContent = `${Swal.getTimerLeft()}`;
+            router.push("/comercioact")
+            }, 1000);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log("I was closed by the timer");
+          }
+        });
+      }
+      // else if (result.isDenied) {
+      //   Swal.fire("Changes are not saved", "", "info");
+      // }
+    });
+  }
+
   return (
     <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borde col-span-12 md:col-span-4 lg:col-span-3 rounded-xl overflow-hidden"}>
       <Link href={`/producto/${producto._id}`}>
@@ -67,6 +106,10 @@ const CardProducto = ({ producto, loading }) => {
           <div className="flex gap-4 pb-3">
             <span className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full'>{producto.descuento}</span>
             <span className='bg-gray-200 text-gray-500 px-2 py-1 text-sm font-semibold rounded-full'>{producto.categoria}</span>
+            {pathName.startsWith("/cuenta/") ?
+              <span className={producto.activado ? "bg-green-100 text-green-700 px-2 py-1 text-sm font-semibold rounded-full" : "bg-red-200 text-red-500 px-2 py-1 text-sm font-semibold rounded-full"}>{producto.activado ? "Activo" : "Inactivo"}</span>
+              : ""
+            }
           </div>
           <h1 className='font-semibold'>
             {producto.nombre}
@@ -75,12 +118,18 @@ const CardProducto = ({ producto, loading }) => {
       </Link>
       {
         pathName.startsWith("/cuenta/") ?
-          <div className="flex gap-4 justify-end mt-3 p-3">
-            <Image onClick={() => handleDelete(producto._id)} className='hover:cursor-pointer'
-              src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/delete.svg" alt="edit" width={20} height={20} />
-            <Link href={`/cuenta/editar/${producto._id}`}>
-              <Image src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/edit.svg" alt="edit" width={20} height={20} />
-            </Link>
+          <div className={producto.activado ? "flex gap-4 justify-end mt-3 p-3" : "flex gap-4 justify-between mt-3 p-3"}>
+            {!producto.activado ?
+              <button onClick={() => handleComercio(producto)} className='border-b-1 border-black'>Activar comercio</button>
+              :
+              ""}
+            <div className='flex justify-center items-center gap-3'>
+              <Image onClick={() => handleDelete(producto._id)} className='hover:cursor-pointer'
+                src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/delete.svg" alt="edit" width={25} height={25} />
+              <Link href={`/cuenta/editar/${producto._id}`}>
+                <Image src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/edit.svg" alt="edit" width={25} height={25} />
+              </Link>
+            </div>
           </div> :
           ""
       }
