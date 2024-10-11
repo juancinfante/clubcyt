@@ -100,7 +100,7 @@ const CardProducto = ({ producto, loading }) => {
 
   return (
     <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borde col-span-12 md:col-span-4 lg:col-span-3 rounded-xl overflow-hidden"}>
-      <Link href={`/producto/${producto._id}`}>
+      <Link href={`/comercio/${producto.slug}`}>
         <img src={producto.logo} alt="" className='h-40 w-full object-cover' />
         <div className="p-3">
           <div className="flex gap-4 pb-3">

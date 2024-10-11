@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Slider from '@/components/Slider';
-import { getProdByID } from '@/lib/actions/page'
+import { getProdByID, getProdBySlug } from '@/lib/actions/page'
 import React from 'react'
 import Wp from '@/public/assets/whatsapp.svg'
 import Fb from '@/public/assets/facebook.svg'
@@ -11,13 +11,13 @@ import LeafletMap from "@/components/Map";
 
 export default async function page({ params }) {
 
-    const producto = await getProdByID(params.id);
+    // const producto = await getProdByID(params.id);
+    const producto = await getProdBySlug(params.slug);
     const { lat, lng } = producto.ubicacion;
-    console.log(lat,lng)
     function insertarHTML(html) {
         return { __html: html };
     }
-    
+
 
     return (
         <>
@@ -64,9 +64,11 @@ export default async function page({ params }) {
                                     ""
                             }
                         </div>
-                        <div className="w-full h-[300px] ">
-                            <h1 className='font-semibold text-2xl'>📍Ubicacion:</h1>
-                            <a href={`https://www.google.com/maps?q=${lat},${lng}`} target='_blank' className='mb-3'>Abrir mapa</a>
+                        <div className="w-full h-[300px] mb-10">
+                            <div className="w-full flex items-center justify-between">
+                                <h1 className='font-semibold text-2xl'>📍Ubicacion:</h1>
+                                <a href={`https://www.google.com/maps?q=${lat},${lng}`} target='_blank'>Abrir mapa</a>
+                            </div>
                             <LeafletMap position={producto.ubicacion} />
                         </div>
                         <div className="w-full">
@@ -75,32 +77,32 @@ export default async function page({ params }) {
                                 <a href={`https://api.whatsapp.com/send?phone=54${producto.celular}`}>
                                     <Wp className="w-10 h-10" />
                                 </a>
-                                {producto.fb != "" ? 
-                                <a href={producto.fb}>
-                                    <Fb className="w-10 h-10" />
-                                </a>
-                                : 
-                                ""}
-                                {producto.ig != "" ? 
-                                <a href={producto.ig}>
-                                    <Ig className="w-10 h-10" />
-                                </a>
-                                : 
-                                ""}
+                                {producto.fb != "" ?
+                                    <a href={producto.fb}>
+                                        <Fb className="w-10 h-10" />
+                                    </a>
+                                    :
+                                    ""}
+                                {producto.ig != "" ?
+                                    <a href={producto.ig}>
+                                        <Ig className="w-10 h-10" />
+                                    </a>
+                                    :
+                                    ""}
                             </div>
                         </div>
-                        {producto.web != "" ? 
-                        <div className="w-full">
-                            <h1 className='font-semibold text-2xl mb-2'>Pagina web:</h1>
-                            <div className="flex">
-                                <Web className="w-6 h-6" />
-                                <a href={`https://${producto.web}`} target="_blank">
-                                    <p>{producto.web}</p>
-                                </a>
+                        {producto.web != "" ?
+                            <div className="w-full">
+                                <h1 className='font-semibold text-2xl mb-2'>Pagina web:</h1>
+                                <div className="flex">
+                                    <Web className="w-6 h-6" />
+                                    <a href={`https://${producto.web}`} target="_blank">
+                                        <p>{producto.web}</p>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        : 
-                        ""}
+                            :
+                            ""}
                     </div>
                 </div>
             </div >

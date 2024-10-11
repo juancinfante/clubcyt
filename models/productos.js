@@ -1,9 +1,11 @@
 import mongoose, { Schema, model, models } from "mongoose";
+import slugify from "slugify";
 
 const ProductSchema = new Schema({
-    usuarioId: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Usuarios' },
+    usuarioId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuarios'
+    },
     nombre: {
         type: String,
         required: true
@@ -76,7 +78,24 @@ const ProductSchema = new Schema({
         type: Boolean,
         default: false
     },
+    slug: {
+        type: String,
+        unique: true 
+    }
 })
+
+// Middleware para generar el slug antes de guardar
+ProductSchema.pre('save', function (next) {
+  if (!this.slug) {
+    // Generar el slug solo si no existe
+    this.slug = slugify(this.nombre, {
+      lower: true, // Convierte a minúsculas
+      strict: true, // Elimina caracteres no válidos
+      replacement: '-', // Usa guiones como separador
+    });
+  }
+  next();
+});
 
 const Producto = models.Productos || model("Productos", ProductSchema);
 

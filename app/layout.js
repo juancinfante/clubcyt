@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import Footer from "@/components/Footer"
 
 export const metadata = {
-  title: 'Club C&T',
+  title: 'Club C&t',
   description: 'Club de cultura y turismo',
 }
 
