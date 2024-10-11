@@ -12,7 +12,8 @@ import LeafletMap from "@/components/Map";
 export default async function page({ params }) {
 
     const producto = await getProdByID(params.id);
-
+    const { lat, lng } = producto.ubicacion;
+    console.log(lat,lng)
     function insertarHTML(html) {
         return { __html: html };
     }
@@ -65,6 +66,7 @@ export default async function page({ params }) {
                         </div>
                         <div className="w-full h-[300px] ">
                             <h1 className='font-semibold text-2xl'>📍Ubicacion:</h1>
+                            <a href={`https://www.google.com/maps?q=${lat},${lng}`} target='_blank' className='mb-3'>Abrir mapa</a>
                             <LeafletMap position={producto.ubicacion} />
                         </div>
                         <div className="w-full">
