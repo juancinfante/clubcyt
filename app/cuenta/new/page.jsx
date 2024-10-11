@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { Spinner } from '@nextui-org/spinner';
+import LeafletMap from "@/components/MapEdit";
 
 // Importa ReactQuill dinámicamente
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -243,7 +244,7 @@ const Page = () => {
                                 isInvalid={errores.includes("nombre") ? true : false}
                                 errorMessage="Ingresa el nombre"
                             />
-                            <Input
+                            {/* <Input
                                 type="text"
                                 className='w-full'
                                 label="Ubicacion"
@@ -256,7 +257,11 @@ const Page = () => {
                                 isInvalid={errores.includes("ubicacion") ? true : false}
                                 errorMessage="Ingresa la ubicacion"
 
-                            />
+                            /> */}
+                            <div className="w-full h-[300px] mb-10">
+                                <h1 className='mb-5'>Ubicacion:</h1>
+                            <LeafletMap setUbi={setUbicacion} />
+                            </div>
                             <Input
                                 type="number"
                                 className='w-full'

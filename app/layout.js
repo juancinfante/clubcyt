@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar"
 import '../styles/globals.css'
 import Footer from "@/components/Footer"
+
 export const metadata = {
   title: 'Club C&T',
   description: 'Club de cultura y turismo',

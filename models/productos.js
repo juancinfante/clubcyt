@@ -32,7 +32,16 @@ const ProductSchema = new Schema({
         required: true
     },
     ubicacion: {
-        type: String,
+        type: {
+            lat: {
+                type: Number,
+                required: true
+            },
+            lng: {
+                type: Number,
+                required: true
+            }
+        },
         required: true
     },
     portada: {

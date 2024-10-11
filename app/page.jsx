@@ -8,6 +8,7 @@ import Separador from '@/components/Separador'
 import Lista from '@/components/Lista'
 import Tags from '@/components/Tags'
 import ProductsNew from '@/components/ProductsNew'
+
 const page = () => {
 
   return (

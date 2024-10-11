@@ -7,6 +7,7 @@ import Fb from '@/public/assets/facebook.svg'
 import Ig from '@/public/assets/instagram.svg'
 import Web from '@/public/assets/web-link.svg'
 import Image from 'next/image';
+import LeafletMap from "@/components/Map";
 
 export default async function page({ params }) {
 
@@ -15,6 +16,7 @@ export default async function page({ params }) {
     function insertarHTML(html) {
         return { __html: html };
     }
+    
 
     return (
         <>
@@ -42,11 +44,8 @@ export default async function page({ params }) {
                         </div>
 
                     </div>
-                    <div className="col-span-6 flex flex-col gap-8 px-3 md:p-0">
-                        <div className="w-full">
-                            <h1 className='font-semibold text-2xl'>📍Ubicacion:</h1>
-                            <p className='text-md mt-2 text-gray-600'>{producto.ubicacion}</p>
-                        </div>
+                    <div className="col-span-12 md:col-span-6 flex flex-col gap-8 px-3 md:p-0 ">
+
                         <div className="w-full">
                             <h1 className='font-semibold text-2xl'>💲Descuento:</h1>
                             <p className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full w-12 text-center mt-2'>{producto.descuento}</p>
@@ -63,6 +62,10 @@ export default async function page({ params }) {
                                     :
                                     ""
                             }
+                        </div>
+                        <div className="w-full h-[300px] ">
+                            <h1 className='font-semibold text-2xl'>📍Ubicacion:</h1>
+                            <LeafletMap position={producto.ubicacion} />
                         </div>
                         <div className="w-full">
                             <h1 className='font-semibold text-2xl mb-2'>Redes:</h1>
