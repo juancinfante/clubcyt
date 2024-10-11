@@ -83,7 +83,7 @@ export default async function page({ params }) {
                                 ""}
                                 {producto.ig != "" ? 
                                 <a href={producto.ig}>
-                                    <Fb className="w-10 h-10" />
+                                    <Ig className="w-10 h-10" />
                                 </a>
                                 : 
                                 ""}
