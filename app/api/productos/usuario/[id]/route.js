@@ -46,6 +46,7 @@ export async function GET(req, { params }) {
                 portada: producto.portada,
                 fotos: producto.fotos,
                 logo: producto.logo,
+                slug: producto.slug,
                 __v: producto.__v,
                 activado: producto.activado
             }))

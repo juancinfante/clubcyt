@@ -7,6 +7,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import Swal from 'sweetalert2';
 
 const CardProducto = ({ producto, loading }) => {
+  console.log(producto)
   const router = useRouter()
   const pathName = usePathname();
 
