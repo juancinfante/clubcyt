@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Spinner } from '@nextui-org/spinner';
 import Swal from 'sweetalert2'
+import LeafletMap from "@/components/MapEdit";
+
 
 // Importa ReactQuill dinámicamente
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -199,14 +201,14 @@ const page = ({ params }) => {
             Swal.fire({
                 icon: "success",
                 text: "Producto actualizado!",
-              });
+            });
             router.back()
         } catch (error) {
             console.log('Error al actualizar el producto:', error);
             Swal.fire({
                 icon: "warning",
                 text: "Error al actualizar el producto.",
-              });
+            });
         }
 
         setLoading(false);
@@ -251,7 +253,7 @@ const page = ({ params }) => {
         <>
             <Navbar />
             <Separador texto={"Editar producto"} />
-            <div className="container mx-auto max-w-7xl">
+            <div className="container mx-auto max-w-6xl">
                 <form className='mt-5 p-3 lg:p-0' onSubmit={handleForm}>
                     <div className="grid grid-cols-12 gap-5 mb-4">
                         <div className="grid gap-6 col-span-12 lg:col-span-6">
@@ -262,13 +264,10 @@ const page = ({ params }) => {
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
-                            <Input
-                                type="text"
-                                className='w-full'
-                                label="Ubicacion"
-                                value={ubicacion}
-                                onChange={(e) => setUbicacion(e.target.value)}
-                            />
+                            <div className="w-full h-[300px] mb-8">
+                                <h1>Selecciona tu ubicacion en el mapa:</h1>
+                                <LeafletMap setUbi={setUbicacion} ubicacion={ubicacion}/>
+                            </div>
                             <Input
                                 type="number"
                                 className='w-full'
@@ -497,7 +496,7 @@ const page = ({ params }) => {
                     >
                         {
                             loading ?
-                            <Spinner color='default' size='sm'/> : "Guardar"
+                                <Spinner color='default' size='sm' /> : "Guardar"
                         }
                     </button>
                 </form>

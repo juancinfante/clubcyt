@@ -17,9 +17,11 @@ const center = {
   lat: -27.7833,
   lng: -64.2667,
 }
-function Map({ setUbi }) {
+function Map({ setUbi , ubicacion }) {
   const [draggable, setDraggable] = useState(false)
-  const [position, setPosition] = useState(center)
+  const [position, setPosition] = useState(
+    ubicacion ? [ubicacion.lat, ubicacion.lng] : center
+  );
 
   const markerRef = useRef(null)
   const markerPosition = position;
@@ -48,7 +50,7 @@ function Map({ setUbi }) {
     <MapContainer
       className={style.map}
       center={markerPosition}
-      zoom={13}
+      zoom={16}
       scrollWheelZoom={false}
     >
       <TileLayer

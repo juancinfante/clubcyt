@@ -244,20 +244,6 @@ const Page = () => {
                                 isInvalid={errores.includes("nombre") ? true : false}
                                 errorMessage="Ingresa el nombre"
                             />
-                            {/* <Input
-                                type="text"
-                                className='w-full'
-                                label="Ubicacion"
-                                onChange={(e) => {
-
-                                    setErrores(errores.filter(item => item !== "ubicacion"));
-                                    setUbicacion(e.target.value)
-                                }
-                                }
-                                isInvalid={errores.includes("ubicacion") ? true : false}
-                                errorMessage="Ingresa la ubicacion"
-
-                            /> */}
                             <div className="w-full h-[300px] mb-10">
                                 <h1 className='mb-5'>Ubicacion:</h1>
                             <LeafletMap setUbi={setUbicacion} />
