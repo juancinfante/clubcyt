@@ -57,7 +57,7 @@ const Products = () => {
     }
   };
 
-  const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica","Eventos", "Turismo", "Museos", "Promociones"]
+  const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica", "Eventos", "Turismo", "Museos", "Promociones"]
   const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
 
   return (
@@ -98,7 +98,7 @@ const Products = () => {
           </Select>
         </div>
 
-        <div className="grid grid-cols-12 w-100 gap-9 mt-5">
+        <div className="grid grid-cols-12 w-100 gap-7 md:gap-9 mt-5">
           {loading ? (
             Array(12)
               .fill()
@@ -106,9 +106,27 @@ const Products = () => {
           ) : productos.length === 0 ? (
             <h3 className="col-span-12 text-center font-semibold">No se encontraron productos para tu búsqueda.</h3>
           ) : (
-            productos.map((producto) => (
-              <CardProducto key={producto._id} producto={producto} loading={false} />
-            ))
+            productos.map((producto, index) => {
+              return (  // Asegúrate de usar un return explícito
+                (index + 1) % 4 === 0 ? (
+                  <div className="col-span-12 md:col-span-4 lg:col-span-3 block md:hidden " key={producto._id || index}>
+                    {/* Aquí va tu div personalizado */}
+                    <a href="">
+                      <img
+                        className="w-full h-56 rounded-xl"
+                        src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1720559811/terraviva/b7cabc3k1nucsgaibs01.gif"
+                        alt="Publicidad"
+                      />
+                    </a>
+                    <p className="text-xs py-2 ps-1 text-gray-500">Publicidad</p>
+                  </div>
+                ) : (
+                  <div className="col-span-12 md:col-span-4 lg:col-span-3" key={producto._id || index}>
+                    <CardProducto producto={producto} loading={false} />
+                  </div>
+                )
+              );
+            })
           )}
         </div>
 

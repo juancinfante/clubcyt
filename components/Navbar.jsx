@@ -49,8 +49,23 @@ const Navbar = () => {
         
     }, []);
 
+    const obtenerFechaFormateada = () => {
+        const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
+        const meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+      
+        const hoy = new Date();
+        const diaSemana = dias[hoy.getDay()];
+        const diaMes = hoy.getDate();
+        const mes = meses[hoy.getMonth()];
+      
+        return `${diaSemana} ${diaMes} DE ${mes}`;
+      };
+
     return (
         <div className="container mx-auto max-w-6xl ps-3 lg:p-0">
+            <div className="py-1">
+                {obtenerFechaFormateada()}
+            </div>
             <nav className='flex justify-between items-center  py-4 '>
                 <Link href="/">
                     <Image src={logo}

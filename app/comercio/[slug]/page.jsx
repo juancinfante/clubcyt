@@ -22,7 +22,7 @@ export default async function page({ params }) {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto max-w-7xl">
+            <div className="container mx-auto max-w-6xl">
                 <div className='relative flex justify-center h-56 md:h-80 lg:h-96'>
                     <img src={producto.portada} alt="" className='w-full h-full object-cover' />
                     <img src={producto.logo}
@@ -46,24 +46,22 @@ export default async function page({ params }) {
 
                     </div>
                     <div className="col-span-12 md:col-span-6 flex flex-col gap-8 px-3 md:p-0 ">
+                        <div className="flex">
 
                         <div className="w-full">
-                            <h1 className='font-semibold text-2xl'>💲Descuento:</h1>
+                            <h1 className='font-semibold text-2xl'>Descuento:</h1>
                             <p className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full w-12 text-center mt-2'>{producto.descuento}</p>
                         </div>
-                        <div className="grid grid-cols-2 gap-5">
                             {
                                 producto.telefono != "" ?
-                                    <div className="col-span-2 md:col-span-1">
-                                        <div className="w-full">
-                                            <h1 className='font-semibold text-2xl'>Telefono:</h1>
-                                            <p className='text-md mt-2 text-gray-600'>{producto.telefono}</p>
+                                <div className="w-full">
+                                            <h1 className='font-semibold text-2xl'>Llamar:</h1>
+                                            <a href={`tel:${producto.telefono}`} className='text-md mt-2 text-gray-600 underline'>→ {producto.telefono}</a>
                                         </div>
-                                    </div>
                                     :
                                     ""
-                            }
-                        </div>
+                                }
+                                </div>
                         <div className="w-full h-[300px] mb-10">
                             <div className="w-full flex items-center justify-between">
                                 <h1 className='font-semibold text-2xl'>📍Ubicacion:</h1>

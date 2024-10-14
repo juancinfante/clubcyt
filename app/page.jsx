@@ -8,14 +8,17 @@ import Separador from '@/components/Separador'
 import Lista from '@/components/Lista'
 import Tags from '@/components/Tags'
 import ProductsNew from '@/components/ProductsNew'
+import Publicidades from '@/components/Publicidades'
 
 const page = () => {
 
   return (
     <>
+
       <Navbar />
       {/* <Hero /> */}
       <Products />
+      <Publicidades />
     </>
   )
 }
