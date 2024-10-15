@@ -1,65 +1,10 @@
-"use client"
 import Navbar from '@/components/Navbar'
-import Community from '@/public/assets/community.svg'
-import { useEffect, useState } from 'react';
+import React from 'react'
 
 const page = () => {
-
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        // Asegurarse de que el código se ejecute solo en el cliente
-        const storedUser = localStorage.getItem("usuario");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
-
     return (
-        <>
-            <div className='container mx-auto'>
-                <Navbar />
-            </div>
-
-            <section
-                className="relative bg-[url(https://thumbs.dreamstime.com/b/young-people-having-fun-happy-group-friendship-student-lifestyle-outdoors-park-244194483.jpg)] bg-cover bg-center bg-no-repeat text-gray-800"
-            >
-                <div
-                    className="absolute inset-0 bg-white/75 sm:bg-transparent sm:from-white/95 sm:to-white/25 ltr:sm:bg-gradient-to-r rtl:sm:bg-gradient-to-l"
-                ></div>
-
-                <div
-                    className="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex justify-start lg:h-screen lg:items-center lg:px-8"
-                >
-                    <div className="container mx-auto max-w-6xl text-center ltr:sm:text-left rtl:sm:text-left">
-                        <h1 className="text-3xl font-extrabold sm:text-5xl">
-                            Suscríbite y disfruta todos los beneficios que ClubCyt tiene para ofrecerte
-
-                        </h1>
-
-                        <p className="mt-4">
-                            Solo cuesta $ 1.500 por mes. Cancelá cuando quieras.
-                        </p>
-
-                        <div className="mt-8 flex gap-4 justify-start">
-
-                            <a
-                                href={user ? "/pagoexitoso" : "/login"}
-                                className="block w-full rounded border border-yellow-300 bg-yellow-300 px-3 py-3 md:px-12 md:py-3 text-sm font-medium  shadow hover:text-gray-700 focus:outline-none focus:ring sm:w-auto"
-                            >
-                                Suscríbite
-                            </a>
-                            <a
-                                href="#clubcyt"
-                                className="block w-full rounded bg-white px-3 py-3 md:px-12 md:py-3 text-sm font-medium text-black shadow hover:border-black hover:border focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
-                            >
-                                Que es club cyt?
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
+        <div>
+            <Navbar />
             <div className='container mx-auto max-w-6xl mt-[100px] text-gray-800' id='clubcyt'>
                 <div className="text-center">
                     <h1 className='text-7xl font-bold' >ClubC&T</h1>
@@ -97,7 +42,7 @@ const page = () => {
                     </div>
                 </section>
                 <section>
-                    <div className="mx-auto max-w-screen-xl px-4 py-0 sm:px-6 sm:py-24 lg:px-8">
+                    <div className="mx-auto max-w-screen-xl px-4 py-0 sm:px-6 sm:py-10 lg:px-8">
                         <div className="max-w-3xl">
                             <h2 className="text-3xl font-bold sm:text-4xl">
                                 Que es ClubC&T?
@@ -129,7 +74,7 @@ const page = () => {
                 </section>
 
             </div>
-            
+
             <section className="bg-gray-900 text-white">
                 <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
                     <div className="mx-auto max-w-lg text-center">
@@ -341,8 +286,7 @@ const page = () => {
                 </div>
 
             </div>
-
-        </>
+        </div>
     )
 }
 

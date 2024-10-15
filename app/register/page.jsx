@@ -9,9 +9,11 @@ import { Spinner } from '@nextui-org/spinner';
 const page = () => {
     const [error, setError] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
+    const [errorDNI, setErrorDNI] = useState(false);
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
+    const [dni, setDNI] = useState("");
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
 
@@ -99,33 +101,43 @@ const page = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (password === password2) {
-            try {
-                const res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ nombre, apellido, email, password }),
-                });
+        if (dni.toString().length == 8) {
+            if (password !== password2) {
+                setErrorPassword(true);
+                setLoading(false);
+            }else{
+                try {
+                    const res = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ nombre, apellido, email, password }),
+                    });
 
-                console.log(res.status);
-                const data = await res.json();
+                    console.log(res.status);
+                    const data = await res.json();
 
-                // Verifica si el email ya está en uso
-                if (data.emailExists) {
-                    setError(true);
-                    return;
+                    // Verifica si el email ya está en uso
+                    if (data.emailExists) {
+                        setError(true);
+                        setLoading(false);
+                        return;
+                    }
+
+                    const id = data._id;
+                    sendEmail({ email, nombre, id })
+
+                } catch (error) {
+                    setLoading(false);
+                    console.log(error);
                 }
-
-                const id = data._id;
-                sendEmail({ email, nombre, id })
-
-            } catch (error) {
-                console.log(error);
             }
-        } else {
-            setErrorPassword(true);
+        }
+        else {
+            setErrorDNI(true)
+            setLoading(false);
+
         }
     };
 
@@ -160,8 +172,26 @@ const page = () => {
                                 isInvalid={error ? "true" : "false"}
                                 errorMessage={error ? "Email ya esta en uso." : ""}
                                 color={error ? "danger" : ""}
-                                isClearable required onChange={(e) => setEmail(e.target.value)} />
+                                isClearable required onChange={(e) => {
+                                    setError(false)
+                                    setEmail(e.target.value)}} />
                         </div>
+                        <div className='relative w-full'>
+                            <Input type="number" label="Numero de DNI"
+                                isInvalid={errorDNI ? "true" : "false"}
+                                errorMessage={errorDNI ? "Coloque un DNI valido." : ""}
+                                color={errorDNI ? "danger" : ""}
+                                isClearable required onChange={(e) => {
+                                    setDNI(e.target.value)
+                                    setErrorDNI(false)
+                                }} />
+                        </div>
+                        {/* {
+                            errorDNI ?
+                                <p className='text-xs pt-1 ps-2 text-red-600'>Coloque un dni valido.</p>
+                                :
+                                ""
+                        } */}
                         <div className='relative w-full'>
                             <Input type="password" label="Contraseña"
                                 isInvalid={errorPassword ? "true" : "false"}

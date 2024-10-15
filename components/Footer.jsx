@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Footer = () => {
@@ -15,15 +16,16 @@ const Footer = () => {
 
                     <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
                         <li>
-                            <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Suscribirse </a>
+                            <Link className="text-gray-700 transition hover:text-gray-700/75" href="/suscribirse"> Suscribirse </Link>
                         </li>
-
                         <li>
-                            <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Contacto </a>
+                            <Link className="text-gray-700 transition hover:text-gray-700/75" href="/contacto"> Contacto </Link>
                         </li>
-
                         <li>
-                            <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Nosotros </a>
+                            <Link className="text-gray-700 transition hover:text-gray-700/75" href="/"> Inicio </Link>
+                        </li>
+                        <li>
+                            <Link className="text-gray-700 transition hover:text-gray-700/75" href="/nosotros"> Nosotros </Link>
                         </li>
                     </ul>
 
