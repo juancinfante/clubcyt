@@ -44,21 +44,21 @@ const Categorias = ({ setCategoria }) => {
                             </div>
                             <p className='text-xs mt-2'>Eventos</p>
                         </div>
-                        <div onClick={() => setCategoria("Obra social")} className='flex flex-col items-center mb-3'>
+                        <div onClick={() => setCategoria("Turismo")} className='flex flex-col items-center mb-3'>
 
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
                                 <Tourism className="w-full h-full" />
                             </div>
                             <p className='text-xs mt-2'>Turismo</p>
                         </div>
-                        <div onClick={() => setCategoria("Obra social")} className='flex flex-col items-center mb-3'>
+                        <div onClick={() => setCategoria("Museo")} className='flex flex-col items-center mb-3'>
 
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
                                 <Museum className="w-full h-full" />
                             </div>
                             <p className='text-xs mt-2'>Museos</p>
                         </div>
-                        <div onClick={() => setCategoria("Obra social")} className='flex flex-col items-center mb-3'>
+                        <div onClick={() => setCategoria("Promociones")} className='flex flex-col items-center mb-3'>
 
                             <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
                                 <Discount className="w-full h-full" />

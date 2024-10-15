@@ -79,7 +79,7 @@ const CardProducto = ({ producto, loading }) => {
             const timer = Swal.getPopup().querySelector("b");
             timerInterval = setInterval(() => {
               // timer.textContent = `${Swal.getTimerLeft()}`;
-            router.push("/comercioact")
+            router.push("https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808473dd91620173de7e3e8803d6")
             }, 1000);
           },
           willClose: () => {

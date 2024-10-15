@@ -9,6 +9,7 @@ import Lista from '@/components/Lista'
 import Tags from '@/components/Tags'
 import ProductsNew from '@/components/ProductsNew'
 import Publicidades from '@/components/Publicidades'
+import CarouselPublicidades from '@/components/CarouselPublicidades'
 
 const page = () => {
 
@@ -19,6 +20,7 @@ const page = () => {
       {/* <Hero /> */}
       <Products />
       <Publicidades />
+      <CarouselPublicidades />
     </>
   )
 }

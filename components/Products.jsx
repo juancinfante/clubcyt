@@ -23,7 +23,7 @@ const Products = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalProductos, setTotalProductos] = useState(0);
 
-  const limit = 8; // Límite de productos por página
+  const limit = 12; // Límite de productos por página
 
   // Fetch products with filters and pagination
   const fetchProductos = async () => {
@@ -41,7 +41,7 @@ const Products = () => {
   };
 
   useEffect(() => {
-    fetchProductos();
+    fetchProductos();console.log(productos)
   }, [searchText, categoria, provincia, currentPage]); // Trigger fetch when filters or page change
 
   // Funciones para cambiar de página
@@ -97,7 +97,12 @@ const Products = () => {
             ))}
           </Select>
         </div>
+        <a href="" className="block md:hidden text-center p-3 text-md bg-yellow-300 border-2 border-gray-500 rounded-sm mt-5">
+          <p>CLUB CyT TE ESPERA!</p>
+          <p>DESCUBRI BENEFICIOS Y EXPERIENCIAS EXCLUSIVAS</p>
+          <p className="underline">#SomosTerraviva</p>
 
+        </a>
         <div className="grid grid-cols-12 w-100 gap-7 md:gap-9 mt-5">
           {loading ? (
             Array(12)
@@ -106,27 +111,49 @@ const Products = () => {
           ) : productos.length === 0 ? (
             <h3 className="col-span-12 text-center font-semibold">No se encontraron productos para tu búsqueda.</h3>
           ) : (
+            // productos.map((producto, index) => {
+            //   return (  // Asegúrate de usar un return explícito
+            //     (index + 1) % 4 === 0 ? (
+            //       <div className="col-span-12 md:col-span-4 lg:col-span-3 block md:hidden " key={producto._id || index}>
+            //         {/* Aquí va tu div personalizado */}
+            //         <a href="">
+            //           <img
+            //             className="w-full h-56 rounded-xl"
+            //             src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1720559811/terraviva/b7cabc3k1nucsgaibs01.gif"
+            //             alt="Publicidad"
+            //           />
+            //         </a>
+            //         <p className="text-xs py-2 ps-1 text-gray-500">Publicidad</p>
+            //       </div>
+            //     ) : (
+            //       <div className="col-span-12 md:col-span-4 lg:col-span-3" key={producto._id || index}>
+            //         <CardProducto producto={producto} loading={false} />
+            //       </div>
+            //     )
+            //   );
+            // })
             productos.map((producto, index) => {
-              return (  // Asegúrate de usar un return explícito
-                (index + 1) % 4 === 0 ? (
-                  <div className="col-span-12 md:col-span-4 lg:col-span-3 block md:hidden " key={producto._id || index}>
-                    {/* Aquí va tu div personalizado */}
-                    <a href="">
-                      <img
-                        className="w-full h-56 rounded-xl"
-                        src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1720559811/terraviva/b7cabc3k1nucsgaibs01.gif"
-                        alt="Publicidad"
-                      />
-                    </a>
-                    <p className="text-xs py-2 ps-1 text-gray-500">Publicidad</p>
-                  </div>
-                ) : (
-                  <div className="col-span-12 md:col-span-4 lg:col-span-3" key={producto._id || index}>
-                    <CardProducto producto={producto} loading={false} />
-                  </div>
-                )
+              return (
+                <div className="col-span-12 md:col-span-4 lg:col-span-3" key={producto._id || index}>
+                  {/* Si el índice es 4, primero muestra la publicidad */}
+                  {index === 4 && (
+                    <div className="block md:hidden mb-6">
+                      <a href="">
+                        <img
+                          className="w-full h-56 rounded-xl"
+                          src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1720559811/terraviva/b7cabc3k1nucsgaibs01.gif"
+                          alt="Publicidad"
+                        />
+                      </a>
+                      <p className="text-xs py-2 ps-1 text-gray-500">Publicidad</p>
+                    </div>
+                  )}
+                  {/* Siempre muestra el producto después de la publicidad si es la posición 5 */}
+                  <CardProducto producto={producto} loading={false} />
+                </div>
               );
             })
+            
           )}
         </div>
 

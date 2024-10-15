@@ -100,7 +100,7 @@ const page = ({ params }) => {
                             className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Ver credencial</button>
                             :
                             <a
-                            href='/pagoexitoso'
+                            href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
                             className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
                         }
                         <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
