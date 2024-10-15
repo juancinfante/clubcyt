@@ -63,7 +63,6 @@ const Products = () => {
   return (
     <div className="container max-w-6xl mx-auto px-3">
       <Categorias setCategoria={setCategoria} />
-
       <div className="flex flex-col mb-5">
         <div className="grid grid-cols-12 w-100 gap-4">
           <Input
@@ -97,12 +96,6 @@ const Products = () => {
             ))}
           </Select>
         </div>
-        <a href="" className="block md:hidden text-center p-3 text-md bg-yellow-300 border-2 border-gray-500 rounded-sm mt-5">
-          <p>CLUB CyT TE ESPERA!</p>
-          <p>DESCUBRI BENEFICIOS Y EXPERIENCIAS EXCLUSIVAS</p>
-          <p className="underline">#SomosTerraviva</p>
-
-        </a>
         <div className="grid grid-cols-12 w-100 gap-7 md:gap-9 mt-5">
           {loading ? (
             Array(12)
