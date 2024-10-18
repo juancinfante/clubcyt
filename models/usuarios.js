@@ -22,6 +22,10 @@ const UsuarioSchema = new Schema({
         required : true,
         default: false
     },
+    dni:{
+        type: Number,
+        required: true
+    },
     suscripto:{
         type: Boolean,
         default: false

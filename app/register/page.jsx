@@ -10,6 +10,7 @@ const page = () => {
     const [error, setError] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
     const [errorDNI, setErrorDNI] = useState(false);
+    const [dniExists, setDniExists] = useState(false);
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
@@ -112,7 +113,7 @@ const page = () => {
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ nombre, apellido, email, password }),
+                        body: JSON.stringify({ nombre, apellido, email, password, dni }),
                     });
 
                     console.log(res.status);
@@ -121,6 +122,12 @@ const page = () => {
                     // Verifica si el email ya está en uso
                     if (data.emailExists) {
                         setError(true);
+                        setLoading(false);
+                        return;
+                    }
+                    // Verifica si el dni ya está en uso
+                    if (data.dniExists) {
+                        setDniExists(true);
                         setLoading(false);
                         return;
                     }
@@ -179,11 +186,14 @@ const page = () => {
                         <div className='relative w-full'>
                             <Input type="number" label="Numero de DNI"
                                 isInvalid={errorDNI ? "true" : "false"}
-                                errorMessage={errorDNI ? "Coloque un DNI valido." : ""}
-                                color={errorDNI ? "danger" : ""}
+                                errorMessage={
+                                    errorDNI ? "Coloque un DNI valido." : dniExists ? "El DNI ya está registrado." : ""
+                                }
+                                color={ errorDNI || dniExists ? "danger" : ""}
                                 isClearable required onChange={(e) => {
                                     setDNI(e.target.value)
                                     setErrorDNI(false)
+                                    setDniExists(false)
                                 }} />
                         </div>
                         {/* {
