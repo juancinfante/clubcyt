@@ -1,7 +1,6 @@
 import React from 'react'
 import Food from '../public/assets/food.svg'
 import Comercio from '../public/assets/comercio.svg'
-import Obrasocial from '../public/assets/obrasocial.svg'
 import Turismo from '../public/assets/turismo.svg'
 import Eventos from '../public/assets/eventos.svg'
 import Hotel from '../public/assets/hotel.svg'

@@ -2,15 +2,26 @@
 
 import Navbar from '@/components/Navbar'
 import Separador from '@/components/Separador'
-import { Input, Textarea } from '@nextui-org/input'
+import { Input } from '@nextui-org/input'
 import { Select, SelectItem } from '@nextui-org/select'
-import { Tooltip } from '@nextui-org/tooltip'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { Spinner } from '@nextui-org/spinner';
-import LeafletMap from "@/components/MapEdit";
+import Bathroom from '@/public/hotel/bathroom.svg'
+import Bed from '@/public/hotel/bed.svg'
+import Chat from '@/public/hotel/chat.svg'
+import Lock from '@/public/hotel/lock.svg'
+import Parking from '@/public/hotel/parking.svg'
+import Services from '@/public/hotel/services.svg'
+import Tv from '@/public/hotel/tv.svg'
+import Warning from '@/public/hotel/warning.svg'
+import Wifi from '@/public/hotel/wifi.svg'
+import Bienestar from '@/public/hotel/bienestar.svg'
+import Cleaner from '@/public/hotel/cleaner.svg'
+import Food from '@/public/hotel/food.svg'
+
 
 // Importa ReactQuill dinámicamente
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -39,6 +50,127 @@ const Page = () => {
     const [portadaUrl, setPortadaUrl] = useState(null)
     const [galeriaUrls, setGaleriaUrls] = useState([]) // URLs para las imágenes de la galería
     const [loading, setLoading] = useState(false);
+
+    const [services, setServices] = useState({
+        baño: {
+            papelHigienico: false,
+            toallas: false,
+            sabanans: false,
+            bañoPrivado: false,
+            ducha: false,
+            secadorDePelo: false,
+            articulosDeAseo: false,
+        },
+        internet: {
+            wifi: false,
+        },
+        general: {
+            prohibidoFumar: false,
+            calefaccion: false,
+            ascensor: false,
+            insonorizacion: false,
+            habitacionInsonorizadas: false,
+        },
+        aparcamiento: {
+            parking: false,
+            parkingEnUnGaraje: false,
+        },
+        habitacion: {
+            ropaDeCama: false,
+            armario: false,
+            enchufeCercaDeLaCama: false,
+            perchero: false,
+            wifi: false,
+        },
+        equipamiento: {
+            tv: false,
+            canalesPorCable: false,
+            canalesViaSatelite: false,
+            telefono: false,
+            canalesDePago: false,
+        },
+        seguridad: {
+            extiontores: false,
+            cámarasDeSeguridad: false,
+            detectoresDeHumo: false,
+            seguridad24Horas: false,
+            tarjetaDeAcceso: false,
+            alarmaDeSeguridad: false,
+        },
+        idiomas: {
+            ingles: false,
+            español: false,
+            frances: false,
+            portugues: false,
+            italiano: false,
+        },
+        servicios: {
+            recepcion24Horas: false,
+            informacionTuristica: false,
+            servicioDeTraslado: false,
+            guardaEquipaje: false,
+            italiano: false,
+        },
+        limpieza: {
+            servicioDeLimpiezaDiario: false,
+            servicioDeLavanderia: false,
+            planchaParaPantalones: false,
+        },
+        bienestar: {
+            gimnasio: false,
+            spa: false,
+            piscinaAlAireLibre: false
+        },
+        comidaYBebida: {
+            bar: false,
+            restaurante: false,
+        },
+    });
+
+    const handleCheckboxChange = (category, service) => {
+        setServices(prevServices => ({
+            ...prevServices,
+            [category]: {
+                ...prevServices[category],
+                [service]: !prevServices[category][service],
+            },
+        }));
+    };
+
+    const getSelectedServices = () => {
+        const selected = {
+            baño: [],
+            habitacion: [],
+            internet: [],
+            general: [],
+            aparcamiento: [],
+            equipamiento: [],
+            seguridad: [],
+            idiomas: [],
+            servicios: [],
+            bienestar: [],
+            comidaybebida: [],
+            limpieza: [],
+        };
+
+        // Filtrar servicios seleccionados
+        Object.keys(services.baño).forEach(service => {
+            if (services.baño[service]) {
+                selected.baño.push(service);
+            }
+        });
+
+
+        return selected;
+    };
+
+    const selectedServices = getSelectedServices();
+
+    const formatServiceName = (service) => {
+        return service.replace(/([A-Z])/g, ' $1') // Agregar espacio antes de mayúsculas
+            .replace(/^./, str => str.toUpperCase()); // Capitalizar la primera letra
+    };
+
     const router = useRouter();
 
     const [imagenes, setImagenes] = useState([]);
@@ -143,7 +275,15 @@ const Page = () => {
                 portada: uploadedPortadaUrl,
                 logo: uploadedLogoUrl,
                 fotos: uploadedGaleriaUrls,
+                activado: false
+                // condicion si cateogira es hotel colocar los servicios aqui 
             };
+
+            if (categoria === "Hotel") {
+                formData.services = services; // Agrega los servicios al objeto
+                formData.activado = true; // Agrega los servicios al objeto
+            }
+            console.log(formData)
 
             // Realizar el fetch POST a la API
             const response = await fetch('/api/productos', {
@@ -244,10 +384,16 @@ const Page = () => {
                                 isInvalid={errores.includes("nombre") ? true : false}
                                 errorMessage="Ingresa el nombre"
                             />
-                            <div className="w-full h-[300px] mb-10">
+                            {/* <div className="w-full h-[300px] mb-10">
                                 <h1 className='mb-5'>Ubicacion:</h1>
                             <LeafletMap setUbi={setUbicacion} />
-                            </div>
+                            </div> */}
+                            <Input
+                                type="text"
+                                className='w-full'
+                                label="Ubicacion"
+                                onChange={(e) => setUbicacion(e.target.value)}
+                            />
                             <Input
                                 type="number"
                                 className='w-full'
@@ -363,6 +509,273 @@ const Page = () => {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+                        <div className="col-span-12 text-gray-700 mb-10">
+                            {categoria == "Hotel" ?
+                                <>
+                                    <h2 className='mb-5 text-xl'>Servicios del Hotel</h2>
+                                    <div className='grid grid-cols-3 gap-4'>
+
+                                        {/* BAÑO */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Bathroom className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Baño</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.baño).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.baño[service]}
+                                                            onChange={() => handleCheckboxChange('baño', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* HABITACION */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Bed className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Habitacion</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.habitacion).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.habitacion[service]}
+                                                            onChange={() => handleCheckboxChange('habitacion', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* EQUIPAMIENTO */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Tv className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Equipamiento</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.equipamiento).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.equipamiento[service]}
+                                                            onChange={() => handleCheckboxChange('equipamiento', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* SEGURIDAD */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Lock className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Seguridad</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.seguridad).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.seguridad[service]}
+                                                            onChange={() => handleCheckboxChange('seguridad', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* GENERAL */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Warning className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>General</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.general).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.general[service]}
+                                                            onChange={() => handleCheckboxChange('general', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                         {/* SERVICIOS */}
+                                         <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Services className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Servicios</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.servicios).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.servicios[service]}
+                                                            onChange={() => handleCheckboxChange('servicios', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* LIMPIEZA */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Cleaner className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Limpieza</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.limpieza).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.limpieza[service]}
+                                                            onChange={() => handleCheckboxChange('limpieza', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* IDIOMAS */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Chat className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Idiomas</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.idiomas).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.idiomas[service]}
+                                                            onChange={() => handleCheckboxChange('idiomas', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* COMIDA */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Food className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Comida y Bebida</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.comidaYBebida).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.comidaYBebida[service]}
+                                                            onChange={() => handleCheckboxChange('comidaYBebida', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* BIENESTAR */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Bienestar className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Bienestar</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.bienestar).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.bienestar[service]}
+                                                            onChange={() => handleCheckboxChange('bienestar', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* APARCAMIENTO */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Parking className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Aparcamiento</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.aparcamiento).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.aparcamiento[service]}
+                                                            onChange={() => handleCheckboxChange('aparcamiento', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {/* INTERNET */}
+                                        <div className="col-span-3 md:col-span-1">
+                                            <div className='flex gap-2 items-center'>
+                                                <Wifi className="h-5 w-5" />
+                                                <h3 className='font-medium text-lg'>Internet</h3>
+                                            </div>
+                                            <div className='flex flex-col mt-2 gap-2'>
+                                                {Object.keys(services.internet).map(service => (
+                                                    <label key={service}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className='me-2'
+                                                            checked={services.internet[service]}
+                                                            onChange={() => handleCheckboxChange('internet', service)}
+                                                        />
+                                                        {formatServiceName(service)}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                                :
+                                ""}
+
+
+
+                            {/* <h3 className='mt-40'>Servicios Seleccionados</h3>
+                            <div>
+                                {selectedServices.baño.length > 0 && (
+                                    <div>
+                                        <h4>Baño:</h4>
+                                        <ul>
+                                            {selectedServices.baño.map(service => (
+                                                <li key={service}>{formatServiceName(service)}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div> */}
                         </div>
                         <div className="col-span-4">
                             <Input

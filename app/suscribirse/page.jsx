@@ -17,10 +17,7 @@ const page = () => {
 
     return (
         <>
-            <div className='container mx-auto'>
-                <Navbar />
-            </div>
-
+            <Navbar />
             <section
                 className="relative bg-[url(https://thumbs.dreamstime.com/b/young-people-having-fun-happy-group-friendship-student-lifestyle-outdoors-park-244194483.jpg)] bg-cover bg-center bg-no-repeat text-gray-800"
             >
@@ -59,7 +56,7 @@ const page = () => {
                     </div>
                 </div>
             </section>
-            
+
             <div className='container mx-auto max-w-6xl mt-[100px] text-gray-800' id='clubcyt'>
                 <div className="text-center">
                     <h1 className='text-7xl font-bold' >ClubC&T</h1>
@@ -129,7 +126,7 @@ const page = () => {
                 </section>
 
             </div>
-            
+
             <section className="bg-gray-900 text-white">
                 <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
                     <div className="mx-auto max-w-lg text-center">

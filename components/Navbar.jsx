@@ -77,7 +77,10 @@ const Navbar = () => {
                     {
                         usuario == null ?
                             <>
-                                <Link href="/suscribirse" className='hidden md:block bg-yellow-200 px-3 py-1 rounded-full'>SUSCRIBITE</Link>
+                                {/* <Link href="/suscribirse" className='bg-yellow-200 px-3 py-1 rounded-full md:hidden'>SUSCRIBITE</Link> */}
+                                <li>
+                                    <Link href="/nosotros" className='hidden md:block'>NOSOTROS</Link>
+                                </li>
                                 <li>
                                     <Link href="/login" className='hidden md:block'>INICIAR SESION</Link>
                                 </li>
@@ -131,7 +134,7 @@ const Navbar = () => {
             </nav>
         </div>
             {usuario == null ? 
-            <div className="w-full bg-gray-100 py-3 flex justify-center items-center gap-2 md:hidden">
+            <div className="w-full bg-gray-100 py-3 flex justify-center items-center gap-2">
                 <Link href={"/suscribirse"} className='px-3 py-2 text-xs font-semibold bg-yellow-200 rounded-full'>SUSCRIBITE POR $1.500</Link>
                 <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link>
             </div>

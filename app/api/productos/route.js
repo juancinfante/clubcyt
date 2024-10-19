@@ -47,7 +47,6 @@ export async function GET(request) {
 
 export async function POST(request) {
     connectDB()
-    console.log(request.portada)
     try {
         const data = await request.json()
         const newProduct = new Producto(data)
@@ -56,6 +55,7 @@ export async function POST(request) {
             message: "Producto creado!"
         })
     } catch (error) {
+        console.log(error)
         return NextResponse.json(error.message, {
             status: 400
         })

@@ -9,11 +9,6 @@ const Footer = () => {
                     <div className="flex justify-center text-teal-600">
                         <img src="/assets/logo_blue_clubcyt.png" alt="" className='w-40' />
                     </div>
-
-                    <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">
-                        Suscríbite y disfruta todos los beneficios que ClubCyt tiene para ofrecerte
-                    </p>
-
                     <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
                         <li>
                             <Link className="text-gray-700 transition hover:text-gray-700/75" href="/suscribirse"> Suscribirse </Link>

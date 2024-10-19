@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, models } from "mongoose";
+import { type } from "os";
 import slugify from "slugify";
 
 const ProductSchema = new Schema({
@@ -34,16 +35,7 @@ const ProductSchema = new Schema({
         required: true
     },
     ubicacion: {
-        type: {
-            lat: {
-                type: Number,
-                required: true
-            },
-            lng: {
-                type: Number,
-                required: true
-            }
-        },
+        type: String,
         required: true
     },
     portada: {
@@ -76,11 +68,15 @@ const ProductSchema = new Schema({
     },
     activado: {
         type: Boolean,
-        default: false
+        required: true
     },
     slug: {
         type: String,
         unique: true 
+    },
+    services:{
+        type: Object,
+        required: false,
     }
 })
 
