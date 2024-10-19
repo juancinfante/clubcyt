@@ -15,16 +15,16 @@ const Slider = ({ fotos }) => {
   };
 
   return (
-    <div className="relative w-full mx-auto">
+    <div className="relative w-full mx-auto h-[300px] md:h-[400px]  overflow-hidden">
       {/* Slider container */}
-      <div className="flex overflow-hidden w-full">
+      <div className="flex overflow-hidden w-full h-full">
         {images.map((image, i) => (
           <div
             key={i}
-            className={`flex-shrink-0 w-full transition-transform transform ${i === index ? 'translate-x-0' : 'translate-x-full'} `}
+            className={`flex-shrink-0 w-full h-full transition-transform transform ${i === index ? 'translate-x-0' : 'translate-x-full'} `}
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
-            <img src={image} className="w-full object-cover" alt={`Slide ${i + 1}`} />
+            <img src={image} className="w-full h-full object-cover" alt={`Slide ${i + 1}`} />
           </div>
         ))}
       </div>

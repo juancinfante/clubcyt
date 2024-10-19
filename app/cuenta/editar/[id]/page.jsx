@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Spinner } from '@nextui-org/spinner';
 import Swal from 'sweetalert2'
-import LeafletMap from "@/components/MapEdit";
 
 
 // Importa ReactQuill dinámicamente
@@ -264,10 +263,10 @@ const page = ({ params }) => {
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
-                            <div className="w-full h-[300px] mb-8">
+                            {/* <div className="w-full h-[300px] mb-8">
                                 <h1>Selecciona tu ubicacion en el mapa:</h1>
                                 <LeafletMap setUbi={setUbicacion} ubicacion={ubicacion}/>
-                            </div>
+                            </div> */}
                             <Input
                                 type="number"
                                 className='w-full'

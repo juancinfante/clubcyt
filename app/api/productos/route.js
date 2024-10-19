@@ -55,7 +55,6 @@ export async function POST(request) {
             message: "Producto creado!"
         })
     } catch (error) {
-        console.log(error)
         return NextResponse.json(error.message, {
             status: 400
         })

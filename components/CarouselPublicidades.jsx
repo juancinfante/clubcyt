@@ -1,16 +1,17 @@
 "use client"
 
+import Image from 'next/image';
 import React from 'react';
 
 const logos = [
-    '/logos/3m.svg',
-    '/logos/barstool-store.svg',
-    '/logos/budweiser.svg',
-    '/logos/buzzfeed.svg',
-    '/logos/forbes.svg',
-    '/logos/macys.svg',
-    '/logos/menshealth.svg',
-    '/logos/mrbeast.svg',
+    '/publicidad/casaterrav.png',
+    '/publicidad/espiritus.jpg',
+    '/publicidad/historias.jpg',
+    '/publicidad/terraviva.png',
+    '/publicidad/casaterrav.png',
+    '/publicidad/espiritus.jpg',
+    '/publicidad/historias.jpg',
+    '/publicidad/terraviva.png',
 ];
 
 const CarouselPublicidades = () => {
@@ -19,8 +20,10 @@ const CarouselPublicidades = () => {
             <h1 className='mb-10 text-lg'>Colaboradores</h1>
             <div className="flex animate-slide">
                 {logos.map((logo, index) => (
-                    <img
-                        className="h-12 mx-10"
+                    <Image
+                        width={80}
+                        height={20}
+                        className='mx-10'
                         key={index}
                         src={logo}
                         alt={`Logo ${index}`}
@@ -29,11 +32,13 @@ const CarouselPublicidades = () => {
                 {/* Clonamos los logos para el efecto de carrusel continuo */}
                 {logos.map((logo, index) => (
 
-                    <img
+                    <Image
                         key={index + logos.length} // Asegura un key único
                         src={logo}
+                        width={80}
+                        height={20}
+                        className='mx-10'
                         alt={`Logo ${index}`}
-                        className="h-12 mx-10"
                     />
                 ))}
             </div>
