@@ -14,7 +14,7 @@ const page = () => {
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
-    const [dni, setDNI] = useState("");
+    const [dni, setDNI] = useState();
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
 
@@ -115,30 +115,32 @@ const page = () => {
                         },
                         body: JSON.stringify({ nombre, apellido, email, password, dni }),
                     });
-
-                    console.log(res.status);
+                
                     const data = await res.json();
-
+                
                     // Verifica si el email ya está en uso
                     if (data.emailExists) {
-                        setError(true);
+                        setError(true); // o manejar el error de otra manera
                         setLoading(false);
                         return;
                     }
+                
                     // Verifica si el dni ya está en uso
                     if (data.dniExists) {
                         setDniExists(true);
                         setLoading(false);
                         return;
                     }
-
+                
+                    // Si no hay errores, continuar con el envío del email
                     const id = data._id;
-                    sendEmail({ email, nombre, id })
-
+                    sendEmail({ email, nombre, id });
+                
                 } catch (error) {
                     setLoading(false);
                     console.log(error);
                 }
+                
             }
         }
         else {
@@ -205,12 +207,18 @@ const page = () => {
                         <div className='relative w-full'>
                             <Input type="password" label="Contraseña"
                                 isInvalid={errorPassword ? "true" : "false"}
-                                isClearable required onChange={(e) => setPassword(e.target.value)} />
+                                isClearable required onChange={(e) => {
+                                    setPassword(e.target.value)
+                                    setErrorPassword(false)
+                                    }} />
                         </div>
                         <div className='relative w-full'>
                             <Input type="password" label="Repite contraseña"
                                 isInvalid={errorPassword ? "true" : "false"}
-                                isClearable required onChange={(e) => setPassword2(e.target.value)} />
+                                isClearable required onChange={(e) => {
+                                    setPassword2(e.target.value)
+                                    setErrorPassword(false)
+                                    }} />
                         </div>
                         {
                             errorPassword ?
