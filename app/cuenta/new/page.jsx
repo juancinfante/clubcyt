@@ -109,7 +109,6 @@ const Page = () => {
             informacionTuristica: false,
             servicioDeTraslado: false,
             guardaEquipaje: false,
-            italiano: false,
         },
         limpieza: {
             servicioDeLimpiezaDiario: false,
@@ -136,35 +135,6 @@ const Page = () => {
             },
         }));
     };
-
-    const getSelectedServices = () => {
-        const selected = {
-            baño: [],
-            habitacion: [],
-            internet: [],
-            general: [],
-            aparcamiento: [],
-            equipamiento: [],
-            seguridad: [],
-            idiomas: [],
-            servicios: [],
-            bienestar: [],
-            comidaybebida: [],
-            limpieza: [],
-        };
-
-        // Filtrar servicios seleccionados
-        Object.keys(services.baño).forEach(service => {
-            if (services.baño[service]) {
-                selected.baño.push(service);
-            }
-        });
-
-
-        return selected;
-    };
-
-    const selectedServices = getSelectedServices();
 
     const formatServiceName = (service) => {
         return service.replace(/([A-Z])/g, ' $1') // Agregar espacio antes de mayúsculas
@@ -283,7 +253,6 @@ const Page = () => {
                 formData.services = services; // Agrega los servicios al objeto
                 formData.activado = true; // Agrega los servicios al objeto
             }
-            console.log(formData)
 
             // Realizar el fetch POST a la API
             const response = await fetch('/api/productos', {
@@ -760,22 +729,6 @@ const Page = () => {
                                 </>
                                 :
                                 ""}
-
-
-
-                            {/* <h3 className='mt-40'>Servicios Seleccionados</h3>
-                            <div>
-                                {selectedServices.baño.length > 0 && (
-                                    <div>
-                                        <h4>Baño:</h4>
-                                        <ul>
-                                            {selectedServices.baño.map(service => (
-                                                <li key={service}>{formatServiceName(service)}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-                            </div> */}
                         </div>
                         <div className="col-span-4">
                             <Input

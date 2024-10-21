@@ -289,7 +289,7 @@ export default async function page({ params }) {
                                         <h4 className='font-semibold'>Comida y Bebida</h4>
                                     </span>
                                     <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.idiomas.map(service => (
+                                        {selectedServices.comidaybebida.map(service => (
                                             <li key={service} className='flex text-sm gap-2'>
                                                 <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
                                                 {formatServiceName(service)}
