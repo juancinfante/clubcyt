@@ -77,6 +77,10 @@ const ProductSchema = new Schema({
     services:{
         type: Object,
         required: false,
+    },
+    popularServices:{
+        type: [],
+        required: false,
     }
 })
 

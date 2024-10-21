@@ -7,7 +7,6 @@ import Fb from '@/public/assets/facebook.svg'
 import Ig from '@/public/assets/instagram.svg'
 import Web from '@/public/assets/web-link.svg'
 import Pin from '@/public/assets/pin.svg'
-import Gallery from '@/components/Gallery';
 import Image from 'next/image';
 
 export default async function page({ params }) {
@@ -16,10 +15,11 @@ export default async function page({ params }) {
     function insertarHTML(html) {
         return { __html: html };
     }
+    console.log(producto)
 
     const getSelectedServices = () => {
         const selected = {
-            baño: [],
+            banio: [],
             habitacion: [],
             internet: [],
             general: [],
@@ -35,9 +35,9 @@ export default async function page({ params }) {
 
         if (producto?.categoria == "Hotel" && producto?.services) {
 
-            Object.keys(producto.services.baño).forEach(service => {
-                if (producto.services.baño[service]) {
-                    selected.baño.push(service);
+            Object.keys(producto.services.banio).forEach(service => {
+                if (producto.services.banio[service]) {
+                    selected.banio.push(service);
                 }
             });
 
@@ -150,207 +150,224 @@ export default async function page({ params }) {
                         <div className="w-full border border-gray-200 rounded-xl p-4 mt-5">
                             <p className='text-sm md:text-lg text-gray-700 w-full' dangerouslySetInnerHTML={insertarHTML(producto.descripcion)}></p>
                         </div>
-                        {producto.services ? 
-                        <div className="col-span-12 border border-gray-200 rounded-xl p-4 mt-5">
-                        <h1 className='font-semibold text-lg mb-5'>Servicios de {producto.nombre} </h1>
-                        <div className="w-full grid grid-cols-12 gap-y-7">
-                            {selectedServices.baño.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/bathroom.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Baño</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.baño.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
+                        {
+                            producto.popularServices != [] ?
+                                <div className="col-span-12 border border-gray-200 rounded-xl p-4 mt-5">
+                                    <h1 className='font-semibold text-lg mb-5'>Servicios mas populares </h1>
+                                    <ul className='flex gap-6'>
+                                        {producto.popularServices.map((service, index) => (
+                                            <li key={index} className='flex gap-2 items-center'>
+                                                <Image src={service.icon} alt="" width={20} height={20}/>
+                                                <span className='text-sm'>{service.service}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
-                            )}
-                            {selectedServices.habitacion.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/bed.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Habitacion</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.habitacion.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                :
+                                ""
+                        }
+                        {producto.services ?
+                            <div className="col-span-12 border border-gray-200 rounded-xl p-4 mt-5">
+                                <h1 className='font-semibold text-lg mb-5'>Servicios de {producto.nombre} </h1>
+                                <div className="w-full grid grid-cols-12 gap-y-7">
+                                    {selectedServices.banio.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/banio.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Baño</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.banio.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.habitacion.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/bed.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Habitacion</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.habitacion.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.equipamiento.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/tv.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Equipamiento</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.equipamiento.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.seguridad.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/lock.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Seguridad</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.seguridad.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.general.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/warning.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>General</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.general.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.servicios.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/services.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Servicios</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.servicios.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.limpieza.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/cleaner.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Limpieza</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.limpieza.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.idiomas.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/chat.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Idiomas</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.idiomas.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.comidaybebida.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/food.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Comida y Bebida</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.comidaybebida.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.bienestar.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/bienestar.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Bienestar</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.bienestar.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.aparcamiento.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/parking.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Aparcamiento</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.aparcamiento.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {selectedServices.internet.length > 0 && (
+                                        <div className='col-span-12 md:col-span-3'>
+                                            <span className='flex gap-2 items-center'>
+                                                <Image src='/hotel/wifi.svg' alt="" width={20} height={20} />
+                                                <h4 className='font-semibold'>Internet</h4>
+                                            </span>
+                                            <ul className='mt-3 flex flex-col gap-1'>
+                                                {selectedServices.internet.map(service => (
+                                                    <li key={service} className='flex text-sm gap-2'>
+                                                        <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
+                                                        {formatServiceName(service)}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                            {selectedServices.equipamiento.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/tv.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Equipamiento</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.equipamiento.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.seguridad.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/lock.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Seguridad</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.seguridad.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.general.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/warning.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>General</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.general.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.servicios.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/services.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Servicios</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.servicios.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.limpieza.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/cleaner.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Limpieza</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.limpieza.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.idiomas.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/chat.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Idiomas</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.idiomas.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.comidaybebida.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/food.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Comida y Bebida</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.comidaybebida.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.bienestar.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/bienestar.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Bienestar</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.bienestar.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.aparcamiento.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/parking.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Aparcamiento</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.aparcamiento.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                            {selectedServices.internet.length > 0 && (
-                                <div className='col-span-12 md:col-span-3'>
-                                    <span className='flex gap-2 items-center'>
-                                        <Image src='/hotel/wifi.svg' alt="" width={20} height={20} />
-                                        <h4 className='font-semibold'>Internet</h4>
-                                    </span>
-                                    <ul className='mt-3 flex flex-col gap-1'>
-                                        {selectedServices.internet.map(service => (
-                                            <li key={service} className='flex text-sm gap-2'>
-                                                <Image src='/hotel/tick.svg' alt="" width={15} height={15} />
-                                                {formatServiceName(service)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                        : 
-                        " "}
-                        
+                            </div>
+                            :
+                            " "}
+
+
                         <div className="col-span-12">
                             <div className="grid grid-cols-6 mt-5 gap-5">
                                 {
@@ -393,7 +410,7 @@ export default async function page({ params }) {
                                     </div>
                                 </div>
                                 <div className="col-span-6 md:col-span-2 border border-gray-200 rounded-xl p-4">
-                                    {producto.web != "" ?
+                                    {producto.web != '' ?
                                         <a href={`https://${producto.web}`} className='flex items-center justify-between' target="_blank">
                                             <h1 className='font-semibold text-md mb-2'>
                                                 <span className='pe-2'>🌐</span>
