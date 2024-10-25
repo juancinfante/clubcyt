@@ -51,7 +51,7 @@ const Products = () => {
   };
 
   useEffect(() => {
-    fetchProductos();console.log(productos)
+    fetchProductos();
   }, [searchText, categoria, provincia, currentPage]); // Trigger fetch when filters or page change
 
   // Funciones para cambiar de página

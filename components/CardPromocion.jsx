@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
+
 
 const CardPromocion = ({ promocion }) => {
 
@@ -18,6 +20,7 @@ const CardPromocion = ({ promocion }) => {
     const [descripcion, setDescripcion] = useState(promocion.descripcion);
     const [promocionP, setPromocionP] = useState(promocion.promocion);
     const [loadingForm, setLoadingForm] = useState(false);
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -133,7 +136,7 @@ const CardPromocion = ({ promocion }) => {
     return (
 
         <>
-            <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borde col-span-3"}>
+            <div onClick={!pathName.startsWith("/cuenta/") ? onOpen : null} className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borded col-span-3 rounded-xl overflow-hidden hover:cursor-pointer"}>
                 <div className="relative group">
                     {/* Imagen */}
                     <img src={promocion.imagen} alt="" className="h-40 w-full object-cover" />
@@ -147,7 +150,11 @@ const CardPromocion = ({ promocion }) => {
                     </div>
 
                     {/* Capa de Hover sobre todo el Card */}
-                    {/* <div className="absolute inset-0 bg-white opacity-0 hover:opacity-30 transition-opacity duration-300"></div> */}
+                    {pathName.startsWith("/cuenta/") ?
+                        ""
+                        :
+                        <div className="absolute inset-0 bg-white opacity-0 hover:opacity-30 transition-opacity duration-300"></div>
+                    }
                     {
                         pathName.startsWith("/cuenta/") ?
                             <div className="flex gap-4 justify-end mt-3 p-3">
@@ -262,7 +269,32 @@ const CardPromocion = ({ promocion }) => {
                     </div>
                 </div>
             )}
-
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalBody>
+                            <ModalHeader className="flex p-0 pb-2 pt-5 justify-between items-center"><p>{promocion.productoId.nombre}</p>
+                            </ModalHeader>
+                                <img
+                                    src={imagePreview}
+                                    alt="Previsualización"
+                                    className="w-full h-48 object-cover rounded-md border border-gray-300"
+                                />
+                                <div className="flex justify-between items-center">
+                                <p className='text-2xl font-semibold'>Promo</p>
+                                <p className='text-2xl text-blue-800 font-semibold'>{promocionP} </p>
+                                </div>
+                                <p>
+                                    {descripcion}
+                                </p>
+                            </ModalBody>
+                            <ModalFooter>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </>
     )
 
