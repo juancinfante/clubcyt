@@ -117,6 +117,7 @@ const page = ({ params }) => {
             });
             const data = await response.json();
             setPromociones(data.promociones)
+            console.log(data.promociones)
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
         }
@@ -240,7 +241,7 @@ const page = ({ params }) => {
                                 ))
                             )}
                             {
-                                Array.isArray(promociones) && promociones.length > 0 ?
+                                Array.isArray(promociones) && promociones.length != undefined ?
                                     promociones.map((prom) => (
                                         <CardPromocion key={prom._id} promocion={prom} />
                                     ))

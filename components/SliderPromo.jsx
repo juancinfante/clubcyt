@@ -6,20 +6,7 @@ import { useEffect, useState } from "react";
 import CardPromocion from "./CardPromocion";
 
 
-const SliderPromo = () => {
-
-    const [promociones, setPromociones] = useState([])
-
-    const fetchPromo = async () => {
-        const data = await fetch('api/promociones');
-        const res = await data.json();
-        setPromociones(res)
-    }
-
-    useEffect(() => {
-        fetchPromo()
-    }, [])
-
+const SliderPromo = ({ promociones }) => {
 
     var settings = {
         dots: true,

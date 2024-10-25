@@ -1,4 +1,5 @@
 import Producto from "@/models/productos";
+import Promocion from "@/models/promocion";
 import { connectDB } from "@/utils/mongoose";
 import { NextResponse } from "next/server";
 
@@ -43,18 +44,44 @@ export async function PUT(req, { params }) {
     }
 }
 
+// export async function DELETE(req, { params }) {
+//     await connectDB(); // Conectar a la base de datos
+
+//     const { id } = params; // Extrae el id desde los params de la URL
+
+//     try {
+//         // Eliminar el producto con el ID proporcionado
+//         await Producto.findByIdAndDelete(id);
+
+//         return NextResponse.json({ message: 'Producto eliminado con éxito' });
+//     } catch (error) {
+//         console.error('Error al eliminar el producto:', error);
+//         return NextResponse.json({ error: 'Error al eliminar el producto' }, { status: 500 });
+//     }
+// }
+
 export async function DELETE(req, { params }) {
     await connectDB(); // Conectar a la base de datos
 
     const { id } = params; // Extrae el id desde los params de la URL
 
     try {
-        // Eliminar el producto con el ID proporcionado
+        // Obtén el producto para acceder a los IDs de promociones antes de eliminarlo
+        const producto = await Producto.findById(id);
+
+        if (!producto) {
+            return NextResponse.json({ error: 'Producto no encontrado' }, { status: 404 });
+        }
+
+        // Elimina todas las promociones referenciadas en el array de IDs del producto
+        await Promocion.deleteMany({ _id: { $in: producto.promociones } });
+
+        // Eliminar el producto
         await Producto.findByIdAndDelete(id);
 
-        return NextResponse.json({ message: 'Producto eliminado con éxito' });
+        return NextResponse.json({ message: 'Producto y promociones eliminados con éxito' });
     } catch (error) {
-        console.error('Error al eliminar el producto:', error);
-        return NextResponse.json({ error: 'Error al eliminar el producto' }, { status: 500 });
+        console.error('Error al eliminar el producto y promociones:', error);
+        return NextResponse.json({ error: 'Error al eliminar el producto y promociones' }, { status: 500 });
     }
 }

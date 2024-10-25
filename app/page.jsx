@@ -11,8 +11,11 @@ import ProductsNew from '@/components/ProductsNew'
 import Publicidades from '@/components/Publicidades'
 import CarouselPublicidades from '@/components/CarouselPublicidades'
 import SliderPromo from '@/components/SliderPromo'
+import { getPromociones } from '@/lib/actions/page'
 
-const page = () => {
+export default async function page () {
+
+  const promociones = await getPromociones();
 
   return (
     <>
@@ -20,11 +23,10 @@ const page = () => {
       <Navbar />
       {/* <Hero /> */}
       <Products />
-      <SliderPromo />
+      <SliderPromo promociones={promociones} />
       <Publicidades />
       <CarouselPublicidades />
     </>
   )
 }
-
-export default page  
+ 

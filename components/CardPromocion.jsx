@@ -8,6 +8,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
 
 
 const CardPromocion = ({ promocion }) => {
+    console.log(promocion)
     const pathName = usePathname();
 
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal

@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Slider from '@/components/Slider';
-import { getProdBySlug } from '@/lib/actions/page'
+import { getProdBySlug, getPromociones } from '@/lib/actions/page'
 import React from 'react'
 import Wp from '@/public/assets/whatsapp.svg'
 import Fb from '@/public/assets/facebook.svg'
@@ -8,10 +8,12 @@ import Ig from '@/public/assets/instagram.svg'
 import Web from '@/public/assets/web-link.svg'
 import Pin from '@/public/assets/pin.svg'
 import Image from 'next/image';
+import SliderPromo from '@/components/SliderPromo';
 
 export default async function page({ params }) {
 
     const producto = await getProdBySlug(params.slug);
+
     function insertarHTML(html) {
         return { __html: html };
     }
@@ -385,6 +387,8 @@ export default async function page({ params }) {
                                 ""}
 
                         </div>
+
+                        <SliderPromo promociones={producto.promociones}/>
 
                     </div>
                 </div>
