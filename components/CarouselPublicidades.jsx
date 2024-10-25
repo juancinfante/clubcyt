@@ -27,6 +27,7 @@ const CarouselPublicidades = () => {
                         key={index}
                         src={logo}
                         alt={`Logo ${index}`}
+                        style={{height: "auto", width: "auto"}}
                     />
                 ))}
                 {/* Clonamos los logos para el efecto de carrusel continuo */}
@@ -39,6 +40,7 @@ const CarouselPublicidades = () => {
                         height={20}
                         className='mx-10'
                         alt={`Logo ${index}`}
+                        style={{height: "auto", width: "auto"}}
                     />
                 ))}
             </div>

@@ -106,7 +106,6 @@ const page = ({ params }) => {
 
     const fetchPromociones = async () => {
 
-        console.log(promociones)
         const userId = JSON.parse(localStorage.getItem("usuario"))
         try {
             // Realizamos la solicitud GET al endpoint que maneja la función GET en el backend

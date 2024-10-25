@@ -15,7 +15,6 @@ export default async function page({ params }) {
     function insertarHTML(html) {
         return { __html: html };
     }
-    console.log(producto)
 
     const getSelectedServices = () => {
         const selected = {
@@ -32,84 +31,21 @@ export default async function page({ params }) {
             comidaybebida: [],
             limpieza: [],
         };
-
-        if (producto?.categoria == "Hotel" && producto?.services) {
-
-            Object.keys(producto.services.banio).forEach(service => {
-                if (producto.services.banio[service]) {
-                    selected.banio.push(service);
+    
+        if (producto?.categoria === "Hotel" && producto?.services) {
+            const serviceKeys = Object.keys(producto.services);
+    
+            for (const key of serviceKeys) {
+                if (selected.hasOwnProperty(key)) {
+                    Object.keys(producto.services[key]).forEach(service => {
+                        if (producto.services[key][service]) {
+                            selected[key].push(service);
+                        }
+                    });
                 }
-            });
-
-            Object.keys(producto.services.habitacion).forEach(service => {
-                if (producto.services.habitacion[service]) {
-                    selected.habitacion.push(service);
-                }
-            });
-
-            Object.keys(producto.services.internet).forEach(service => {
-                if (producto.services.internet[service]) {
-                    selected.internet.push(service);
-                }
-            });
-
-            Object.keys(producto.services.general).forEach(service => {
-                if (producto.services.general[service]) {
-                    selected.general.push(service);
-                }
-            });
-
-            Object.keys(producto.services.aparcamiento).forEach(service => {
-                if (producto.services.aparcamiento[service]) {
-                    selected.aparcamiento.push(service);
-                }
-            });
-
-            Object.keys(producto.services.equipamiento).forEach(service => {
-                if (producto.services.equipamiento[service]) {
-                    selected.equipamiento.push(service);
-                }
-            });
-
-            Object.keys(producto.services.seguridad).forEach(service => {
-                if (producto.services.seguridad[service]) {
-                    selected.seguridad.push(service);
-                }
-            });
-
-            Object.keys(producto.services.idiomas).forEach(service => {
-                if (producto.services.idiomas[service]) {
-                    selected.idiomas.push(service);
-                }
-            });
-
-            Object.keys(producto.services.servicios).forEach(service => {
-                if (producto.services.servicios[service]) {
-                    selected.servicios.push(service);
-                }
-            });
-
-            Object.keys(producto.services.bienestar).forEach(service => {
-                if (producto.services.bienestar[service]) {
-                    selected.bienestar.push(service);
-                }
-            });
-
-            Object.keys(producto.services.comidaYBebida).forEach(service => {
-                if (producto.services.comidaYBebida[service]) {
-                    selected.comidaybebida.push(service);
-                }
-            });
-
-            Object.keys(producto.services.limpieza).forEach(service => {
-                if (producto.services.limpieza[service]) {
-                    selected.limpieza.push(service);
-                }
-            });
-
+            }
         }
-
-
+    
         return selected;
     };
 
@@ -449,7 +385,6 @@ export default async function page({ params }) {
                                 ""}
 
                         </div>
-
 
                     </div>
                 </div>

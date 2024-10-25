@@ -81,7 +81,13 @@ const ProductSchema = new Schema({
     popularServices:{
         type: [],
         required: false,
-    }
+    },
+    promociones: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Promocion",
+        },
+      ],
 })
 
 // Middleware para generar el slug antes de guardar

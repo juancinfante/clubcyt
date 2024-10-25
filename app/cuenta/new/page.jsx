@@ -277,7 +277,8 @@ const Page = () => {
                 portada: uploadedPortadaUrl,
                 logo: uploadedLogoUrl,
                 fotos: uploadedGaleriaUrls,
-                activado: false
+                activado: false,
+                promociones: []
                 // condicion si cateogira es hotel colocar los servicios aqui 
             };
 

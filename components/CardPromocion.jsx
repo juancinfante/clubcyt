@@ -8,7 +8,6 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
 
 
 const CardPromocion = ({ promocion }) => {
-
     const pathName = usePathname();
 
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
@@ -136,40 +135,39 @@ const CardPromocion = ({ promocion }) => {
     return (
 
         <>
-            <div onClick={!pathName.startsWith("/cuenta/") ? onOpen : null} className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borded col-span-3 rounded-xl overflow-hidden hover:cursor-pointer"}>
-                <div className="relative group">
-                    {/* Imagen */}
-                    <img src={promocion.imagen} alt="" className="h-40 w-full object-cover" />
+            
+                <div onClick={!pathName.startsWith("/cuenta/") ? onOpen : null} className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borded col-span-3 rounded-xl overflow-hidden hover:cursor-pointer"}>
+                    <div className="relative group">
+                        {/* Imagen */}
+                        <img src={promocion.imagen} alt="" className="h-40 w-full object-cover" /> {/* Muestra la imagen de la primera promoción */}
 
-                    {/* Contenido del Card */}
-                    <div className="p-3 bg-gray-50 h-[85px] rounded-b-xl border">
-                        <div className="grid grid-cols-4 text-xl font-semibold items-center">
-                            <span className="col-span-3">{promocion.productoId.nombre}</span>
-                            <span className="col-span-1 text-right text-3xl text-blue-800">{promocion.promocion}</span>
+                        {/* Contenido del Card */}
+                        <div className="p-3 bg-gray-50 h-[85px] rounded-b-xl border">
+                            <div className="grid grid-cols-4 text-xl font-semibold items-center">
+                                <span className="col-span-3">{promocion.productoId.nombre}</span>
+                                <span className="col-span-1 text-right text-3xl text-blue-800">{promocion.promocion}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Capa de Hover sobre todo el Card */}
-                    {pathName.startsWith("/cuenta/") ?
-                        ""
-                        :
-                        <div className="absolute inset-0 bg-white opacity-0 hover:opacity-30 transition-opacity duration-300"></div>
-                    }
-                    {
-                        pathName.startsWith("/cuenta/") ?
-                            <div className="flex gap-4 justify-end mt-3 p-3">
-                                <div className='flex justify-center items-center gap-3'>
-                                    <Image onClick={() => handleDelete(promocion._id)} className='hover:cursor-pointer'
-                                        src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/delete.svg" alt="edit" width={25} height={25} />
-                                    <span onClick={handleOpenModalPromocion}>
-                                        <Image src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/edit.svg" alt="edit" width={25} height={25} />
-                                    </span>
+                        {/* Capa de Hover sobre todo el Card */}
+                        {pathName.startsWith("/cuenta/") ? "" : <div className="absolute inset-0 bg-white opacity-0 hover:opacity-30 transition-opacity duration-300"></div>}
+
+                        {
+                            pathName.startsWith("/cuenta/") ? (
+                                <div className="flex gap-4 justify-end mt-3 p-3">
+                                    <div className='flex justify-center items-center gap-3'>
+                                        <Image onClick={() => handleDelete(promocion._id)} className='hover:cursor-pointer'
+                                            src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/delete.svg" alt="delete" width={25} height={25} />
+                                        <span onClick={handleOpenModalPromocion}>
+                                            <Image src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/edit.svg" alt="edit" width={25} height={25} />
+                                        </span>
+                                    </div>
                                 </div>
-                            </div> :
-                            ""
-                    }
+                            ) : ""
+                        }
+                    </div>
                 </div>
-            </div>
+            
             {isModalOpenPromocion && (
                 <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="fixed inset-0 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -274,16 +272,16 @@ const CardPromocion = ({ promocion }) => {
                     {(onClose) => (
                         <>
                             <ModalBody>
-                            <ModalHeader className="flex p-0 pb-2 pt-5 justify-between items-center"><p>{promocion.productoId.nombre}</p>
-                            </ModalHeader>
+                                <ModalHeader className="flex p-0 pb-2 pt-5 justify-between items-center"><p>{promocion.productoId.nombre}</p>
+                                </ModalHeader>
                                 <img
                                     src={imagePreview}
                                     alt="Previsualización"
                                     className="w-full h-48 object-cover rounded-md border border-gray-300"
                                 />
                                 <div className="flex justify-between items-center">
-                                <p className='text-2xl font-semibold'>Promo</p>
-                                <p className='text-2xl text-blue-800 font-semibold'>{promocionP} </p>
+                                    <p className='text-2xl font-semibold'>Promo</p>
+                                    <p className='text-2xl text-blue-800 font-semibold'>{promocionP} </p>
                                 </div>
                                 <p>
                                     {descripcion}
