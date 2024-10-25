@@ -8,6 +8,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* SLIDER PROMO */
+
+.slick-prev:before, .slick-next:before{
+  color: #2b2d84 !important;
+}
+
+.slick-slide > div {
+  margin: 0 10px;
+}
 @layer utilities {
   .custom-scrollbar {
     /* Ancho de la barra de desplazamiento */

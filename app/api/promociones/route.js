@@ -17,3 +17,18 @@ export async function POST(request) {
         })
     }
 }
+
+
+export async function GET() {
+    await connectDB(); // Conectar a la base de datos
+
+    try {
+        // Buscar todas las promociones y hacer populate del nombre del producto referenciado
+        const response = await Promocion.find().populate('productoId', 'nombre'); // Suponiendo que el campo de referencia es 'productoId'
+
+        return NextResponse.json(response);
+    } catch (error) {
+        console.error('Error al obtener el producto:', error);
+        return NextResponse.json({ error: 'Error al obtener el producto' }, { status: 500 });
+    }
+}

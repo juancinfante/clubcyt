@@ -105,6 +105,8 @@ const page = ({ params }) => {
     }
 
     const fetchPromociones = async () => {
+
+        console.log(promociones)
         const userId = JSON.parse(localStorage.getItem("usuario"))
         try {
             // Realizamos la solicitud GET al endpoint que maneja la función GET en el backend
@@ -115,7 +117,6 @@ const page = ({ params }) => {
                 },
             });
             const data = await response.json();
-            console.log(data)
             setPromociones(data.promociones)
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
@@ -212,9 +213,14 @@ const page = ({ params }) => {
                                     href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
                                     className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
                         }
+                        {Array.isArray(productos) && productos.length ? 
                         <button
                             onClick={handleOpenModalPromocion}
-                            className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion</button>
+                            className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion
+                        </button>
+                        : 
+                        "" 
+                        }
                         <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
                         <button className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar</button>
                     </div>
@@ -234,9 +240,14 @@ const page = ({ params }) => {
                                     <CardProducto key={producto._id} producto={producto} loading={false} />
                                 ))
                             )}
-                            {promociones.map((prom) => (
-                                <CardPromocion key={prom._id} promocion={prom} />
-                            ))}
+                            {
+                                Array.isArray(promociones) && promociones.length > 0 ?
+                                    promociones.map((prom) => (
+                                        <CardPromocion key={prom._id} promocion={prom} />
+                                    ))
+                                    :
+                                    ""
+                            }
                         </div>
                     </div>
                 </div>

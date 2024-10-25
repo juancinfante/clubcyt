@@ -73,13 +73,6 @@ const Categorias = ({ setCategoria }) => {
                         </div>
                         <p className='text-xs mt-2'>Museos</p>
                     </div>
-                    <div onClick={() => setCategoria("Promociones")} className='flex flex-col items-center mb-3'>
-
-                        <div className="w-16 h-16 p-4 border flex justify-center items-center rounded-full hover:bg-indigo-100 hover:cursor-pointer">
-                            <Discount className="w-full h-full" />
-                        </div>
-                        <p className='text-xs mt-2'>Promociones</p>
-                    </div>
                 </div>
             </div>
         </>

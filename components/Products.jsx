@@ -28,16 +28,26 @@ const Products = () => {
   // Fetch products with filters and pagination
   const fetchProductos = async () => {
     setLoading(true);
-    try {
-      const res = await fetch(`/api/productos?text=${searchText}&categoria=${categoria}&provincia=${provincia}&page=${currentPage}&limit=${limit}`);
-      const data = await res.json();
-      setProductos(data.productos);
-      setTotalPages(data.totalPages); // Actualizar el total de páginas
-      setTotalProductos(data.totalProductos); // Total de productos
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    if(categoria == "Promociones") {
+      try {
+        const response = await fetch('api/promociones');
+        setProductos()
+        console.log(response)
+      } catch (error) {
+        
+      }
+    }else{
+      try {
+        const res = await fetch(`/api/productos?text=${searchText}&categoria=${categoria}&provincia=${provincia}&page=${currentPage}&limit=${limit}`);
+        const data = await res.json();
+        setProductos(data.productos);
+        setTotalPages(data.totalPages); // Actualizar el total de páginas
+        setTotalProductos(data.totalProductos); // Total de productos
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+      setLoading(false); // Termina la carga
     }
-    setLoading(false); // Termina la carga
   };
 
   useEffect(() => {
@@ -98,7 +108,7 @@ const Products = () => {
         </div>
         <div className="grid grid-cols-12 w-100 gap-7 md:gap-9 mt-5">
           {loading ? (
-            Array(12)
+            Array(8)
               .fill()
               .map((_, i) => <CardProducto key={i} loading={true} />)
           ) : productos.length === 0 ? (

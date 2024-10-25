@@ -133,13 +133,13 @@ const CardPromocion = ({ promocion }) => {
     return (
 
         <>
-            <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borde col-span-12 md:col-span-4 lg:col-span-3 rounded-xl overflow-hidden"}>
+            <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borde col-span-3"}>
                 <div className="relative group">
                     {/* Imagen */}
                     <img src={promocion.imagen} alt="" className="h-40 w-full object-cover" />
 
                     {/* Contenido del Card */}
-                    <div className="p-3 bg-gray-50 h-[70px] rounded-b-xl border">
+                    <div className="p-3 bg-gray-50 h-[85px] rounded-b-xl border">
                         <div className="grid grid-cols-4 text-xl font-semibold items-center">
                             <span className="col-span-3">{promocion.productoId.nombre}</span>
                             <span className="col-span-1 text-right text-3xl text-blue-800">{promocion.promocion}</span>

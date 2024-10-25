@@ -60,7 +60,7 @@ const Page = () => {
             insonorizacion: false,
             habitacionInsonorizadas: false,
             habitacionesSinHumo: false,
-            aireAcondicionado:false,
+            aireAcondicionado: false,
         },
         aparcamiento: {
             parking: false,
@@ -114,14 +114,14 @@ const Page = () => {
             spa: false,
             piscinaAlAireLibre: false,
             peluqueria: false,
-            manicura:false,
+            manicura: false,
             pedicura: false,
             sauna: false
         },
         comidaYBebida: {
             bar: false,
             restaurante: false,
-            minibar:false
+            minibar: false
         },
         internet: {
             wifi: false,
@@ -363,7 +363,7 @@ const Page = () => {
 
     const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica", "Museo", "Turismo", "Promocion"]
     const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
-    const descuentos = ["5%","10%", "15%", "20%", "25%", "30%", "35%", "40%","45","50%","55%","60%","65%","70%"]
+    const descuentos = ["5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45", "50%", "55%", "60%", "65%", "70%"]
 
     return (
         <>
@@ -512,15 +512,18 @@ const Page = () => {
                                 ))}
                             </div>
                         </div>
+                        {categoria == "Hotel" ?
                         <div className="col-span-12 text-gray-700 mb-10">
                             <h2 className='mb-5 text-xl font-semibold'>Servicios del Hotel</h2>
                             <div className='grid grid-cols-3 gap-4'>
                                 {renderServices()}
                             </div>
-                        <div className="col-span-12">
-                            <InputServiciosPopulares setSelectedPopulares={setSelectedPopulares} selectedPopulares={selectedPopulares} />
+                            <div className="col-span-12">
+                                <InputServiciosPopulares setSelectedPopulares={setSelectedPopulares} selectedPopulares={selectedPopulares} />
+                            </div>
                         </div>
-                        </div>
+                            :
+                            ""}
 
                         <div className="col-span-4">
                             <Input

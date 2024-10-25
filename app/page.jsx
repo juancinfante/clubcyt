@@ -10,6 +10,7 @@ import Tags from '@/components/Tags'
 import ProductsNew from '@/components/ProductsNew'
 import Publicidades from '@/components/Publicidades'
 import CarouselPublicidades from '@/components/CarouselPublicidades'
+import SliderPromo from '@/components/SliderPromo'
 
 const page = () => {
 
@@ -19,6 +20,7 @@ const page = () => {
       <Navbar />
       {/* <Hero /> */}
       <Products />
+      <SliderPromo />
       <Publicidades />
       <CarouselPublicidades />
     </>
