@@ -10,6 +10,7 @@ import MenuSvg from '@/public/assets/menu.svg'
 const Navbar = () => {
 
     const [usuario, setUsuario] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleSalir = () => {
         localStorage.removeItem('usuario');
@@ -38,16 +39,24 @@ const Navbar = () => {
             setUsuario(data)
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
+        } finally {
+            // Cambiamos isLoading a false una vez que se completa la carga
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
-        if (localStorage.getItem('usuario') !== null) {
-            const { _id } = JSON.parse(localStorage.getItem('usuario'));
-            fetchUsuario(_id)
+        const storedUsuario = localStorage.getItem('usuario');
+        if (storedUsuario !== null) {
+            const { _id } = JSON.parse(storedUsuario);
+            fetchUsuario(_id);
+        } else {
+            setIsLoading(false); // Si no hay usuario en localStorage, también terminamos la carga
         }
-
     }, []);
+    if (isLoading) {
+        return null; // Puedes retornar un loader o nada mientras carga
+    }
 
     const obtenerFechaFormateada = () => {
         const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
