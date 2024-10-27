@@ -7,8 +7,7 @@ import Swal from 'sweetalert2';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 
 
-const CardPromocion = ({ promocion }) => {
-    console.log(promocion)
+const CardPromocion = ({ promocion, producto }) => {
     const pathName = usePathname();
 
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
@@ -145,8 +144,8 @@ const CardPromocion = ({ promocion }) => {
                         {/* Contenido del Card */}
                         <div className="p-3 bg-gray-50 h-[85px] rounded-b-xl border">
                             <div className="grid grid-cols-4 text-xl font-semibold items-center">
-                                <span className="col-span-3">{promocion.productoId.nombre}</span>
-                                <span className="col-span-1 text-right text-3xl text-blue-800">{promocion.promocion}</span>
+                                <span className="col-span-3">{promocion.productoId.nombre ? promocion.productoId.nombre : producto.nombre}</span>
+                                <span className="col-span-1 text-right text-xl text-blue-800">{promocion.promocion}</span>
                             </div>
                         </div>
 

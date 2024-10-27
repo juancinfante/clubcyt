@@ -13,7 +13,7 @@ import SliderPromo from '@/components/SliderPromo';
 export default async function page({ params }) {
 
     const producto = await getProdBySlug(params.slug);
-
+    console.log(encodeURI(producto.ubicacion))
     function insertarHTML(html) {
         return { __html: html };
     }
@@ -33,10 +33,10 @@ export default async function page({ params }) {
             comidaybebida: [],
             limpieza: [],
         };
-    
+
         if (producto?.categoria === "Hotel" && producto?.services) {
             const serviceKeys = Object.keys(producto.services);
-    
+
             for (const key of serviceKeys) {
                 if (selected.hasOwnProperty(key)) {
                     Object.keys(producto.services[key]).forEach(service => {
@@ -47,7 +47,7 @@ export default async function page({ params }) {
                 }
             }
         }
-    
+
         return selected;
     };
 
@@ -89,13 +89,13 @@ export default async function page({ params }) {
                             <p className='text-sm md:text-lg text-gray-700 w-full' dangerouslySetInnerHTML={insertarHTML(producto.descripcion)}></p>
                         </div>
                         {
-                            producto.popularServices != [] ?
+                            producto.categoria == "Hotel" ?
                                 <div className="col-span-12 border border-gray-200 rounded-xl p-4 mt-5">
                                     <h1 className='font-semibold text-lg mb-5'>Servicios mas populares </h1>
                                     <ul className='flex gap-6'>
                                         {producto.popularServices.map((service, index) => (
                                             <li key={index} className='flex gap-2 items-center'>
-                                                <Image src={service.icon} alt="" width={20} height={20}/>
+                                                <Image src={service.icon} alt="" width={20} height={20} />
                                                 <span className='text-sm'>{service.service}</span>
                                             </li>
                                         ))}
@@ -372,7 +372,14 @@ export default async function page({ params }) {
                                 </div>
                                 <div className="col-span-2 md:col-span-1 md:ps-4 border border-gray-200 rounded-xl p-4">
                                     <h1 className='font-semibold text-md mb-2'>Ubicacion:</h1>
-                                    <p>{producto.ubicacion}</p>
+                                    {/* <p>{producto.ubicacion}</p> */}
+                                    <iframe
+                                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBBqs-sIVAZAlasv6jUKSb0pD68F9_y_aw&q=${encodeURI(producto.ubicacion)}`}
+                                        style={{height: "400px", width: "100%"}}
+                                        allowfullscreen=""
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                    </iframe>
                                 </div>
                             </div>
                         </div>
@@ -388,7 +395,7 @@ export default async function page({ params }) {
 
                         </div>
 
-                        <SliderPromo promociones={producto.promociones}/>
+                        <SliderPromo promociones={producto.promociones} producto={producto} />
 
                     </div>
                 </div>
