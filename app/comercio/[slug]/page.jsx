@@ -11,7 +11,6 @@ import Image from 'next/image';
 import SliderPromo from '@/components/SliderPromo';
 
 export default async function page({ params }) {
-    console.log(process.env.GOOGLE_KEY)
     const producto = await getProdBySlug(params.slug);
     function insertarHTML(html) {
         return { __html: html };
