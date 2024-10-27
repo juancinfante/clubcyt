@@ -6,10 +6,10 @@ import { NextResponse } from "next/server";
 export async function GET(request, { params }) {
     connectDB(); // Conectar a la base de datos
     const { id_usuario } = params; // Obtener el userId de los parámetros de la URL
-
+    console.log(id_usuario)
     try {
         // Buscar todas las promociones que coincidan con el userId y hacer populate del producto
-        const promociones = await Promocion.find({ userId: id_usuario }).populate('productoId', 'nombre');
+        const promociones = await Promocion.find({ usuarioId: id_usuario }).populate('productoId', 'nombre');
 
         // Comprobar si se encontraron promociones
         if (promociones.length === 0) {

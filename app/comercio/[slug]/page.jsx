@@ -13,7 +13,6 @@ import SliderPromo from '@/components/SliderPromo';
 export default async function page({ params }) {
 
     const producto = await getProdBySlug(params.slug);
-    console.log(encodeURI(producto.ubicacion))
     function insertarHTML(html) {
         return { __html: html };
     }

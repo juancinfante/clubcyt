@@ -117,7 +117,6 @@ const page = ({ params }) => {
             });
             const data = await response.json();
             setPromociones(data.promociones)
-            console.log(data.promociones)
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
         }
@@ -213,13 +212,13 @@ const page = ({ params }) => {
                                     href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
                                     className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
                         }
-                        {Array.isArray(productos) && productos.length ? 
-                        <button
-                            onClick={handleOpenModalPromocion}
-                            className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion
-                        </button>
-                        : 
-                        "" 
+                        {Array.isArray(productos) && productos.length ?
+                            <button
+                                onClick={handleOpenModalPromocion}
+                                className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion
+                            </button>
+                            :
+                            ""
                         }
                         <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
                         <button className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar</button>
@@ -240,14 +239,21 @@ const page = ({ params }) => {
                                     <CardProducto key={producto._id} producto={producto} loading={false} />
                                 ))
                             )}
-                            {
-                                Array.isArray(promociones) && promociones.length != undefined ?
+                            {/* {
+                                productos.length != 0 && Array.isArray(promociones) && promociones.length != undefined ?
                                     promociones.map((prom) => (
                                         <CardPromocion key={prom._id} promocion={prom} />
                                     ))
                                     :
                                     ""
-                            }
+                            } */}
+                            {productos.length != 0 ?
+                                Array.isArray(promociones) ?
+                                    promociones.length > 0 ? promociones.map((prom) => (
+                                        <CardPromocion key={prom._id} promocion={prom} />
+                                    )) : "" : "no"
+                                :
+                                ""}
                         </div>
                     </div>
                 </div>
@@ -316,98 +322,96 @@ const page = ({ params }) => {
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div className="sm:flex sm:items-start">
                                         <div className="container mx-auto flex justify-center mt-10">
-                                            <div className=" py-10">
-                                                <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-                                                    <h1 className="text-2xl font-bold mb-4">Agregar Promocion</h1>
+                                            <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+                                                <h1 className="text-2xl font-bold mb-4">Agregar Promocion</h1>
 
-                                                    {/* Subir Imagen */}
-                                                    <div className="mb-4">
-                                                        <label className="block text-sm font-medium text-gray-700" htmlFor="image">
-                                                            Subir Imagen
-                                                        </label>
-                                                        <input
-                                                            type="file"
-                                                            id="image"
-                                                            accept="image/*"
-                                                            onChange={handleImageChange}
-                                                            className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                                                        />
+                                                {/* Subir Imagen */}
+                                                <div className="mb-4">
+                                                    <label className="block text-sm font-medium text-gray-700" htmlFor="image">
+                                                        Subir Imagen
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="image"
+                                                        accept="image/*"
+                                                        onChange={handleImageChange}
+                                                        className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                                    />
 
-                                                        {/* Previsualización de la imagen */}
-                                                        {imagePreview && (
-                                                            <div className="mt-4">
-                                                                <img
-                                                                    src={imagePreview}
-                                                                    alt="Previsualización"
-                                                                    className="w-full h-48 object-cover rounded-md border border-gray-300"
-                                                                />
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                    {/* Previsualización de la imagen */}
+                                                    {imagePreview && (
+                                                        <div className="mt-4">
+                                                            <img
+                                                                src={imagePreview}
+                                                                alt="Previsualización"
+                                                                className="w-full h-48 object-cover rounded-md border border-gray-300"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
 
-                                                    {/* Descripción */}
-                                                    <div className="mb-4">
-                                                        <label className="block text-sm font-medium text-gray-700" htmlFor="description">
-                                                            Breve descripción
-                                                        </label>
-                                                        <textarea
-                                                            id="description"
-                                                            rows="3"
-                                                            className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                            placeholder="Descripción de la promocion..."
-                                                            onChange={(e) => setDescripcionPromocion(e.target.value)}
-                                                        ></textarea>
-                                                    </div>
+                                                {/* Descripción */}
+                                                <div className="mb-4">
+                                                    <label className="block text-sm font-medium text-gray-700" htmlFor="description">
+                                                        Breve descripción
+                                                    </label>
+                                                    <textarea
+                                                        id="description"
+                                                        rows="3"
+                                                        className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                        placeholder="Descripción de la promocion..."
+                                                        onChange={(e) => setDescripcionPromocion(e.target.value)}
+                                                    ></textarea>
+                                                </div>
 
-                                                    {/* Seleccionar Promoción */}
-                                                    <div className="mb-4">
-                                                        <label className="block text-sm font-medium text-gray-700" htmlFor="promotion">
-                                                            Promoción
-                                                        </label>
-                                                        <select
-                                                            id="promotion"
-                                                            className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                            onChange={(e) => setPromocion(e.target.value)}
-                                                        >
-                                                            <option value="">Selecciona una promoción</option>
-                                                            <option value="2x1">2x1</option>
-                                                            <option value="3x1">3x1</option>
-                                                            <option value="50% off">50% off</option>
-                                                        </select>
-                                                    </div>
+                                                {/* Seleccionar Promoción */}
+                                                <div className="mb-4">
+                                                    <label className="block text-sm font-medium text-gray-700" htmlFor="promotion">
+                                                        Promoción
+                                                    </label>
+                                                    <select
+                                                        id="promotion"
+                                                        className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                        onChange={(e) => setPromocion(e.target.value)}
+                                                    >
+                                                        <option value="">Selecciona una promoción</option>
+                                                        <option value="2x1">2x1</option>
+                                                        <option value="3x1">3x1</option>
+                                                        <option value="50% off">50% off</option>
+                                                    </select>
+                                                </div>
 
-                                                    {/* Seleccionar Producto */}
-                                                    <div className="mb-4">
-                                                        <label className="block text-sm font-medium text-gray-700" htmlFor="product">
-                                                            Aplicar en
-                                                        </label>
-                                                        <select
-                                                            id="product"
-                                                            className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                            onChange={(e) => setProductoPromocion(e.target.value)}
-                                                        >
-                                                            <option value="">Selecciona un producto</option>
-                                                            {productos.map((producto) => (
-                                                                <option key={producto._id} value={producto._id}>
-                                                                    {producto.nombre}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
+                                                {/* Seleccionar Producto */}
+                                                <div className="mb-4">
+                                                    <label className="block text-sm font-medium text-gray-700" htmlFor="product">
+                                                        Aplicar en
+                                                    </label>
+                                                    <select
+                                                        id="product"
+                                                        className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                        onChange={(e) => setProductoPromocion(e.target.value)}
+                                                    >
+                                                        <option value="">Selecciona un producto</option>
+                                                        {productos.map((producto) => (
+                                                            <option key={producto._id} value={producto._id}>
+                                                                {producto.nombre}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
 
-                                                    {/* Botón Enviar */}
-                                                    <div className="mt-6">
-                                                        <button
-                                                            type="submit"
-                                                            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                            onClick={handleForm}
-                                                        >
-                                                            {
-                                                                loadingForm ?
-                                                                    <Spinner color='default' size='sm' /> : "Crear"
-                                                            }
-                                                        </button>
-                                                    </div>
+                                                {/* Botón Enviar */}
+                                                <div className="mt-6">
+                                                    <button
+                                                        type="submit"
+                                                        className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                        onClick={handleForm}
+                                                    >
+                                                        {
+                                                            loadingForm ?
+                                                                <Spinner color='default' size='sm' /> : "Crear"
+                                                        }
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
