@@ -11,7 +11,7 @@ import Image from 'next/image';
 import SliderPromo from '@/components/SliderPromo';
 
 export default async function page({ params }) {
-
+    console.log(process.env.GOOGLE_KEY)
     const producto = await getProdBySlug(params.slug);
     function insertarHTML(html) {
         return { __html: html };
@@ -373,9 +373,9 @@ export default async function page({ params }) {
                                     <h1 className='font-semibold text-md mb-2'>Ubicacion:</h1>
                                     {/* <p>{producto.ubicacion}</p> */}
                                     <iframe
-                                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBBqs-sIVAZAlasv6jUKSb0pD68F9_y_aw&q=${encodeURI(producto.ubicacion)}`}
+                                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_KEY}&q=${encodeURI(producto.ubicacion)}`}
                                         style={{height: "400px", width: "100%"}}
-                                        allowfullscreen=""
+                                        allowFullScreen=""
                                         loading="lazy"
                                         referrerpolicy="no-referrer-when-downgrade">
                                     </iframe>
