@@ -16,7 +16,6 @@ import { getPromociones } from '@/lib/actions/page'
 export default async function page() {
 
   const promociones = await getPromociones();
-
   return (
     <>
 
@@ -24,7 +23,7 @@ export default async function page() {
       {/* <Hero /> */}
       <Products />
       {
-        promociones != null ?
+        promociones.length > 0  ?
           <SliderPromo promociones={promociones} />
           :
           ""
