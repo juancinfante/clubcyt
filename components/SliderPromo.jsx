@@ -8,6 +8,19 @@ import CardPromocion from "./CardPromocion";
 
 const SliderPromo = ({ promociones, producto }) => {
 
+
+  // Verifica si la fecha es pasada, ignorando la hora
+function esFechaPasada(dateString) {
+  const today = new Date();
+  const selectedDate = new Date(dateString);
+  // Normaliza ambas fechas a las 00:00:00 para ignorar la hora en la comparación
+  today.setHours(0, 0, 0, 0);
+  selectedDate.setHours(0, 0, 0, 0);
+
+  console.log(today, selectedDate)
+  return selectedDate < today;
+}
+
   var settings = {
     dots: true,
     infinite: false,
@@ -49,7 +62,9 @@ const SliderPromo = ({ promociones, producto }) => {
         {
 
           [...promociones].reverse().map((prom, index) => (
+            !esFechaPasada(prom.hasta) ? 
             <CardPromocion promocion={prom} key={index} producto={producto} />
+            : ""
           ))
         }
       </Slider>

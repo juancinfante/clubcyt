@@ -317,6 +317,8 @@ const page = ({ params }) => {
         { key: "gastronomia", label: "Gastronomia" },
         { key: "area comercial", label: "Area Comercial" },
         { key: "atraccion turistica", label: "Atraccion Turistica" },
+        { key: "museo", label: "Museo" },
+        { key: "turismo", label: "Turismo" },
     ];
 
     const provincias = [
@@ -325,18 +327,25 @@ const page = ({ params }) => {
         { key: "catamarca", label: "Catamarca" },
         { key: "salta", label: "Salta" },
         { key: "jujuy", label: "Jujuy" },
-        { key: "cordoba", label: "Cordoba" },
-        { key: "buenos aires", label: "Buenos Aires" }
+        { key: "la rioja", label: "La Rioja" }
     ];
 
     const descuentos = [
+        { key: "Ninguno", label: "Ninguno" },
+        { key: "5%", label: "5%" },
         { key: "10%", label: "10%" },
         { key: "15%", label: "15%" },
         { key: "20%", label: "20%" },
         { key: "25%", label: "25%" },
         { key: "30%", label: "30%" },
         { key: "35%", label: "35%" },
-        { key: "40%", label: "40%" }
+        { key: "40%", label: "40%" },
+        { key: "45%", label: "45%" },
+        { key: "50%", label: "50%" },
+        { key: "55%", label: "55%" },
+        { key: "60%", label: "60%" },
+        { key: "65%", label: "65%" },
+        { key: "70%", label: "70%" }
     ];
 
     function capitalize(str) {

@@ -13,7 +13,7 @@ import CarouselPublicidades from '@/components/CarouselPublicidades'
 import SliderPromo from '@/components/SliderPromo'
 import { getPromociones } from '@/lib/actions/page'
 
-export default async function page () {
+export default async function page() {
 
   const promociones = await getPromociones();
 
@@ -23,10 +23,15 @@ export default async function page () {
       <Navbar />
       {/* <Hero /> */}
       <Products />
-      <SliderPromo promociones={promociones} />
+      {
+        promociones != null ?
+          <SliderPromo promociones={promociones} />
+          :
+          ""
+      }
       <Publicidades />
       <CarouselPublicidades />
     </>
   )
 }
- 
+

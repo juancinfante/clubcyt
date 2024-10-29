@@ -282,7 +282,7 @@ const Page = () => {
                 // condicion si cateogira es hotel colocar los servicios aqui 
             };
 
-            if (categoria === "Hotel") {
+            if (categoria === "Hotel" || categoria === "Atraccion Turistica" || categoria === "Turismo" || categoria === "Museo") {
                 formData.services = services; // Agrega los servicios al objeto
                 formData.activado = true; // Agrega los servicios al objeto
                 formData.popularServices = selectedPopulares
@@ -362,9 +362,9 @@ const Page = () => {
         return videoID;
     }
 
-    const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica", "Museo", "Turismo", "Promocion"]
-    const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "Cordoba", "Buenos Aires"]
-    const descuentos = ["5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45", "50%", "55%", "60%", "65%", "70%"]
+    const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica", "Museo", "Turismo"]
+    const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "La Rioja"]
+    const descuentos = ["Ninguno","5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45", "50%", "55%", "60%", "65%", "70%"]
 
     return (
         <>

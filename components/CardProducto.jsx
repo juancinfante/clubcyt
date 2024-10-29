@@ -102,10 +102,15 @@ const CardProducto = ({ producto, loading }) => {
     <div className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : " col-span-12 md:col-span-4 lg:col-span-3 rounded-xl overflow-hidden"}>
       <Link href={`/comercio/${producto.slug}`}>
         <img src={producto.logo} alt="" className='h-40 w-full object-cover' />
-        <div className="p-3">
+        <div className="py-3 px-1">
           <div className="flex gap-4 pb-3">
-            <span className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full'>{producto.descuento}</span>
-            <span className='bg-gray-200 text-gray-500 px-2 py-1 text-sm font-semibold rounded-full'>{producto.categoria}</span>
+            {
+              producto.descuento != "Ninguno" ? 
+              <span className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-md'>{producto.descuento}</span>
+              : 
+              ""
+            }
+            <span className='bg-gray-200 text-gray-500 px-2 py-1 text-sm font-semibold rounded-md'>{producto.categoria}</span>
             {pathName.startsWith("/cuenta/") ?
               <span className={producto.activado ? "bg-green-100 text-green-700 px-2 py-1 text-sm font-semibold rounded-full" : "bg-red-200 text-red-500 px-2 py-1 text-sm font-semibold rounded-full"}>{producto.activado ? "Activo" : "Inactivo"}</span>
               : ""

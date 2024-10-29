@@ -20,7 +20,15 @@ const PromocionSchema = new Schema({
     promocion: {
         type: String,
         required: true
-    }
+    },
+    desde:{
+        type: String,
+        required: false,
+    },
+    hasta:{
+        type: String,
+        required: false,
+    },
 })
 
 
