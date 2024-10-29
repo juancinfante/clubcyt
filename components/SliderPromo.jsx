@@ -17,7 +17,6 @@ function esFechaPasada(dateString) {
   today.setHours(0, 0, 0, 0);
   selectedDate.setHours(0, 0, 0, 0);
 
-  console.log(today, selectedDate)
   return selectedDate < today;
 }
 
