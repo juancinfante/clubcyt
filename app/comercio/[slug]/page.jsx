@@ -372,7 +372,7 @@ export default async function page({ params }) {
                                     <h1 className='font-semibold text-md mb-2'>Ubicacion:</h1>
                                     {/* <p>{producto.ubicacion}</p> */}
                                     <iframe
-                                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_KEY}&q=${encodeURI(producto.ubicacion)}`}
+                                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyChZfvdH6QX3g0Np7ihIOekdeLNYVpOyfc&q=${encodeURI(producto.ubicacion)}`}
                                         style={{height: "400px", width: "100%"}}
                                         allowFullScreen=""
                                         loading="lazy"
