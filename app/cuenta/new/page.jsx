@@ -697,7 +697,7 @@ const Page = () => {
                                             setCodigo(e.target.value)
                                         }}
                                     />
-                                    <p className='bg-gray-300 p-2 rounded-md' onClick={fetchCodigo}>APLICAR</p>
+                                    <p className='bg-gray-300 p-2 rounded-md cursor-pointer' onClick={fetchCodigo}>APLICAR</p>
                                 </div>
                                 <p className='mt-2 text-green-800'>{mensajeExito}</p>
                                 <p className='mt-2 text-red-800'>{mensajeError}</p>
