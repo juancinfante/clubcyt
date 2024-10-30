@@ -42,6 +42,12 @@ const Page = () => {
     const [loading, setLoading] = useState(false);
     const [selectedPopulares, setSelectedPopulares] = useState([]);
 
+
+    const [codigo, setCodigo] = useState('');
+    const [mensajeExito, setMensajeExito] = useState('');
+    const [mensajeError, setMensajeError] = useState('');
+    const [descuentoAplicado, setDescuentoAplicado] = useState(false);
+    const [idCodigo, setCodigoId] = useState(null)
     const [services, setServices] = useState({
         banio: {
             papelHigienico: false,
@@ -173,6 +179,36 @@ const Page = () => {
             .replace(/^./, str => str.toUpperCase()); // Capitalizar la primera letra
     };
 
+    const fetchCodigo = async () => {
+        try {
+            const response = await fetch(`/api/codigos/${codigo}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                setMensajeError(`${errorData.error || 'Código no válido'}`);
+                return;
+            }
+
+            const data = await response.json();
+            setCodigoId(data)
+            // Validar si el código es aplicable para descuento
+            if (data.cantidad > 0) {
+                setDescuentoAplicado(true);
+                setMensajeExito('¡Codigo aplicado con éxito!');
+            } else {
+                setMensajeError('El código ya fue usado.');
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+            setMensajeError('Error al realizar la solicitud.');
+        }
+    };
+
     const router = useRouter();
 
     const [imagenes, setImagenes] = useState([]);
@@ -288,6 +324,10 @@ const Page = () => {
                 formData.popularServices = selectedPopulares
             }
 
+            if (descuentoAplicado) {
+                formData.activado = true;
+            }
+
             // Realizar el fetch POST a la API
             const response = await fetch('/api/productos', {
                 method: 'POST',
@@ -295,6 +335,17 @@ const Page = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData), // Convertir los datos a JSON
+            });
+
+            // Realizar el fetch PUT a la API para actualizar el código
+            const res = await fetch(`/api/codigos/${idCodigo._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cantidad: idCodigo.cantidad - 1 // Convertir los datos a JSON
+                }),
             });
 
             if (response.ok) {
@@ -364,7 +415,7 @@ const Page = () => {
 
     const categorias = ["Hotel", "Gastronomia", "Area Comercial", "Atraccion Turistica", "Museo", "Turismo"]
     const provincias = ["Santiago del Estero", "Tucuman", "Catamarca", "Salta", "Jujuy", "La Rioja"]
-    const descuentos = ["Ninguno","5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45", "50%", "55%", "60%", "65%", "70%"]
+    const descuentos = ["Ninguno", "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45", "50%", "55%", "60%", "65%", "70%"]
 
     return (
         <>
@@ -514,15 +565,15 @@ const Page = () => {
                             </div>
                         </div>
                         {categoria == "Hotel" ?
-                        <div className="col-span-12 text-gray-700 mb-10">
-                            <h2 className='mb-5 text-xl font-semibold'>Servicios del Hotel</h2>
-                            <div className='grid grid-cols-3 gap-4'>
-                                {renderServices()}
+                            <div className="col-span-12 text-gray-700 mb-10">
+                                <h2 className='mb-5 text-xl font-semibold'>Servicios del Hotel</h2>
+                                <div className='grid grid-cols-3 gap-4'>
+                                    {renderServices()}
+                                </div>
+                                <div className="col-span-12">
+                                    <InputServiciosPopulares setSelectedPopulares={setSelectedPopulares} selectedPopulares={selectedPopulares} />
+                                </div>
                             </div>
-                            <div className="col-span-12">
-                                <InputServiciosPopulares setSelectedPopulares={setSelectedPopulares} selectedPopulares={selectedPopulares} />
-                            </div>
-                        </div>
                             :
                             ""}
 
@@ -629,6 +680,30 @@ const Page = () => {
                                 </button>
                             </div>
                         ))}
+                        {categoria === "Gastronomia" || categoria === "Area Comercial" ?
+                            <div className='col-span-12'>
+                                <p>Tienes cupon de descuento?</p>
+                                <div className="flex gap-2 mt-2">
+
+                                    <input
+                                        type="text"
+                                        className='border border-black px-2 p-1'
+                                        placeholder="Ingrese su código de descuento"
+                                        value={codigo}
+                                        disabled={descuentoAplicado ? true : false}
+                                        onChange={(e) => {
+                                            setMensajeError("")
+                                            setMensajeExito("")
+                                            setCodigo(e.target.value)
+                                        }}
+                                    />
+                                    <p className='bg-gray-300 p-2 rounded-md' onClick={fetchCodigo}>APLICAR</p>
+                                </div>
+                                <p className='mt-2 text-green-800'>{mensajeExito}</p>
+                                <p className='mt-2 text-red-800'>{mensajeError}</p>
+                            </div>
+                            :
+                            ""}
                     </div>
                     <p className='text-xs text-gray-400 my-5'>
                         Los datos personales suministrados podrán ser utilizados con la finalidad de mantenerme actualizado e informado sobre promociones, campañas publicitarias, productos y servicios. Se deja expresamente aclarado que, en cualquier momento podés solicitar el retiro o bloqueo de tu nombre de nuestra base de datos. Para más información visitá los términos y condiciones de nuestra plataforma. Los beneficios y/o descuentos no son combinables ni acumulables con otras promociones, beneficios y/o descuentos. Para más información sobre beneficios, condiciones, locales adheridos y el reglamento de suscripción entrar a www.clubcyt.com
@@ -643,6 +718,7 @@ const Page = () => {
                         }
                     </button>
                 </form>
+
             </div>
         </>
     );

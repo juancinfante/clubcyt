@@ -16,8 +16,6 @@ export default async function page({ params }) {
         return { __html: html };
     }
 
-    console.log(process.env.GOOGLE_KEY)
-
     const getSelectedServices = () => {
         const selected = {
             banio: [],

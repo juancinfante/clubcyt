@@ -44,22 +44,6 @@ export async function PUT(req, { params }) {
     }
 }
 
-// export async function DELETE(req, { params }) {
-//     await connectDB(); // Conectar a la base de datos
-
-//     const { id } = params; // Extrae el id desde los params de la URL
-
-//     try {
-//         // Eliminar el producto con el ID proporcionado
-//         await Producto.findByIdAndDelete(id);
-
-//         return NextResponse.json({ message: 'Producto eliminado con éxito' });
-//     } catch (error) {
-//         console.error('Error al eliminar el producto:', error);
-//         return NextResponse.json({ error: 'Error al eliminar el producto' }, { status: 500 });
-//     }
-// }
-
 export async function DELETE(req, { params }) {
     await connectDB(); // Conectar a la base de datos
 
