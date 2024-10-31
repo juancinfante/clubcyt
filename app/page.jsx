@@ -13,6 +13,8 @@ import CarouselPublicidades from '@/components/CarouselPublicidades'
 import SliderPromo from '@/components/SliderPromo'
 import { getPromociones } from '@/lib/actions/page'
 
+export const revalidate = 10;
+
 export default async function page() {
 
   const promociones = await getPromociones();
