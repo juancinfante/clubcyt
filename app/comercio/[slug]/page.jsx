@@ -75,8 +75,8 @@ export default async function page({ params }) {
                             </h1>
                             <div className="flex items-center gap-2">
                                 <Pin className="w-4 h-4" />
-                                <p>{producto.ubicacion} - </p>
-                                <a href="#" className='text-blue-900 font-semibold text-sm hover:underline'>Ver ubicacion mapa</a>
+                                <p>{producto.ubicacion}</p>
+                                {/* <a href={`https://www.google.com/maps/search/?api=${process.env.GOOGLE_MAPS_EMBED_API_KEY}&query=${encodeURIComponent(producto.ubicacion)}`} className='text-blue-900 font-semibold text-sm hover:underline'>Ver ubicacion mapa</a> */}
                             </div>
                             <p>
 
@@ -372,7 +372,7 @@ export default async function page({ params }) {
                                     <h1 className='font-semibold text-md mb-2'>Ubicacion:</h1>
                                     {/* <p>{producto.ubicacion}</p> */}
                                     <iframe
-                                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_KEY}&q=${encodeURI(producto.ubicacion)}`}
+                                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_EMBED_API_KEY}&q=${encodeURI(producto.ubicacion)}`}
                                         style={{height: "400px", width: "100%"}}
                                         allowFullScreen=""
                                         loading="lazy"
