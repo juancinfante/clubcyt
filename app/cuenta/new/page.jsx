@@ -240,7 +240,7 @@ const Page = () => {
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "albums"); // Configurado en Cloudinary
+        formData.append("upload_preset", "clubcyt"); // Configurado en Cloudinary
 
         const response = await fetch(`https://api.cloudinary.com/v1_1/dwjhbrsmf/image/upload`, {
             method: "POST",
@@ -318,7 +318,10 @@ const Page = () => {
                 // condicion si cateogira es hotel colocar los servicios aqui 
             };
 
-            if (categoria === "Hotel" || categoria === "Atraccion Turistica" || categoria === "Turismo" || categoria === "Museo") {
+            if (categoria === "Atraccion Turistica" || categoria === "Turismo" || categoria === "Museo") {
+                formData.activado = true; // Agrega los servicios al objeto
+            }
+            if(categoria === "Hotel"){
                 formData.services = services; // Agrega los servicios al objeto
                 formData.activado = true; // Agrega los servicios al objeto
                 formData.popularServices = selectedPopulares
@@ -338,15 +341,17 @@ const Page = () => {
             });
 
             // Realizar el fetch PUT a la API para actualizar el código
-            const res = await fetch(`/api/codigos/${idCodigo._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cantidad: idCodigo.cantidad - 1 // Convertir los datos a JSON
-                }),
-            });
+            if(descuentoAplicado){
+                const res = await fetch(`/api/codigos/${idCodigo._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cantidad: idCodigo.cantidad - 1 // Convertir los datos a JSON
+                    }),
+                });
+            }
 
             if (response.ok) {
                 Swal.fire({
@@ -438,10 +443,6 @@ const Page = () => {
                                 isInvalid={errores.includes("nombre") ? true : false}
                                 errorMessage="Ingresa el nombre"
                             />
-                            {/* <div className="w-full h-[300px] mb-10">
-                                <h1 className='mb-5'>Ubicacion:</h1>
-                            <LeafletMap setUbi={setUbicacion} />
-                            </div> */}
                             <Input
                                 type="text"
                                 className='w-full'

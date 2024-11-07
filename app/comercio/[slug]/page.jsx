@@ -318,10 +318,13 @@ export default async function page({ params }) {
                                         :
                                         ""
                                 }
-                                <div className='col-span-6 md:col-span-2 flex items-center justify-between border border-gray-200 rounded-xl p-4'>
-                                    <h1 className='font-semibold text-md'>Descuento</h1>
-                                    <p className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full w-12 text-center'>{producto.descuento}</p>
-                                </div>
+                                {producto.descuento != "Ninguno" ?
+                                    <div className='col-span-6 md:col-span-2 flex items-center justify-between border border-gray-200 rounded-xl p-4'>
+                                        <h1 className='font-semibold text-md'>Descuento</h1>
+                                        <p className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-full w-12 text-center'>{producto.descuento}</p>
+                                    </div>
+                                    :
+                                    ""}
                                 <div className="col-span-6 md:col-span-2 flex items-center justify-between border border-gray-200 rounded-xl p-4">
                                     <h1 className='font-semibold text-md'>
                                         <span className='pe-2'>👥</span>
@@ -373,7 +376,7 @@ export default async function page({ params }) {
                                     {/* <p>{producto.ubicacion}</p> */}
                                     <iframe
                                         src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_EMBED_API_KEY}&q=${encodeURI(producto.ubicacion)}`}
-                                        style={{height: "400px", width: "100%"}}
+                                        style={{ height: "400px", width: "100%" }}
                                         allowFullScreen=""
                                         loading="lazy"
                                         referrerpolicy="no-referrer-when-downgrade">
@@ -392,8 +395,10 @@ export default async function page({ params }) {
                                 ""}
 
                         </div>
-
-                        <SliderPromo promociones={producto.promociones} producto={producto} />
+                        {producto.promociones.length != 0 ?
+                            <SliderPromo promociones={producto.promociones} producto={producto} />
+                            :
+                            ""}
 
                     </div>
                 </div>

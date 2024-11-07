@@ -371,7 +371,13 @@ const page = ({ params }) => {
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
-
+                            <Input
+                                type="text"
+                                className='w-full'
+                                label="Ubicacion"
+                                value={ubicacion}
+                                onChange={(e) => setUbicacion(e.target.value)}
+                            />
                             <Input
                                 type="number"
                                 className='w-full'
