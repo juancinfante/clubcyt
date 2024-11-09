@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import logo from '@/public/assets/logo_blue_clubcyt.png'
 import { Input } from '@nextui-org/input';
 import { Spinner } from '@nextui-org/spinner';
+import { signIn } from 'next-auth/react';
 
 const page = () => {
 
@@ -20,33 +21,50 @@ const page = () => {
     e.preventDefault();
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: false
+      })
 
-      const data = await res.json();
-      
-      if (!res.ok) {
-        setError(data.error || 'Error desconocido');
+      if (res?.error) {
+        setError(res.error);
         setLoading(false)
-        return;
       }
-      
-      // Guardar el token en localStorage o manejar la sesión como prefieras
-      // Redirigir a la página principal o donde desees
-      if(data){
-        localStorage.setItem('usuario', JSON.stringify(data));
-        window.location.href = "/"
-      }
-      setLoading(false)
+
+      if (res?.ok) return router.push("/")
+
     } catch (error) {
-      setError('Error de red');
-      setLoading(false)
+      console.log(error)
     }
+    // try {
+    //   const res = await fetch('/api/auth/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ email, password }),
+    //   });
+
+    //   const data = await res.json();
+
+    //   if (!res.ok) {
+    //     setError(data.error || 'Error desconocido');
+    //     setLoading(false)
+    //     return;
+    //   }
+
+    //   // Guardar el token en localStorage o manejar la sesión como prefieras
+    //   // Redirigir a la página principal o donde desees
+    //   if(data){
+    //     localStorage.setItem('usuario', JSON.stringify(data));
+    //     window.location.href = "/"
+    //   }
+    //   setLoading(false)
+    // } catch (error) {
+    //   setError('Error de red');
+    //   setLoading(false)
+    // }
   };
 
   useEffect(() => {
@@ -68,18 +86,18 @@ const page = () => {
           <form className='w-full flex flex-col gap-3' onSubmit={handleSubmit}>
             <div className='relative w-full'>
               <Input type='email' label="Email" isClearable required
-              onChange={(e) => setEmail(e.target.value)}/>
+                onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className='relative w-full'>
-              <Input type='password' label="Contraseña" isClearable required onChange={(e) => setPassword(e.target.value)}/>
+              <Input type='password' label="Contraseña" isClearable required onChange={(e) => setPassword(e.target.value)} />
             </div>
             <button type='submit' className='bg-indigo-500 text-white text-sm mt-2 p-3 rounded-md'>
-              {loading ? 
-              <Spinner color='default' size='sm'/>
-              : 
-              "Ingresar"
-            }
-              </button>
+              {loading ?
+                <Spinner color='default' size='sm' />
+                :
+                "Ingresar"
+              }
+            </button>
           </form>
           <p className='text-xs mt-5'>No tienes cuenta? <a href="/register" className='text-indigo-600'>Registrate</a></p>
         </div>

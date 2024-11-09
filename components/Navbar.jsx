@@ -6,57 +6,17 @@ import logo from '@/public/assets/logo_blue_clubcyt.png'
 import { usePathname, useRouter } from 'next/navigation'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown'
 import MenuSvg from '@/public/assets/menu.svg'
+import { signOut, useSession } from 'next-auth/react'
 
 const Navbar = () => {
+
+
+    const session = useSession()
 
     const [usuario, setUsuario] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const handleSalir = () => {
-        localStorage.removeItem('usuario');
-        window.location.href('/')
-    }
 
-    const fetchUsuario = async (idUsuario) => {
-        try {
-            // Realizamos la solicitud GET al endpoint que maneja la función GET en el backend
-            const response = await fetch(`/api/usuarios/${idUsuario}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            // Verificamos si la respuesta fue exitosa
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Error:', errorData.error);
-                return;
-            }
-
-            // Convertimos la respuesta a JSON
-            const data = await response.json();
-            setUsuario(data)
-        } catch (error) {
-            console.error('Error al realizar la solicitud:', error);
-        } finally {
-            // Cambiamos isLoading a false una vez que se completa la carga
-            setIsLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        const storedUsuario = localStorage.getItem('usuario');
-        if (storedUsuario !== null) {
-            const { _id } = JSON.parse(storedUsuario);
-            fetchUsuario(_id);
-        } else {
-            setIsLoading(false); // Si no hay usuario en localStorage, también terminamos la carga
-        }
-    }, []);
-    if (isLoading) {
-        return null; // Puedes retornar un loader o nada mientras carga
-    }
 
     const obtenerFechaFormateada = () => {
         const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
@@ -84,7 +44,7 @@ const Navbar = () => {
                 </Link>
                 <ul className='flex gap-4 justify-center items-center'>
                     {
-                        usuario == null ?
+                        !session.data ?
                             <>
                                 {/* <Link href="/suscribirse" className='bg-yellow-200 px-3 py-1 rounded-full md:hidden'>SUSCRIBITE</Link> */}
                                 <li>
@@ -103,7 +63,7 @@ const Navbar = () => {
                                 variant="bordered"
                             >
                                 {
-                                    usuario == null ?
+                                    !session.data ?
                                         <MenuSvg className="w-10 h-10 md:hidden" />
                                         :
                                         <p className='bg-gray-300 rounded-full px-3 py-3 me-2'>
@@ -113,7 +73,7 @@ const Navbar = () => {
                             </button>
                         </DropdownTrigger>
                         {
-                            usuario == null ?
+                            !session.data ?
                                 <DropdownMenu aria-label="Static Actions">
                                     <DropdownItem key="new2" className='bg-yellow-200 w-full' textValue='a'>
                                         <Link href="/suscribirse" className='w-full'>SUSCRIBITE</Link>
@@ -124,17 +84,17 @@ const Navbar = () => {
                                 </DropdownMenu>
                                 :
                                 <DropdownMenu aria-label="Static Actions">
-                                    {usuario.suscripto == false ?
+                                    {!session.data && session.data.user.suscripto ?
                                         <DropdownItem key="new2" className='bg-yellow-200' textValue='a'>
                                             <Link href="/suscribirse">SUSCRIBIRSE</Link>
                                         </DropdownItem>
                                         :
                                         ""}
                                     <DropdownItem key="copy" textValue='a'>
-                                        <Link href={`/cuenta/${usuario._id}`} >CUENTA</Link>
+                                        <Link href={`/cuenta/`} >CUENTA</Link>
                                     </DropdownItem>
                                     <DropdownItem key="edit" textValue='a'>
-                                        <Link href="" onClick={handleSalir}>SALIR</Link>
+                                        <Link href="" onClick={() => {signOut({callbackUrl: "/login"})}}>SALIR</Link>
                                     </DropdownItem>
                                 </DropdownMenu>
                         }
@@ -142,7 +102,7 @@ const Navbar = () => {
                 </ul>
             </nav>
         </div>
-            {usuario == null ? 
+            {!session.data ? 
             <div className="w-full bg-gray-100 py-3 flex justify-center items-center gap-2">
                 <Link href={"/suscribirse"} className='px-3 py-2 text-xs font-semibold bg-yellow-200 rounded-full'>SUSCRIBITE POR $1.500</Link>
                 <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link>

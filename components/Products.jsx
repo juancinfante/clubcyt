@@ -32,7 +32,6 @@ const Products = () => {
       try {
         const response = await fetch('api/promociones');
         setProductos()
-        console.log(response)
       } catch (error) {
         
       }

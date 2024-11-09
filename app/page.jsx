@@ -12,7 +12,6 @@ import Publicidades from '@/components/Publicidades'
 import CarouselPublicidades from '@/components/CarouselPublicidades'
 import SliderPromo from '@/components/SliderPromo'
 import { getPromociones } from '@/lib/actions/page'
-
 export const revalidate = 10;
 
 export default async function page() {
@@ -22,14 +21,15 @@ export default async function page() {
     <>
 
       <Navbar />
+
       {/* <Hero /> */}
       <Products />
-      {
+      {/* {
         promociones.length > 0  ?
           <SliderPromo promociones={promociones} />
           :
           ""
-      }
+      } */}
       <Publicidades />
       <CarouselPublicidades />
     </>

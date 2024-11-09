@@ -10,8 +10,11 @@ import React, { useEffect, useState } from 'react'
 import qrcontainer from '@/public/assets/qrcontainer.jpeg';
 import { Spinner } from '@nextui-org/spinner'
 import Swal from 'sweetalert2'
+import { useSession } from 'next-auth/react'
 
 const page = ({ params }) => {
+
+    const { data: session, status } = useSession();
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
@@ -186,15 +189,13 @@ const page = ({ params }) => {
         }
     }
 
+    // }, [])
     useEffect(() => {
-        fetchProductos(params.id)
-        fetchUsuario(params.id)
-        fetchPromociones()
-        if (!localStorage.getItem("usuario")) {
-            window.location.href = "/"
+        if (status === "authenticated" && session?.user?._id) {
+            fetchProductos(session.user._id);
+            fetchUsuario(session.user._id);
         }
-
-    }, [])
+    }, [session, status]);
 
 
     return (
