@@ -2,6 +2,7 @@ import Usuario from "@/models/usuarios";
 import { connectDB } from "@/utils/mongoose";
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 const handler = NextAuth({
     providers: [
@@ -28,6 +29,10 @@ const handler = NextAuth({
                 
                 return user
             }
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         })
     ],
     callbacks: {

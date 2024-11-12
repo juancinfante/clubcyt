@@ -7,6 +7,7 @@ import logo from '@/public/assets/logo_blue_clubcyt.png'
 import { Input } from '@nextui-org/input';
 import { Spinner } from '@nextui-org/spinner';
 import { signIn } from 'next-auth/react';
+import GoogleSignInButton from '@/components/GoogleSignInButton';
 
 const page = () => {
 
@@ -37,34 +38,6 @@ const page = () => {
     } catch (error) {
       console.log(error)
     }
-    // try {
-    //   const res = await fetch('/api/auth/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ email, password }),
-    //   });
-
-    //   const data = await res.json();
-
-    //   if (!res.ok) {
-    //     setError(data.error || 'Error desconocido');
-    //     setLoading(false)
-    //     return;
-    //   }
-
-    //   // Guardar el token en localStorage o manejar la sesión como prefieras
-    //   // Redirigir a la página principal o donde desees
-    //   if(data){
-    //     localStorage.setItem('usuario', JSON.stringify(data));
-    //     window.location.href = "/"
-    //   }
-    //   setLoading(false)
-    // } catch (error) {
-    //   setError('Error de red');
-    //   setLoading(false)
-    // }
   };
 
   useEffect(() => {
@@ -107,6 +80,7 @@ const page = () => {
           alt="banner"
           className='w-full h-full object-cover hidden md:block' />
       </div>
+      {/* <GoogleSignInButton /> */}
     </div>
   )
 }

@@ -151,7 +151,7 @@ const CardPromocion = ({ promocion, producto }) => {
 
         <>
 
-            <div onClick={!pathName.startsWith("/cuenta/") ? onOpen : null} className={pathName.startsWith("/cuenta/") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borded col-span-3 rounded-xl overflow-hidden hover:cursor-pointer"}>
+            <div onClick={!pathName.startsWith("/cuenta") ? onOpen : null} className={pathName.startsWith("/cuenta") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "borded col-span-3 rounded-xl overflow-hidden hover:cursor-pointer"}>
                 <div className="relative group">
                     {/* Imagen */}
                     <img src={promocion.imagen} alt="" className="h-40 w-full object-cover" /> {/* Muestra la imagen de la primera promoción */}
@@ -165,10 +165,10 @@ const CardPromocion = ({ promocion, producto }) => {
                     </div>
 
                     {/* Capa de Hover sobre todo el Card */}
-                    {pathName.startsWith("/cuenta/") ? "" : <div className="absolute inset-0 bg-white opacity-0 hover:opacity-30 transition-opacity duration-300"></div>}
+                    {pathName.startsWith("/cuenta") ? "" : <div className="absolute inset-0 bg-white opacity-0 hover:opacity-30 transition-opacity duration-300"></div>}
 
                     {
-                        pathName.startsWith("/cuenta/") ? (
+                        pathName.startsWith("/cuenta") ? (
                             <div className="flex gap-4 justify-end mt-3 p-3">
                                 <div className='flex justify-center items-center gap-3'>
                                     <Image onClick={() => handleDelete(promocion._id)} className='hover:cursor-pointer'

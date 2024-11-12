@@ -110,12 +110,11 @@ const page = ({ params }) => {
         }
     }
 
-    const fetchPromociones = async () => {
+    const fetchPromociones = async (userId) => {
 
-        const userId = JSON.parse(localStorage.getItem("usuario"))
         try {
             // Realizamos la solicitud GET al endpoint que maneja la función GET en el backend
-            const response = await fetch(`/api/promociones/user/${userId._id}`, {
+            const response = await fetch(`/api/promociones/user/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -194,6 +193,7 @@ const page = ({ params }) => {
         if (status === "authenticated" && session?.user?._id) {
             fetchProductos(session.user._id);
             fetchUsuario(session.user._id);
+            fetchPromociones(session.user._id)
         }
     }, [session, status]);
 

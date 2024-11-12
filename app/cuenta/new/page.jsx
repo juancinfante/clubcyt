@@ -16,9 +16,12 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css'; // Asegúrate de incluir los estilos de Quill
 import Image from 'next/image'
 import InputServiciosPopulares from '@/components/TagInputServicios'
+import { useSession } from 'next-auth/react'
 
 
 const Page = () => {
+
+    const { data: session, status } = useSession();
 
     const [nombre, setNombre] = useState("")
     const [categoria, setCategoria] = useState("")
@@ -292,11 +295,11 @@ const Page = () => {
             setPortadaUrl(uploadedPortadaUrl);
             setGaleriaUrls(uploadedGaleriaUrls);
 
-            const usuario = JSON.parse(localStorage.getItem("usuario"))
-            const usuarioId = usuario._id
+            // const usuario = JSON.parse(localStorage.getItem("usuario"))
+            // const usuarioId = usuario._id
 
             const formData = {
-                usuarioId,
+                usuarioId: session.user._id,
                 nombre,
                 descripcion,
                 provincia,
