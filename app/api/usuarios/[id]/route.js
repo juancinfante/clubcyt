@@ -35,7 +35,6 @@ export async function PUT(req, { params }) {
             return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
         }
 
-        console.log(userUpdate)
         return NextResponse.json(userUpdate);
     } catch (error) {
         console.error('Error al actualizar el usuario:', error);

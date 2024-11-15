@@ -72,7 +72,8 @@ const page = () => {
               }
             </button>
           </form>
-          <p className='text-xs mt-5'>No tienes cuenta? <a href="/register" className='text-indigo-600'>Registrate</a></p>
+          <p className='text-sm mt-5'>No tienes cuenta? <a href="/register" className='text-indigo-600 text-sm'>Registrate</a></p>
+          <a href="/passwordrecovery" className='text-red-600 text-xs'>Olvide mi contraseña</a>
         </div>
       </div>
       <div className="col-span-6 h-full">
@@ -80,7 +81,6 @@ const page = () => {
           alt="banner"
           className='w-full h-full object-cover hidden md:block' />
       </div>
-      {/* <GoogleSignInButton /> */}
     </div>
   )
 }

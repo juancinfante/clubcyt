@@ -36,7 +36,6 @@ export async function PUT(req, { params }) {
             return NextResponse.json({ error: 'Producto no encontrado' }, { status: 404 });
         }
 
-        console.log(updatedProducto)
         return NextResponse.json(updatedProducto);
     } catch (error) {
         console.error('Error al actualizar el producto:', error);

@@ -33,6 +33,9 @@ const UsuarioSchema = new Schema({
     qrcode:{
         type: String,
     },
+    verificationCode: {
+        type: String
+    }
 })
 
 const Usuario = models.Usuarios || model("Usuarios", UsuarioSchema);

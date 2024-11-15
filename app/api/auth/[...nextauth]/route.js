@@ -3,6 +3,7 @@ import { connectDB } from "@/utils/mongoose";
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import bcrypt from 'bcrypt';
 
 const handler = NextAuth({
     providers: [
@@ -18,16 +19,25 @@ const handler = NextAuth({
                 password: { label: "password", type: "password" }
             },
             async authorize(credentials, req) {
-                // Add logic here to look up the user from the credentials supplied
-                // const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
-                await connectDB()
+                await connectDB();
 
-                const user = await Usuario.findOne({ email: credentials.email }).select("+password")
-                if (!user) throw new Error("Invalid credentials");
+                // Buscar al usuario por el email
+                const user = await Usuario.findOne({ email: credentials.email }).select("+password");
+
+                // Si no existe el usuario, retornar un error
+                if (!user) throw new Error("Email o contraseña incorrectos.");
+
+                // Verificar si el email está verificado
                 if (!user.email_verificado) throw new Error("Revisa tu correo y verifica tu email");
-                if(user.password != credentials.password) throw new Error("Invalid credentials");
-                
-                return user
+
+                // Comparar la contraseña proporcionada con la contraseña hasheada en la base de datos
+                const isMatch = await bcrypt.compare(credentials.password, user.password);
+
+                // Si las contraseñas no coinciden, retornar un error
+                if (!isMatch) throw new Error("Email o contraseña incorrectos.");
+
+                // Si todo está bien, retornar el usuario
+                return user;
             }
         }),
         GoogleProvider({
