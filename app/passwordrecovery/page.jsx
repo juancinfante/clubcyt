@@ -15,7 +15,7 @@ const page = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [step, setStep] = useState(2); // 1 = Formulario de email, 2 = Formulario de código, 3 = Formulario de nueva contraseña, 4 = Éxito
+  const [step, setStep] = useState(1); // 1 = Formulario de email, 2 = Formulario de código, 3 = Formulario de nueva contraseña, 4 = Éxito
 
   // Función para manejar el formulario de recuperación de contraseña (enviar el email)
   const handleEmailSubmit = async (e) => {
