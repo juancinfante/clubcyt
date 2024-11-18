@@ -9,7 +9,7 @@ const page = () => {
     const [user, setUser] = useState(null);
 
     const suscribirse = async () => {
-        const email = "test_user_976725804@testuser.com";
+        const email = "pruebacorreo@gmail.com";
       
         try {
           const response = await fetch("/api/suscribirse", {
