@@ -29,7 +29,10 @@ const PromocionSchema = new Schema({
         type: String,
         required: false,
     },
-})
+},
+{
+    timestamps: true // Habilita createdAt y updatedAt automáticamente
+},)
 
 
 const Promocion = models.Promocion || model("Promocion", PromocionSchema);

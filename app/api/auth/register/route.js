@@ -1,7 +1,7 @@
 import Usuario from "@/models/usuarios";
 import { connectDB } from "@/utils/mongoose";
 import { NextResponse } from "next/server";
-
+import bcrypt from 'bcrypt'
 // export async function POST(req) {
 
 //     await connectDB(); // Conectar a la base de datos
@@ -46,7 +46,7 @@ export async function POST(request) {
     connectDB();
     try {
         const data = await request.json();
-        const { email, dni } = data;
+        const { email, dni, password } = data;
 
         // Verificar si el email o el dni ya existen
         const emailExists = await Usuario.findOne({ email });
@@ -64,8 +64,15 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        // Si no existen, se crea un nuevo usuario
-        const newUsuario = new Usuario(data);
+        // Hashear la contraseña antes de guardar
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Crear un nuevo usuario con la contraseña hasheada
+        const newUsuario = new Usuario({
+            ...data,
+            password: hashedPassword
+        });
+
         await newUsuario.save();
 
         return NextResponse.json({

@@ -317,7 +317,7 @@ const Page = () => {
                 logo: uploadedLogoUrl,
                 fotos: uploadedGaleriaUrls,
                 activado: false,
-                promociones: []
+                promociones: [],
                 // condicion si cateogira es hotel colocar los servicios aqui 
             };
 
@@ -332,6 +332,7 @@ const Page = () => {
 
             if (descuentoAplicado) {
                 formData.activado = true;
+                formData.codigoPromo = codigo
             }
 
             // Realizar el fetch POST a la API

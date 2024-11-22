@@ -35,8 +35,18 @@ const UsuarioSchema = new Schema({
     },
     verificationCode: {
         type: String
-    }
-})
+    },
+    suscriptionId: {
+        type: String
+    },
+    status: {
+        type: String
+    },
+    role: { type: String, default: "user" }
+},
+{
+    timestamps: true // Habilita createdAt y updatedAt automáticamente
+},)
 
 const Usuario = models.Usuarios || model("Usuarios", UsuarioSchema);
 

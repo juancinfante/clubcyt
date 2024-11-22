@@ -6,43 +6,69 @@ export async function GET(request) {
     await connectDB(); // Conectar a la base de datos
 
     const { searchParams } = new URL(request.url);
-    const text = searchParams.get('text') || "";
-    const tag = searchParams.get('text') || "";
-    const categoria = searchParams.get('categoria') || "";
-    const provincia = searchParams.get('provincia') || "";
-    const page = parseInt(searchParams.get('page')) || 1; // Página actual, por defecto 1
-    const limit = parseInt(searchParams.get('limit')) || 12; // Límite de productos por página, por defecto 10
 
-     // Crear la consulta para buscar por nombre o tags y productos activados
-     const query = {
-        activado: true,
+    const all = searchParams.get('all') === 'true'; // Verificar si se solicitan todos los productos
+    const admin = searchParams.get('admin') === 'true'; // Verificar si se solicita desde el admin
+    const text = searchParams.get('text') || ""; // Texto de búsqueda
+    const categoria = searchParams.get('categoria') || ""; // Categoría de búsqueda
+    const provincia = searchParams.get('provincia') || ""; // Provincia de búsqueda
+    const page = parseInt(searchParams.get('page'), 10) || 1; // Página actual (por defecto 1)
+    const limit = parseInt(searchParams.get('limit'), 10) || 12; // Límite de productos por página (por defecto 12)
+
+    // Si se solicitan todos los productos sin filtros
+    if (all) {
+        const productos = await Producto.find().populate({
+            path: 'usuarioId',
+            select: 'nombre email', // Solo traer nombre y email del usuario
+        });
+
+        return NextResponse.json({
+            productos,
+            totalProductos: productos.length,
+        });
+    }
+
+    // Construcción dinámica de la query
+    const query = {
+        ...(admin ? {} : { activado: true }), // Si admin=true, no aplica el filtro 'activado: true'
         ...(text && {
             $or: [
-                { nombre: { $regex: text, $options: 'i' } }, // Búsqueda en nombre
-                { tags: { $elemMatch: { $regex: text, $options: 'i' } } } // Búsqueda en tags (arreglo)
-            ]
+                { nombre: { $regex: text, $options: 'i' } }, // Buscar por nombre
+                { categoria: { $regex: text, $options: 'i' } }, // Buscar por categoría
+                { provincia: { $regex: text, $options: 'i' } }, // Buscar por provincia
+                { codigoPromo: { $regex: text, $options: 'i' } }, // Buscar por código promocional
+                { tags: { $elemMatch: { $regex: text, $options: 'i' } } }, // Buscar en tags
+            ],
         }),
-        ...(categoria && { categoria }), // Filtrar por categoría
-        ...(provincia && { provincia })  // Filtrar por provincia
+        ...(categoria && { categoria }), // Filtrar por categoría exacta
+        ...(provincia && { provincia }), // Filtrar por provincia exacta
     };
 
-    const skip = (page - 1) * limit; // Calcular el número de documentos a saltar
+    // Calcular documentos a saltar (para la paginación)
+    const skip = (page - 1) * limit;
 
-    // Obtener los productos con paginación
+    // Obtener los productos con filtros, paginación y población
     const productos = await Producto.find(query)
-        .skip(skip) // Saltar documentos
-        .limit(limit); // Límite de productos
+        .populate({
+            path: 'usuarioId',
+            select: 'nombre apellido email', // Solo traer datos específicos del usuario
+        })
+        .sort({ createdAt: -1 }) // Ordenar por más recientes
+        .skip(skip) // Saltar documentos según la página
+        .limit(limit); // Limitar la cantidad de resultados
 
-    // Contar el total de productos que coinciden con la búsqueda para saber cuántas páginas hay
+    // Contar el total de documentos que coinciden con la búsqueda
     const totalProductos = await Producto.countDocuments(query);
 
     return NextResponse.json({
-        productos,
-        currentPage: page,
-        totalPages: Math.ceil(totalProductos / limit),
-        totalProductos,
+        productos, // Lista de productos
+        currentPage: page, // Página actual
+        totalPages: Math.ceil(totalProductos / limit), // Total de páginas
+        totalProductos, // Total de productos
     });
 }
+
+
 
 
 export async function POST(request) {

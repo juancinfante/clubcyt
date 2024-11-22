@@ -6,10 +6,9 @@ import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import Swal from 'sweetalert2';
 
-const CardProducto = ({ producto, loading }) => {
+const CardProducto = ({ producto, loading , email }) => {
   const router = useRouter()
   const pathName = usePathname();
-
   if (loading) {
     // Mostrar skeletons cuando loading sea true
     return (
@@ -20,6 +19,28 @@ const CardProducto = ({ producto, loading }) => {
       </div>
     );
   }
+
+  const suscribirse = async () => {
+    try {
+        const response = await fetch("/api/suscribirse", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, producto}), // Enviamos al backend
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al crear la suscripción");
+        }
+
+        const data = await response.json();
+        // Redirigimos al usuario a Mercado Pago
+        window.location.href = data.url;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -79,7 +100,8 @@ const CardProducto = ({ producto, loading }) => {
             const timer = Swal.getPopup().querySelector("b");
             timerInterval = setInterval(() => {
               // timer.textContent = `${Swal.getTimerLeft()}`;
-            router.push("https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808473dd91620173de7e3e8803d6")
+            // router.push("https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808473dd91620173de7e3e8803d6")
+            suscribirse()
             }, 1000);
           },
           willClose: () => {

@@ -70,37 +70,50 @@ const ProductSchema = new Schema({
         type: Boolean,
         required: true
     },
+    suscriptionId: {
+        type: String
+    },
+    status: {
+        type: String
+    },
+
     slug: {
         type: String,
-        unique: true 
+        unique: true
     },
-    services:{
+    services: {
         type: Object,
         required: false,
     },
-    popularServices:{
+    popularServices: {
         type: [],
         required: false,
     },
+    codigoPromo: {
+        type: String,
+    },
     promociones: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "Promocion",
+            type: Schema.Types.ObjectId,
+            ref: "Promocion",
         },
-      ],
-})
+    ],
+},
+    {
+        timestamps: true // Habilita createdAt y updatedAt automáticamente
+    },)
 
 // Middleware para generar el slug antes de guardar
 ProductSchema.pre('save', function (next) {
-  if (!this.slug) {
-    // Generar el slug solo si no existe
-    this.slug = slugify(this.nombre, {
-      lower: true, // Convierte a minúsculas
-      strict: true, // Elimina caracteres no válidos
-      replacement: '-', // Usa guiones como separador
-    });
-  }
-  next();
+    if (!this.slug) {
+        // Generar el slug solo si no existe
+        this.slug = slugify(this.nombre, {
+            lower: true, // Convierte a minúsculas
+            strict: true, // Elimina caracteres no válidos
+            replacement: '-', // Usa guiones como separador
+        });
+    }
+    next();
 });
 
 const Producto = models.Productos || model("Productos", ProductSchema);

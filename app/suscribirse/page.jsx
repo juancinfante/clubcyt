@@ -3,42 +3,41 @@ import Navbar from '@/components/Navbar'
 import Community from '@/public/assets/community.svg'
 import { useEffect, useState } from 'react';
 import suscribe from '../api-mercadopago';
+import { useSession } from 'next-auth/react';
 
-const page = () => {
+const page = () => { 
 
     const [user, setUser] = useState(null);
-
+    const { data: session, status } = useSession();
+    const [email, setEmail] = useState(null)
     const suscribirse = async () => {
-        const email = "josiasdamir013@gmail.com";
-      
+
         try {
-          const response = await fetch("/api/suscribirse", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email }), // Enviamos el email al backend
-          });
-      
-          if (!response.ok) {
-            throw new Error("Error al crear la suscripción");
-          }
-      
-          const data = await response.json();
-          // Redirigimos al usuario a Mercado Pago
-          window.location.href = data.url;
+            const response = await fetch("/api/suscribirse", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }), // Enviamos el email al backend
+            });
+
+            if (!response.ok) {
+                throw new Error("Error al crear la suscripción");
+            }
+
+            const data = await response.json();
+            // Redirigimos al usuario a Mercado Pago
+            window.location.href = data.url;
         } catch (error) {
-          console.error("Error:", error);
+            console.error("Error:", error);
         }
-      };
+    };
 
     useEffect(() => {
-        // Asegurarse de que el código se ejecute solo en el cliente
-        const storedUser = localStorage.getItem("usuario");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+        if (status === "authenticated" && session?.user?._id) {
+            setEmail(session.user.email)
         }
-    }, []);
+    }, [session, status]);
 
     return (
         <>
@@ -66,11 +65,16 @@ const page = () => {
                         <div className="mt-8 flex gap-4 justify-start">
 
                             <a
-                                // href={user ? "/pagoexitoso" : "/login"}
-                                onClick={suscribirse}
-                                className="block w-full rounded border border-yellow-300 bg-yellow-300 px-3 py-3 md:px-12 md:py-3 text-sm font-medium  shadow hover:text-gray-700 focus:outline-none focus:ring sm:w-auto"
+                                onClick={() => {
+                                    if (session) {
+                                        suscribirse(); // Llama a la función si hay sesión
+                                    } else {
+                                        window.location.href = "/login"; // Redirige al login si no hay sesión
+                                    }
+                                }}
+                                className="block w-full rounded border border-yellow-300 bg-yellow-300 px-3 py-3 md:px-12 md:py-3 text-sm font-medium shadow hover:text-gray-700 focus:outline-none focus:ring sm:w-auto"
                             >
-                                Suscríbite
+                                Suscribirse
                             </a>
                             <a
                                 href="#clubcyt"

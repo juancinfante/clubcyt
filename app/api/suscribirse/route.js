@@ -1,3 +1,6 @@
+import Producto from "@/models/productos";
+import Usuario from "@/models/usuarios";
+import { connectDB } from "@/utils/mongoose";
 import { MercadoPagoConfig, PreApproval } from "mercadopago";
 
 // Inicializa MercadoPago con tu accessToken
@@ -6,25 +9,56 @@ const mercadopago = new MercadoPagoConfig({
 });
 
 export async function POST(req) {
-  // Asegúrate de que la petición esté en formato JSON
-  const { email } = await req.json(); // Obtén el email del cuerpo de la petición
-
+  connectDB();
   try {
+    // Asegúrate de que la petición esté en formato JSON
+    const { email, producto } = await req.json(); // Obtén el email del cuerpo de la petición
+
+    // Busca el usuario en la base de datos
+    const user = await Usuario.findOne({ email });
+    if (!user) {
+      return new Response(
+        JSON.stringify({ error: "Usuario no encontrado" }),
+        {
+          status: 404,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+    let amount = 100;
+    let reason = "Suscripcion ClubCyT"
+    if (producto) {
+      amount = 200
+      reason = "Suscripcion ClubCyt: " + producto.nombre;
+    }
     // Crea la suscripción en Mercado Pago
     const suscription = await new PreApproval(mercadopago).create({
       body: {
-        back_url: "https://nb92zqsb-3000.brs.devtunnels.ms/",
-        reason: "Suscripción clubcyt",
+        back_url: "https://clubcyt.vercel.app/cuenta",
+        reason: reason,
         auto_recurring: {
           frequency: 1,
           frequency_type: "months",
-          transaction_amount: 100,
+          transaction_amount: amount,
           currency_id: "ARS",
         },
         payer_email: email,
         status: "pending",
       },
     });
+
+    if (producto) {
+      await Producto.findByIdAndUpdate( producto._id, {
+        suscriptionId: suscription.id,
+        status: suscription.status
+      });
+    } else {
+      // Actualiza el usuario con el ID de la suscripción
+      await Usuario.findByIdAndUpdate(user._id, {
+        suscriptionId: suscription.id,
+        status: suscription.status
+      });
+    }
 
     // Devuelve la URL de pago para redirigir al usuario
     return new Response(JSON.stringify({ url: suscription.init_point }), {
@@ -33,9 +67,13 @@ export async function POST(req) {
     });
   } catch (error) {
     console.error("Error al crear la suscripción:", error);
-    return new Response(JSON.stringify({ error: "Error al crear la suscripción" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: "Error al crear la suscripción" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
+

@@ -15,7 +15,7 @@ import { useSession } from 'next-auth/react'
 const page = ({ params }) => {
 
     const { data: session, status } = useSession();
-
+    console.log(session)
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
 
@@ -190,10 +190,10 @@ const page = ({ params }) => {
 
     // }, [])
     useEffect(() => {
-        if (status === "authenticated" && session?.user?._id) {
-            fetchProductos(session.user._id);
-            fetchUsuario(session.user._id);
-            fetchPromociones(session.user._id)
+        if (status === "authenticated" && session?.user?.id) {
+            fetchProductos(session.user.id);
+            fetchUsuario(session.user.id);
+            fetchPromociones(session.user.id)
         }
     }, [session, status]);
 
@@ -207,7 +207,7 @@ const page = ({ params }) => {
                     <div className="col-span-12 md:col-span-3 h-80 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center">
                         <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
                         <p className='text-sm'>{usuario.nombre + " " + usuario.apellido} </p>
-                        {/* <p className='text-sm'>{usuario.email}</p> */}
+                        <p className='text-sm'>{usuario.email}</p>
                         {
                             usuario.suscripto ?
                                 <button
@@ -242,7 +242,7 @@ const page = ({ params }) => {
                             ) : (
                                 // Mostrar productos cuando existan
                                 productos.map((producto) => (
-                                    <CardProducto key={producto._id} producto={producto} loading={false} />
+                                    <CardProducto key={producto._id} producto={producto} email={usuario.email} loading={false} />
                                 ))
                             )}
                             {/* {
