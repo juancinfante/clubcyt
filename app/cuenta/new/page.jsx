@@ -299,7 +299,7 @@ const Page = () => {
             // const usuarioId = usuario._id
 
             const formData = {
-                usuarioId: session.user._id,
+                usuarioId: session.user.id,
                 nombre,
                 descripcion,
                 provincia,
