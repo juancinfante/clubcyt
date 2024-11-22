@@ -104,7 +104,7 @@ const Navbar = () => {
             {!session?.data?.user?.suscripto ? 
             <div className="w-full bg-gray-100 py-3 flex justify-center items-center gap-2">
                 <Link href={"/suscribirse"} className='px-3 py-2 text-xs font-semibold bg-yellow-200 rounded-full'>SUSCRIBITE POR $1.500</Link>
-                <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link>
+                {/* <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link> */}
             </div>
             : 
             ""}

@@ -174,7 +174,8 @@ const CardPromocion = ({ promocion, producto }) => {
                                     <Image onClick={() => handleDelete(promocion._id)} className='hover:cursor-pointer'
                                         src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/delete.svg" alt="delete" width={25} height={25} />
                                     <span onClick={handleOpenModalPromocion}>
-                                        <Image src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/edit.svg" alt="edit" width={25} height={25} />
+                                        <Image className='hover:cursor-pointer'
+                                         src="https://raw.githubusercontent.com/adrianhajdin/event_platform/fa7a715be4612ad8e17049a8b2ef2ac20ecbf88b/public/assets/icons/edit.svg" alt="edit" width={25} height={25} />
                                     </span>
                                 </div>
                             </div>
@@ -192,7 +193,7 @@ const CardPromocion = ({ promocion, producto }) => {
                                 <div className="sm:flex sm:items-start">
                                     <div className="container mx-auto flex justify-center mt-10">
                                         <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-                                            <h1 className="text-2xl font-bold mb-4">Agregar Promocion</h1>
+                                            <h1 className="text-2xl font-bold mb-4">Editar Promocion</h1>
 
                                             {/* Subir Imagen */}
                                             <div className="mb-4">
