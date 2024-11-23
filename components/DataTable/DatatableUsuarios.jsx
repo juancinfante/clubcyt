@@ -162,6 +162,12 @@ const DatatableUsuarios = () => {
             sortable: true,
         },
         {
+            name: "Status",
+            selector: (row) => row.status,
+            width: '250px',
+            sortable: true,
+        },
+        {
             name: "Email verificado",
             selector: (row) =>
                 row.email_verificado ? (

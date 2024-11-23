@@ -13,7 +13,7 @@ export async function POST(req) {
   try {
     // Asegúrate de que la petición esté en formato JSON
     const { email, producto } = await req.json(); // Obtén el email del cuerpo de la petición
-
+    console.log(email)
     // Busca el usuario en la base de datos
     const user = await Usuario.findOne({ email });
     if (!user) {

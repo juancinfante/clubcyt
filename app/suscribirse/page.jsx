@@ -9,6 +9,7 @@ const page = () => {
 
     const [user, setUser] = useState(null);
     const { data: session, status } = useSession();
+    console.log(session)
     const [email, setEmail] = useState(null)
     const suscribirse = async () => {
 
@@ -22,6 +23,7 @@ const page = () => {
             });
 
             if (!response.ok) {
+                console.log(response)
                 throw new Error("Error al crear la suscripción");
             }
 
@@ -34,7 +36,7 @@ const page = () => {
     };
 
     useEffect(() => {
-        if (status === "authenticated" && session?.user?._id) {
+        if (session) {
             setEmail(session.user.email)
         }
     }, [session, status]);

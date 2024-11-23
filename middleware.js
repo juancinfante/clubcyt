@@ -17,7 +17,7 @@ export async function middleware(req) {
   }
 
   // Rutas protegidas generales (requieren autenticación)
-  const protectedPaths = ["/cuenta", "/cuenta/new", "/cuenta/edit", "/cuenta/:path*", "/admin"];
+  const protectedPaths = ["/cuenta", "/cuenta/new", "/cuenta/edit", "/cuenta/:path*", ];
   const isProtectedPath = protectedPaths.some((path) => url.pathname.startsWith(path));
 
   if (isProtectedPath) {
@@ -28,14 +28,14 @@ export async function middleware(req) {
     }
 
     // Protección adicional para rutas administrativas
-    if (url.pathname.startsWith("/admin")) {
-      const userRole = token.user.role || "user"; // Asegúrate de enviar el rol en el JWT
-      if (userRole !== "admin") {
-        // Redirigir si no tiene permisos
-        url.pathname = "/"; // Página de acceso denegado
-        return NextResponse.redirect(url);
-      }
-    }
+    // if (url.pathname.startsWith("/admin")) {
+    //   const userRole = token.user.role || "user"; // Asegúrate de enviar el rol en el JWT
+    //   if (userRole !== "admin") {
+    //     // Redirigir si no tiene permisos
+    //     url.pathname = "/"; // Página de acceso denegado
+    //     return NextResponse.redirect(url);
+    //   }
+    // }
   }
 
   return NextResponse.next();
