@@ -7,13 +7,13 @@ export const sendRecoveryEmail = async (email, code) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',  // Puedes configurar esto con el proveedor de tu elección
         auth: {
-            user: 'juaninfantejj@gmail.com',    // Reemplaza con tu email
-            pass: 'emgu qdav aues qtfm',         // Reemplaza con tu contraseña o contraseñas de app de Gmail
+            user: 'miclubcyt@gmail.com',    // Reemplaza con tu email
+            pass: 'ghdi hplu cbdh irja',         // Reemplaza con tu contraseña o contraseñas de app de Gmail
         },
     });
 
     const mailOptions = {
-        from: "juaninfantejj@gmail.com",
+        from: "miclubcyt@gmail.com",
         to: email,
         subject: 'Recuperación de contraseña',
         text: `Tu código de recuperación es: ${code}`,

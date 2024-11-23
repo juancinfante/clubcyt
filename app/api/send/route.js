@@ -7,14 +7,14 @@ export async function POST(req) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: "juaninfantejj@gmail.com",
-        pass: "emgu qdav aues qtfm",
+        user: "miclubcyt@gmail.com",
+        pass: "ghdi hplu cbdh irja",
       },
     });
 
     // Configurar el correo
     const mailOptions = {
-      from: "juaninfantejj@gmail.com",
+      from: "miclubcyt@gmail.com",
       to,
       subject,
       html,
