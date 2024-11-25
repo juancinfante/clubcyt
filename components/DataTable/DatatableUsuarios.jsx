@@ -320,11 +320,11 @@ const DatatableUsuarios = () => {
                                         </div>
                                         <div>
                                             <p className="text-sm font-semibold text-gray-500">Ultima suscripcion</p>
-                                            <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateSuscription) || 'No disponible'}</p>
+                                            <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateSuscription) == "31-12-1969" ? "-" : formatFecha(selectedProduct.dateSuscription)}</p>
                                         </div>
                                         <div>
                                             <p className="text-sm font-semibold text-gray-500">Ultima Cancelacion</p>
-                                            <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateCancelation) || '-'}</p>
+                                            <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateCancelation) == "31-12-1969" ? "-" : formatFecha(selectedProduct.dateCancelation)}</p>
                                         </div>
                                         <div>
                                             <p className="text-sm font-semibold text-gray-500">Rol</p>
