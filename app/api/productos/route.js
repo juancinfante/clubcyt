@@ -27,6 +27,8 @@ export async function GET(request) {
             totalProductos: productos.length,
         });
     }
+     // Convertir el texto a número para buscar por CUIT si es posible
+     const cuitNumber = !isNaN(Number(text)) ? Number(text) : null;
 
     // Construcción dinámica de la query
     const query = {
@@ -35,9 +37,10 @@ export async function GET(request) {
             $or: [
                 { nombre: { $regex: text, $options: 'i' } }, // Buscar por nombre
                 { categoria: { $regex: text, $options: 'i' } }, // Buscar por categoría
-                { provincia: { $regex: text, $options: 'i' } }, // Buscar por provincia
+                { provincia: { $regex: text, $options: 'i' } }, // Buscar por provincia 
                 { codigoPromo: { $regex: text, $options: 'i' } }, // Buscar por código promocional
                 { tags: { $elemMatch: { $regex: text, $options: 'i' } } }, // Buscar en tags
+                ...(cuitNumber !== null ? [{ cuit: cuitNumber }] : []),
             ],
         }),
         ...(categoria && { categoria }), // Filtrar por categoría exacta

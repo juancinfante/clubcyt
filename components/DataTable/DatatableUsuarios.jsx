@@ -1,6 +1,14 @@
+import formatFecha from '@/utils/convertFecha';
+import { Tooltip } from '@nextui-org/tooltip';
 import React, { useEffect, useState } from 'react';
 import DataTable from "react-data-table-component";
 import Swal from 'sweetalert2';
+import { RedirectIcon } from '../RedirectIcon';
+import { EditIcon } from '../EditIcon';
+import { DeleteIcon } from '../DeleteIcon';
+import { EyeIcon } from '../EyeIcon';
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
+import { Button } from '@nextui-org/button';
 
 const DatatableUsuarios = () => {
     const [usuarios, setUsuarios] = useState([]);
@@ -8,6 +16,9 @@ const DatatableUsuarios = () => {
     const [page, setPage] = useState(1); // Página actual
     const [totalPages, setTotalPages] = useState(1); // Total de páginas
     const [loading, setLoading] = useState(false); // Indicador de carga
+
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     // Obtener usuarios con paginación y filtros
     const fetchUsuarios = async (currentPage = 1) => {
@@ -17,6 +28,7 @@ const DatatableUsuarios = () => {
             if (!response.ok) throw new Error("Error al obtener los datos");
             const data = await response.json();
             setUsuarios(data.usuarios);
+            console.log("busqueda")
             setTotalPages(data.totalPages); // Actualizar total de páginas
         } catch (error) {
             Swal.fire({
@@ -151,56 +163,94 @@ const DatatableUsuarios = () => {
             width: '200px',
         },
         {
-            name: "DNI",
-            selector: (row) => row.dni,
-            width: '200px',
-        },
-        {
             name: "Email",
             selector: (row) => row.email,
             width: '250px',
             sortable: true,
         },
         {
-            name: "Status",
-            selector: (row) => row.status,
-            width: '250px',
-            sortable: true,
+            name: "DNI",
+            selector: (row) => row.dni,
+            width: '100px',
         },
         {
-            name: "Email verificado",
-            selector: (row) =>
-                row.email_verificado ? (
-                    <p className='bg-green-100 px-3 py-1 rounded-lg'>Verificado</p>
-                ) : (
-                    <p className='bg-red-100 px-3 py-1 rounded-lg'>NO</p>
-                ),
-            width: '200px',
+            name: "Ingreso",
+            selector: (row) => formatFecha(row.createdAt),
+            width: '110px',
         },
         {
             name: "Rol",
-            selector: (row) => row.role,
-            width: '100px',
+            selector: (row) => row.role == "admin" ? (
+                <p className='bg-green-200 text-green-800 px-3 py-1 rounded-lg'>Admin</p>
+            ) : row.role == "user" ? (
+                <p className='bg-blue-200 text-blue-800 px-3 py-1 rounded-lg'>Miembro</p>
+            ) : "",
+            width: '110px',
             sortable: true,
         },
         {
+            name: <div className='flex flex-col'>
+                <p>Estado</p>
+                <p>Suscripción</p>
+            </div>,
+            selector: (row) => row.status == "authorized" ? (
+                <p className='bg-green-200 text-green-800 px-3 py-1 rounded-lg'>Activada</p>
+            ) : row.status == "cancelled" ? (
+                <p className='bg-red-200 text-red-800 px-3 py-1 rounded-lg'>Cancelada</p>
+            ) : <p className='bg-blue-200 text-blue-800 px-3 py-1 rounded-lg'>No tiene</p>,
+            width: '130px',
+            sortable: true,
+        },
+        // {
+        //     name: "Acciones",
+        //     cell: (row) => (
+        //         <div className='flex gap-3'>
+        //             <a
+        //                 onClick={() => handleEdit(row)}
+        //                 className='bg-gray-300 px-2 py-1 rounded-lg hover:bg-gray-400 transition duration-200 ease-in-out cursor-pointer'>
+        //                 EDITAR
+        //             </a>
+        //             <a
+        //                 onClick={() => handleDelete(row._id)}
+        //                 className='bg-gray-300 px-2 py-1 rounded-lg hover:bg-gray-400 transition duration-200 ease-in-out cursor-pointer'>
+        //                 BORRAR
+        //             </a>
+        //         </div>
+        //     ),
+        //     width: '300px',
+        // },
+        {
             name: "Acciones",
-            cell: (row) => (
-                <div className='flex gap-3'>
-                    <a
-                        onClick={() => handleEdit(row)}
-                        className='bg-blue-100 px-2 py-1 rounded-lg hover:bg-blue-300 transition duration-200 ease-in-out cursor-pointer'>
-                        EDITAR
-                    </a>
-                    <a
-                        onClick={() => handleDelete(row._id)}
-                        className='bg-gray-100 px-2 py-1 rounded-lg hover:bg-gray-300 transition duration-200 ease-in-out cursor-pointer'>
-                        BORRAR
-                    </a>
+            selector: row => (
+                <div className="relative flex items-center gap-2">
+                    <Tooltip color="danger" content="Ver">
+                        <a href={`/comercio/${row.slug}`} target='_blank' className="text-2xl text-danger cursor-pointer active:opacity-50">
+                            <RedirectIcon />
+                        </a>
+                    </Tooltip>
+                    <Tooltip content="Detalles">
+                        <button onClick={() => {
+                            setSelectedProduct(row); // Establece el producto seleccionado
+                            onOpen(); // Abre el modal
+                        }} className="text-2xl text-default-400 cursor-pointer active:opacity-50">
+                            <EyeIcon />
+                        </button>
+                    </Tooltip>
+                    <Tooltip content="Editar">
+                        <button onClick={() => handleEdit(row)} className="text-2xl text-default-400 cursor-pointer active:opacity-50">
+                            <EditIcon />
+                        </button>
+                    </Tooltip>
+                    <Tooltip color="danger" content="Eliminar">
+                        <button onClick={() => handleDelete(row._id)} className="text-2xl text-danger cursor-pointer active:opacity-50">
+                            <DeleteIcon />
+                        </button>
+                    </Tooltip>
                 </div>
             ),
-            width: '300px',
-        },
+            width: '150px',
+            sortable: true,
+        }
     ];
 
     // Manejar cambios en la página
@@ -250,6 +300,58 @@ const DatatableUsuarios = () => {
                 paginationComponentOptions={paginationComponentOptions}
                 progressPending={loading}
             />
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent className="bg-white rounded-xl shadow-lg">
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="bg-gray-100 px-6 py-4 rounded-t-xl text-lg font-bold text-gray-800">
+                                Detalles del Producto
+                            </ModalHeader>
+                            <ModalBody className="px-6 py-4 space-y-4 text-gray-700">
+                                {selectedProduct && (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">Nombre</p>
+                                            <p className="text-lg text-gray-800">{selectedProduct.nombre}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">CUIT</p>
+                                            <p className="text-lg text-gray-800">{selectedProduct.dni || 'No disponible'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">Ultima suscripcion</p>
+                                            <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateSuscription) || 'No disponible'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">Ultima Cancelacion</p>
+                                            <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateCancelation) || '-'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">Rol</p>
+                                            <p className="text-lg text-gray-800">{selectedProduct.role || 'No disponible'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">Estado Suscripcion</p>
+                                            <p className="text-lg text-gray-800">{selectedProduct.status == "authorized" ? "Activada" : selectedProduct.status == "cancelled" ? "Cancelada" : 'No tiene' }</p>
+                                        </div>
+                                        {/* Agrega más campos si es necesario */}
+                                    </div>
+                                )}
+                            </ModalBody>
+                            <ModalFooter className="bg-gray-100 px-6 py-4 rounded-b-xl flex justify-end">
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                    className="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-md"
+                                >
+                                    Cerrar
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </div>
     );
 };

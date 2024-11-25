@@ -92,6 +92,24 @@ const ProductSchema = new Schema({
     codigoPromo: {
         type: String,
     },
+    dateSuscription: {
+        type: Date,
+        default: null // Por defecto, lo inicializamos en null
+    },
+    dateCancelation: {
+        type: Date,
+        default: null // Por defecto, lo inicializamos en null
+    },
+    razonSocial: {
+        type: String,
+    },
+    cuit: {
+        type: Number,
+    },
+    direccionFiscal: {
+        type: String,
+    },
+    
     promociones: [
         {
             type: Schema.Types.ObjectId,

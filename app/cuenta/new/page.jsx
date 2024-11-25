@@ -44,6 +44,10 @@ const Page = () => {
     const [galeriaUrls, setGaleriaUrls] = useState([]) // URLs para las imágenes de la galería
     const [loading, setLoading] = useState(false);
     const [selectedPopulares, setSelectedPopulares] = useState([]);
+    const [cuit, setCuit] = useState("");
+    const [razonSocial, setRazonSocial] = useState("");
+    const [direccionFiscal, setDireccionFiscal] = useState("");
+    
 
 
     const [codigo, setCodigo] = useState('');
@@ -268,6 +272,9 @@ const Page = () => {
         if (!categoria) Nerrores.push("categoria");
         if (!provincia) Nerrores.push("provincia");
         if (!celular) Nerrores.push("celular");
+        if (!cuit || cuit.length !== 11 || !/^\d+$/.test(cuit)) nuevosErrores.push("cuit");
+        if (!razonSocial) nuevosErrores.push("razonSocial");
+        if (!direccionFiscal) nuevosErrores.push("direccionFiscal");
         // Agrega más validaciones para otros campos que consideres requeridos
 
         // Si hay errores, no enviar el formulario y mostrar los errores
@@ -321,10 +328,15 @@ const Page = () => {
                 // condicion si cateogira es hotel colocar los servicios aqui 
             };
 
+            if (categoria === "Gastronomia" || categoria === "Area Comercial") {
+                formData.cuit = cuit; // Agrega los servicios al objeto
+                formData.razonSocial = razonSocial; // Agrega los servicios al objeto
+                formData.direccionFiscal = direccionFiscal; // Agrega los servicios al objeto
+            }
             if (categoria === "Atraccion Turistica" || categoria === "Turismo" || categoria === "Museo") {
                 formData.activado = true; // Agrega los servicios al objeto
             }
-            if(categoria === "Hotel"){
+            if (categoria === "Hotel") {
                 formData.services = services; // Agrega los servicios al objeto
                 formData.activado = true; // Agrega los servicios al objeto
                 formData.popularServices = selectedPopulares
@@ -345,7 +357,7 @@ const Page = () => {
             });
 
             // Realizar el fetch PUT a la API para actualizar el código
-            if(descuentoAplicado){
+            if (descuentoAplicado) {
                 const res = await fetch(`/api/codigos/${idCodigo._id}`, {
                     method: 'PUT',
                     headers: {
@@ -685,6 +697,7 @@ const Page = () => {
                                 </button>
                             </div>
                         ))}
+
                         {categoria === "Gastronomia" || categoria === "Area Comercial" ?
                             <div className='col-span-12'>
                                 <p>Tienes cupon de descuento?</p>
@@ -710,6 +723,58 @@ const Page = () => {
                             :
                             ""}
                     </div>
+                    {(categoria === "Area Comercial" || categoria === "Atraccion Turistica") && (
+                        <div className="grid grid-cols-12 gap-5 mb-4">
+                            <h1 className="col-span-12">Datos de Facturación</h1>
+                            {/* CUIT */}
+                            <div className="col-span-12 lg:col-span-6">
+                                <Input
+                                    type="text"
+                                    className="w-full"
+                                    label="CUIT"
+                                    maxLength={11} // Máximo de 11 caracteres
+                                    onChange={(e) => {
+                                        setErrores(errores.filter(item => item !== "cuit"));
+                                        setCuit(e.target.value);
+                                    }}
+                                    isInvalid={errores.includes("cuit")}
+                                    errorMessage="Ingresa un CUIT válido de 11 dígitos"
+                                    description="Ejemplo: 20XXXXXXXXX"
+                                />
+                            </div>
+
+                            {/* Razón Social */}
+                            <div className="col-span-12 lg:col-span-6">
+                                <Input
+                                    type="text"
+                                    className="w-full"
+                                    label="Razón Social"
+                                    onChange={(e) => {
+                                        setErrores(errores.filter(item => item !== "razonSocial"));
+                                        setRazonSocial(e.target.value);
+                                    }}
+                                    isInvalid={errores.includes("razonSocial")}
+                                    errorMessage="Ingresa la razón social"
+                                />
+                            </div>
+
+                            {/* Dirección Fiscal */}
+                            <div className="col-span-12 lg:col-span-12">
+                                <Input
+                                    type="text"
+                                    className="w-full"
+                                    label="Dirección Fiscal"
+                                    onChange={(e) => {
+                                        setErrores(errores.filter(item => item !== "direccionFiscal"));
+                                        setDireccionFiscal(e.target.value);
+                                    }}
+                                    isInvalid={errores.includes("direccionFiscal")}
+                                    errorMessage="Ingresa la dirección fiscal"
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <p className='text-xs text-gray-400 my-5'>
                         Los datos personales suministrados podrán ser utilizados con la finalidad de mantenerme actualizado e informado sobre promociones, campañas publicitarias, productos y servicios. Se deja expresamente aclarado que, en cualquier momento podés solicitar el retiro o bloqueo de tu nombre de nuestra base de datos. Para más información visitá los términos y condiciones de nuestra plataforma. Los beneficios y/o descuentos no son combinables ni acumulables con otras promociones, beneficios y/o descuentos. Para más información sobre beneficios, condiciones, locales adheridos y el reglamento de suscripción entrar a www.clubcyt.com
                     </p>

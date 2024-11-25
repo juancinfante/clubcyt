@@ -1,36 +1,36 @@
 import { Schema, model, models } from "mongoose";
 
 const UsuarioSchema = new Schema({
-    nombre:{
+    nombre: {
         type: String,
-        required : true
+        required: true
     },
     apellido: {
         type: String,
-        required : true
+        required: true
     },
-    email:{
+    email: {
         type: String,
-        required : true
+        required: true
     },
-    password:{
+    password: {
         type: String,
-        required : true
+        required: true
     },
-    email_verificado:{
+    email_verificado: {
         type: Boolean,
-        required : true,
+        required: true,
         default: false
     },
-    dni:{
+    dni: {
         type: Number,
         required: true
     },
-    suscripto:{
+    suscripto: {
         type: Boolean,
         default: false
     },
-    qrcode:{
+    qrcode: {
         type: String,
     },
     verificationCode: {
@@ -42,11 +42,19 @@ const UsuarioSchema = new Schema({
     status: {
         type: String
     },
-    role: { type: String, default: "user" }
+    role: { type: String, default: "user" },
+    dateSuscription: {
+        type: Date,
+        default: null // Por defecto, lo inicializamos en null
+    },
+    dateCancelation: {
+        type: Date,
+        default: null // Por defecto, lo inicializamos en null
+    },
 },
-{
-    timestamps: true // Habilita createdAt y updatedAt automáticamente
-},)
+    {
+        timestamps: true // Habilita createdAt y updatedAt automáticamente
+    },)
 
 const Usuario = models.Usuarios || model("Usuarios", UsuarioSchema);
 

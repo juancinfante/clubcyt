@@ -91,9 +91,9 @@ const uploadImage = async (file) => {
 
   // Filtrar los productos según el texto ingresado
   const productosFiltrados = productos.filter(producto =>
-    producto.productoId.nombre.toLowerCase().includes(busqueda.toLowerCase())
-    // producto.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
-    // producto.provincia.toLowerCase().includes(busqueda.toLowerCase())
+    producto.productoId.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    producto.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
+    producto.provincia.toLowerCase().includes(busqueda.toLowerCase())
   );
 
   function convertirFecha(fechaISO) {
@@ -254,7 +254,7 @@ const uploadImage = async (file) => {
       <DataTable
         className="mt-4"
         columns={columns}
-        data={productosFiltrados} // Pasamos los datos filtrados
+        data={productos} // Pasamos los datos filtrados
         pagination
         paginationComponentOptions={paginationComponentOptions}
         dense

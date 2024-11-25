@@ -37,13 +37,13 @@ export async function POST(request) {
 }
 
 
-
 export async function GET() {
     await connectDB(); // Conectar a la base de datos
 
     try {
-        // Buscar todas las promociones y hacer populate del nombre del producto referenciado
-        const response = await Promocion.find().populate('productoId', 'nombre'); // Suponiendo que el campo de referencia es 'productoId'
+        // Buscar todas las promociones y hacer populate del nombre, provincia y categoria del producto referenciado
+        const response = await Promocion.find()
+            .populate('productoId', 'nombre provincia categoria'); // Campos a traer del producto referenciado
 
         return NextResponse.json(response);
     } catch (error) {
@@ -51,4 +51,5 @@ export async function GET() {
         return NextResponse.json({ error: 'Error al obtener el producto' }, { status: 500 });
     }
 }
+
 

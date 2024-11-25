@@ -6,7 +6,6 @@ const mercadopago = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
-
 export async function POST(request) {
   // Obtenemos el cuerpo de la petición que incluye el tipo de notificación
   const body = await request.json();
@@ -15,22 +14,31 @@ export async function POST(request) {
   if (body.type === "subscription_preapproval") {
     // Obtenemos la suscripción
     const preapproval = await new PreApproval(mercadopago).get({ id: body.data.id });
-    console.log(preapproval)
+    console.log(preapproval);
+
     // Buscar primero en Productos
     let producto = await Producto.findOne({ suscriptionId: preapproval.id });
 
     if (producto) {
-      // Si se encuentra en Productos, actualiza el estado correspondiente
+      // Si se encuentra en Productos, actualiza el estado correspondiente y lastUpdated
       if (preapproval.status === "authorized") {
         await Producto.findOneAndUpdate(
           { suscriptionId: preapproval.id },
-          { status: "authorized", activado: true },
+          { 
+            status: "authorized", 
+            activado: true, 
+            dateSuscription: new Date() 
+          },
           { new: true, runValidators: true }
         );
       } else if (preapproval.status === "cancelled") {
         await Producto.findOneAndUpdate(
           { suscriptionId: preapproval.id },
-          { status: "cancelled", activado: false },
+          { 
+            status: "cancelled", 
+            activado: false, 
+            dateCancelation: new Date() 
+          },
           { new: true, runValidators: true }
         );
       }
@@ -39,16 +47,25 @@ export async function POST(request) {
       let usuario = await Usuario.findOne({ suscriptionId: preapproval.id });
 
       if (usuario) {
+        // Actualiza el estado correspondiente y lastUpdated
         if (preapproval.status === "authorized") {
           await Usuario.findOneAndUpdate(
             { suscriptionId: preapproval.id },
-            { status: "authorized", suscripto: true },
+            { 
+              status: "authorized", 
+              suscripto: true, 
+              dateSuscription: new Date() 
+            },
             { new: true, runValidators: true }
           );
         } else if (preapproval.status === "cancelled") {
           await Usuario.findOneAndUpdate(
             { suscriptionId: preapproval.id },
-            { status: "cancelled", suscripto: false },
+            { 
+              status: "cancelled", 
+              suscripto: false, 
+              dateCancelation: new Date() 
+            },
             { new: true, runValidators: true }
           );
         }
@@ -59,4 +76,3 @@ export async function POST(request) {
   // Respondemos con un estado 200 para indicarle que la notificación fue recibida
   return new Response(null, { status: 200 });
 }
-
