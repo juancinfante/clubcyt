@@ -37,7 +37,7 @@ const Products = () => {
       }
     }else{
       try {
-        const res = await fetch(`/api/productos?text=${searchText}&categoria=${categoria}&provincia=${provincia}&page=${currentPage}&limit=${limit}`);
+        const res = await fetch(`/api/productos?text=${searchText}&categoria=${categoria}&provincia=${provincia}&page=${currentPage}&limit=${limit}&admin=false`);
         const data = await res.json();
         setProductos(data.productos);
         setTotalPages(data.totalPages); // Actualizar el total de páginas
