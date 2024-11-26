@@ -19,7 +19,6 @@ const Lista = ({ cat }) => {
         try {
             const res = await fetch(`/api/productos?text=&categoria=${cat}&provincia=&page=&limit=`);
             const data = await res.json();
-            console.log(data)
             setProductos(data.productos);
             setTotalPages(data.totalPages); // Actualizar el total de páginas
         } catch (error) {

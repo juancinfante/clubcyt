@@ -74,7 +74,7 @@ const page = () => {
                                         window.location.href = "/login"; // Redirige al login si no hay sesión
                                     }
                                 }}
-                                className="block w-full rounded border border-yellow-300 bg-yellow-300 px-3 py-3 md:px-12 md:py-3 text-sm font-medium shadow hover:text-gray-700 focus:outline-none focus:ring sm:w-auto"
+                                className="block w-full cursor-pointer rounded border border-yellow-300 bg-yellow-300 px-3 py-3 md:px-12 md:py-3 text-sm font-medium shadow hover:text-gray-700 focus:outline-none focus:ring sm:w-auto"
                             >
                                 Suscribirse
                             </a>

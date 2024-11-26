@@ -47,7 +47,7 @@ const Page = () => {
     const [cuit, setCuit] = useState("");
     const [razonSocial, setRazonSocial] = useState("");
     const [direccionFiscal, setDireccionFiscal] = useState("");
-    
+
 
 
     const [codigo, setCodigo] = useState('');
@@ -264,29 +264,45 @@ const Page = () => {
 
 
         const Nerrores = [];
+        const erroresFacturacion = [];
 
-        // Validaciones
-        if (!nombre) Nerrores.push("nombre");
-        if (!ubicacion) Nerrores.push("ubicacion");
-        if (!descuento) Nerrores.push("descuento");
-        if (!categoria) Nerrores.push("categoria");
-        if (!provincia) Nerrores.push("provincia");
-        if (!celular) Nerrores.push("celular");
-        if (!cuit || cuit.length !== 11 || !/^\d+$/.test(cuit)) nuevosErrores.push("cuit");
-        if (!razonSocial) nuevosErrores.push("razonSocial");
-        if (!direccionFiscal) nuevosErrores.push("direccionFiscal");
-        // Agrega más validaciones para otros campos que consideres requeridos
+        // Validaciones generales
+    if (!nombre) Nerrores.push("nombre");
+    if (!ubicacion) Nerrores.push("ubicacion");
+    if (!descuento) Nerrores.push("descuento");
+    if (!categoria) Nerrores.push("categoria");
+    if (!provincia) Nerrores.push("provincia");
+    if (!celular) Nerrores.push("celular");
 
-        // Si hay errores, no enviar el formulario y mostrar los errores
-        if (Nerrores.length > 0) {
-            setErrores(Nerrores);
+    // Validaciones específicas de facturación
+    if (!cuit || cuit.length !== 11 || !/^\d+$/.test(cuit)) erroresFacturacion.push("cuit");
+    if (!razonSocial) erroresFacturacion.push("razonSocial");
+    if (!direccionFiscal) erroresFacturacion.push("direccionFiscal");
+
+    // Verifica si la categoría requiere datos de facturación
+    if (categoria === "Gastronomia" || categoria === "Area Comercial") {
+        if (erroresFacturacion.length > 0) {
+            setErrores([...Nerrores, ...erroresFacturacion]); // Combina los errores
             Swal.fire({
                 icon: "warning",
-                text: "Completa los campos obligatorios!",
+                text: "Completa los datos de facturación obligatorios!",
             });
             setLoading(false);
-            return; // Salir de la función si hay errores
+            return; // Salir si hay errores de facturación
         }
+    }
+
+    // Si hay errores generales, detener la ejecución
+    if (Nerrores.length > 0) {
+        setErrores(Nerrores);
+        Swal.fire({
+            icon: "warning",
+            text: "Completa los campos obligatorios!",
+        });
+        setLoading(false);
+        return; // Salir si hay errores generales
+    }
+
         try {
             // Subir logo y portada
             const uploadedLogoUrl = logo ? await uploadImage(logo) : null;
@@ -723,7 +739,7 @@ const Page = () => {
                             :
                             ""}
                     </div>
-                    {(categoria === "Area Comercial" || categoria === "Atraccion Turistica") && (
+                    {(categoria === "Area Comercial" || categoria === "Gastronomia") && (
                         <div className="grid grid-cols-12 gap-5 mb-4">
                             <h1 className="col-span-12">Datos de Facturación</h1>
                             {/* CUIT */}

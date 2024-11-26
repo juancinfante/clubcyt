@@ -132,30 +132,30 @@ const Datatable = () => {
       name: "Acciones",
       selector: row => (
         <div className="relative flex items-center gap-2">
-            <Tooltip color="danger" content="Ver">
-              <a href={`/comercio/${row.slug}`} target='_blank' className="text-2xl text-danger cursor-pointer active:opacity-50">
-                <RedirectIcon  />
-              </a>
-            </Tooltip>
-            <Tooltip content="Detalles">
-              <button onClick={() => {
-                setSelectedProduct(row); // Establece el producto seleccionado
-                onOpen(); // Abre el modal
-              }} className="text-2xl text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </button>
-            </Tooltip>
-            <Tooltip content="Editar">
-              <a href={`/cuenta/editar/${row._id}`} target='_blank' className="text-2xl text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </a>
-            </Tooltip>
-            <Tooltip color="danger" content="Eliminar">
-              <button onClick={() => handleDelete(row._id)} className="text-2xl text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </button>
-            </Tooltip>
-          </div>
+          <Tooltip color="danger" content="Ver">
+            <a href={`/comercio/${row.slug}`} target='_blank' className="text-2xl text-danger cursor-pointer active:opacity-50">
+              <RedirectIcon />
+            </a>
+          </Tooltip>
+          <Tooltip content="Detalles">
+            <button onClick={() => {
+              setSelectedProduct(row); // Establece el producto seleccionado
+              onOpen(); // Abre el modal
+            }} className="text-2xl text-default-400 cursor-pointer active:opacity-50">
+              <EyeIcon />
+            </button>
+          </Tooltip>
+          <Tooltip content="Editar">
+            <a href={`/cuenta/editar/${row._id}`} target='_blank' className="text-2xl text-default-400 cursor-pointer active:opacity-50">
+              <EditIcon />
+            </a>
+          </Tooltip>
+          <Tooltip color="danger" content="Eliminar">
+            <button onClick={() => handleDelete(row._id)} className="text-2xl text-danger cursor-pointer active:opacity-50">
+              <DeleteIcon />
+            </button>
+          </Tooltip>
+        </div>
       ),
       width: '150px',
       sortable: true,
@@ -272,11 +272,11 @@ const Datatable = () => {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-500">Telefono</p>
-                      <p className="text-lg text-gray-800">{selectedProduct.cuit || 'No disponible'}</p>
+                      <p className="text-lg text-gray-800">{selectedProduct.telefono || 'No disponible'}</p>
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-500">Celular</p>
-                      <p className="text-lg text-gray-800">{selectedProduct.cuit || 'No disponible'}</p>
+                      <p className="text-lg text-gray-800">{selectedProduct.celular || 'No disponible'}</p>
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-500">Razón Social</p>
@@ -288,11 +288,16 @@ const Datatable = () => {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-500">Ultima suscripcion</p>
-                      <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateSuscription) || '-'}</p>
+                      <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateSuscription) == "31-12-1969" ? "-" : formatFecha(selectedProduct.dateSuscription)}</p>
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-500">Ultima Cancelacion</p>
-                      <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateCancelation) || '-'}</p>
+                      <p className="text-lg text-gray-800">{formatFecha(selectedProduct.dateCancelation) == "31-12-1969" ? "-" : formatFecha(selectedProduct.dateCancelation)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-500">Creado por</p>
+                      <p className="text-lg text-gray-800">{selectedProduct.usuarioId.nombre +  " " + selectedProduct.usuarioId.apellido}</p>
+                      <p className="text-lg text-gray-800">{selectedProduct.usuarioId.email}</p>
                     </div>
                     {/* Agrega más campos si es necesario */}
                   </div>

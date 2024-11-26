@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function middleware(req) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
+  console.log("token desde middlewarre", token)
   const url = req.nextUrl.clone();
 
   // Rutas públicas que no requieren autenticación
@@ -17,25 +17,28 @@ export async function middleware(req) {
   }
 
   // Rutas protegidas generales (requieren autenticación)
-  const protectedPaths = ["/cuenta", "/cuenta/new", "/cuenta/edit", "/cuenta/:path*", ];
+  const protectedPaths = ["/cuenta", "/cuenta/new", "/cuenta/edit", "/cuenta/:path*", "/admin"];
   const isProtectedPath = protectedPaths.some((path) => url.pathname.startsWith(path));
 
   if (isProtectedPath) {
     if (!token) {
-      // Redirigir al login si el usuario no está autenticado
+      // Redirigir al inicio si el usuario no está autenticado
       url.pathname = "/login";
       return NextResponse.redirect(url);
     }
 
-    // Protección adicional para rutas administrativas
-    // if (url.pathname.startsWith("/admin")) {
-    //   const userRole = token.user.role || "user"; // Asegúrate de enviar el rol en el JWT
-    //   if (userRole !== "admin") {
-    //     // Redirigir si no tiene permisos
-    //     url.pathname = "/"; // Página de acceso denegado
-    //     return NextResponse.redirect(url);
-    //   }
-    // }
+    if (url.pathname.startsWith("/admin")) {
+      // Verifica el valor del token y el rol
+      console.log("Token completo:", token);  // Imprime el token completo
+      console.log("Rol del usuario:", token.user?.role);  // Verifica el rol
+    
+      const userRole = token.user?.role || "user";  // Manejo de fallback por si no existe el role
+      if (userRole !== "admin") {
+        console.log("Acceso denegado: El usuario no es admin.");
+        url.pathname = "/";  // Redirigir a la página principal
+        return NextResponse.redirect(url);
+      }
+    }
   }
 
   return NextResponse.next();
@@ -47,7 +50,7 @@ export const config = {
     "/cuenta/:path*", 
     "/cuenta/new", 
     "/cuenta/edit", 
-    "/admin/:path*", 
+    "/admin", 
     "/login", 
     "/register" // Agrega login y register a la configuración del middleware
   ],

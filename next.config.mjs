@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com'], // Agrega el dominio de Cloudinary aquí
+    domains: ['res.cloudinary.com'],
   },
   webpack(config) {
     config.module.rules.push({
@@ -9,6 +9,9 @@ const nextConfig = {
       use: ['@svgr/webpack'],
     });
     return config;
+  },
+  experimental: {
+    turbo: true,
   },
 };
 

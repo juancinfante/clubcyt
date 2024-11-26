@@ -14,7 +14,6 @@ export async function POST(request) {
   if (body.type === "subscription_preapproval") {
     // Obtenemos la suscripción
     const preapproval = await new PreApproval(mercadopago).get({ id: body.data.id });
-    console.log(preapproval);
 
     // Buscar primero en Productos
     let producto = await Producto.findOne({ suscriptionId: preapproval.id });

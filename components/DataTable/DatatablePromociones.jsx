@@ -25,7 +25,6 @@ const DatatablePromociones = () => {
     const response = await fetch("api/promociones");
     const data = await response.json();
     setProductos(data);
-    console.log(data);
   };
 
   

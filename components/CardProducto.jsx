@@ -114,9 +114,7 @@ const CardProducto = ({ producto, loading , email }) => {
           }
         });
       }
-      // else if (result.isDenied) {
-      //   Swal.fire("Changes are not saved", "", "info");
-      // }
+
     });
   }
 

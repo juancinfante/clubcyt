@@ -15,7 +15,6 @@ import { useSession } from 'next-auth/react'
 const page = ({ params }) => {
 
     const { data: session, status } = useSession();
-    console.log(session)
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
 
@@ -188,6 +187,30 @@ const page = ({ params }) => {
         }
     }
 
+    const suscribirse = async (email) => {
+
+        try {
+            const response = await fetch("/api/suscribirse", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }), // Enviamos el email al backend
+            });
+
+            if (!response.ok) {
+                console.log(response)
+                throw new Error("Error al crear la suscripción");
+            }
+
+            const data = await response.json();
+            // Redirigimos al usuario a Mercado Pago
+            window.location.href = data.url;
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
     // }, [])
     useEffect(() => {
         if (status === "authenticated" && session?.user?.id) {
@@ -214,7 +237,7 @@ const page = ({ params }) => {
                                     onClick={handleOpenModal}
                                     className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Ver credencial</button>
                                 :
-                                <a
+                                <a  onClick={() => suscribirse(usuario.email)}
                                     href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
                                     className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
                         }

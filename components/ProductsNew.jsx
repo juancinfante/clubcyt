@@ -19,7 +19,6 @@ export default async function page() {
         } else {
             params.delete('search')
         }
-        console.log(params.toString())
         replace(`${pathname}?${params.toString()}`)
     }
 

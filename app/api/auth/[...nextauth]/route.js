@@ -65,6 +65,7 @@ const handler = NextAuth({
           id: user.id,
           email: user.email,
           role: user.role || "user",
+          suscripto: user.suscripto
         };
       }
 
@@ -77,6 +78,7 @@ const handler = NextAuth({
           apellido: userFromDB.apellido,
           email: userFromDB.email,
           role: userFromDB.role || "user",
+          suscripto: userFromDB.suscripto,
         };
       }
 
@@ -86,7 +88,6 @@ const handler = NextAuth({
     async session({ session, token }) {
       // Incluir datos del token en la sesión
       session.user = token.user;
-      console.log("Session:", session);
       return session;
     },
   },

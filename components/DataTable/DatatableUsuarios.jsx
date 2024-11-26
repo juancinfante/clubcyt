@@ -28,7 +28,6 @@ const DatatableUsuarios = () => {
             if (!response.ok) throw new Error("Error al obtener los datos");
             const data = await response.json();
             setUsuarios(data.usuarios);
-            console.log("busqueda")
             setTotalPages(data.totalPages); // Actualizar total de páginas
         } catch (error) {
             Swal.fire({
@@ -305,18 +304,26 @@ const DatatableUsuarios = () => {
                     {(onClose) => (
                         <>
                             <ModalHeader className="bg-gray-100 px-6 py-4 rounded-t-xl text-lg font-bold text-gray-800">
-                                Detalles del Producto
+                                Detalles del usuario
                             </ModalHeader>
                             <ModalBody className="px-6 py-4 space-y-4 text-gray-700">
                                 {selectedProduct && (
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-500">Nombre</p>
-                                            <p className="text-lg text-gray-800">{selectedProduct.nombre}</p>
+                                            <p className="text-sm font-semibold text-gray-500">Nombre completo</p>
+                                            <p className="text-lg text-gray-800">{selectedProduct.nombre + " " + selectedProduct.apellido}</p>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-500">CUIT</p>
+                                            <p className="text-sm font-semibold text-gray-500">CUIL</p>
                                             <p className="text-lg text-gray-800">{selectedProduct.dni || 'No disponible'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500">Email</p>
+                                            <p className="text-lg text-gray-800">{selectedProduct.email || 'No disponible'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-500"></p>
+                                            <p className="text-lg text-gray-800"></p>
                                         </div>
                                         <div>
                                             <p className="text-sm font-semibold text-gray-500">Ultima suscripcion</p>
