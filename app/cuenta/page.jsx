@@ -15,7 +15,6 @@ import { useSession } from 'next-auth/react'
 const page = ({ params }) => {
 
     const { data: session, status, update } = useSession();
-    console.log(session)
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal

@@ -12,7 +12,6 @@ const Navbar = () => {
 
 
     const session = useSession()
-    console.log(session)
     const [usuario, setUsuario] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
