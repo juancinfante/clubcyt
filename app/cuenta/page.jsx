@@ -15,8 +15,10 @@ import { useSession } from 'next-auth/react'
 const page = ({ params }) => {
 
     const { data: session, status } = useSession();
+    console.log(session)
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
+    const [isModalOpenEditarUsuario, setIsModalOpenEditarUsuario] = useState(false); // Estado para manejar el modal
 
     const handleOpenModal = () => setIsModalOpen(true);  // Función para abrir el modal
     const handleCloseModal = () => setIsModalOpen(false);
@@ -26,6 +28,7 @@ const page = ({ params }) => {
     const [productos, setProductos] = useState([])
     const [promociones, setPromociones] = useState([])
     const [usuario, setUsuario] = useState([])
+    const [errores, setErrores] = useState({ email: false, dni: false });
     const [loading, setLoading] = useState(false);
     const [loadingForm, setLoadingForm] = useState(false);
     const [fechaInicio, setFechaInicio] = useState(false);
@@ -40,8 +43,71 @@ const page = ({ params }) => {
     const [descripcionPromocion, setDescripcionPromocion] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [usuarioTemporal, setUsuarioTemporal] = useState([]);
+
+    const handleOpenModalEditarUsuario = () => {
+        setUsuarioTemporal(usuario);
+        setIsModalOpenEditarUsuario(true); // Cambiar el estado para cerrar el modal
+    };
+    const handleCloseModalEditarUsuario = () => {
+        setIsModalOpenEditarUsuario(false); // Cambiar el estado para cerrar el modal
+    };
 
 
+    const handleUpdateUsuario = async () => {
+        setLoadingForm(true)
+        try {
+            // Opcional: Validación de los datos antes de enviarlos
+            if (!usuarioTemporal.nombre || !usuarioTemporal.apellido || !usuarioTemporal.email || !usuarioTemporal.dni) {
+                alert("Por favor, completa todos los campos.");
+                setLoadingForm(false)
+                return;
+            }
+
+            // Petición al backend para actualizar los datos
+            const response = await fetch(`/api/usuarios/${usuario._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nombre: usuarioTemporal.nombre,
+                    apellido: usuarioTemporal.apellido,
+                    email: usuarioTemporal.email,
+                    dni: usuarioTemporal.dni,
+                }),
+            });
+
+            if (response.ok) {
+                setLoadingForm(false)
+                Swal.fire({
+                    icon: "success",
+                    text: "Datos editados.",
+                });
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1500);
+                setIsModalOpenPromocion(false)
+            } else {
+                setLoadingForm(false)
+                Swal.fire({
+                    icon: "warning",
+                    text: "Hubo un error al editar los datos.",
+                });
+            }
+
+            const data = await response.json();
+
+            // Actualizar el estado local/global con los datos nuevos
+            setUsuario(data);
+
+            // Cerrar el modal
+            handleCloseModalEditarUsuario();
+        } catch (error) {
+            console.error(error);
+            alert("Ocurrió un error al actualizar el usuario.");
+        }
+    };
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -81,10 +147,12 @@ const page = ({ params }) => {
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
         }
-        setLoading(false);
+        setLoadingForm(false)
+
     };
 
     const fetchUsuario = async (idUsuario) => {
+        setLoading(true);
         try {
             // Realizamos la solicitud GET al endpoint que maneja la función GET en el backend
             const response = await fetch(`/api/usuarios/${idUsuario}`, {
@@ -107,6 +175,8 @@ const page = ({ params }) => {
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
         }
+        setLoading(false);
+
     }
 
     const fetchPromociones = async (userId) => {
@@ -185,6 +255,8 @@ const page = ({ params }) => {
         } catch (error) {
             console.log(error)
         }
+        setLoadingForm(true)
+
     }
 
     const suscribirse = async (email) => {
@@ -227,31 +299,48 @@ const page = ({ params }) => {
             <Separador texto={"Cuenta"} />
             <div className="container max-w-6xl mx-auto px-3 lg:p-0">
                 <div className="grid grid-cols-12 gap-6 mt-5 py-4">
-                    <div className="col-span-12 md:col-span-3 h-80 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center">
-                        <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
-                        <p className='text-sm'>{usuario.nombre + " " + usuario.apellido} </p>
-                        <p className='text-sm'>{usuario.email}</p>
-                        {
-                            usuario.suscripto ?
+                    {loading ?
+                        <div className="col-span-12 md:col-span-3 h-96 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center animate-pulse">
+                            {/* Imagen Skeleton */}
+                            <div className="w-20 h-20 bg-gray-300 rounded-full mb-4"></div>
+                            {/* Nombre y Apellido Skeleton */}
+                            <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
+                            {/* Email Skeleton */}
+                            <div className="h-4 w-40 bg-gray-300 rounded mb-4"></div>
+                            {/* Botones Skeleton */}
+                            <div className="w-24 h-8 bg-gray-300 rounded mb-2"></div>
+                            <div className="w-32 h-8 bg-gray-300 rounded mb-2"></div>
+                            <div className="w-32 h-8 bg-gray-300 rounded mb-2"></div>
+                            <div className="w-28 h-8 bg-gray-300 rounded"></div>
+                        </div>
+                        :
+                        <div className="col-span-12 md:col-span-3 h-96 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center">
+                            <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
+                            <p className='text-sm'>{usuario.nombre + " " + usuario.apellido} </p>
+                            <p className='text-sm'>{usuario.email}</p>
+                            {
+                                usuario.suscripto ?
+                                    <button
+                                        onClick={handleOpenModal}
+                                        className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Ver credencial</button>
+                                    :
+                                    <a onClick={() => suscribirse(usuario.email)}
+                                        href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
+                                        className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
+                            }
+                            {Array.isArray(productos) && productos.length ?
                                 <button
-                                    onClick={handleOpenModal}
-                                    className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Ver credencial</button>
+                                    onClick={handleOpenModalPromocion}
+                                    className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion
+                                </button>
                                 :
-                                <a  onClick={() => suscribirse(usuario.email)}
-                                    href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
-                                    className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
-                        }
-                        {Array.isArray(productos) && productos.length ?
-                            <button
-                                onClick={handleOpenModalPromocion}
-                                className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion
-                            </button>
-                            :
-                            ""
-                        }
-                        <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
-                        <button className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar</button>
-                    </div>
+                                ""
+                            }
+                            <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
+                            <button onClick={handleOpenModalEditarUsuario}
+                                className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar datos {usuario.dni == 0 ? "⚠️" : ""} </button>
+                        </div>}
+
                     <div className="col-span-12 md:col-span-9">
                         <div className="grid grid-cols-12 w-full gap-4">
                             {loading ? (
@@ -268,14 +357,6 @@ const page = ({ params }) => {
                                     <CardProducto key={producto._id} producto={producto} email={usuario.email} loading={false} />
                                 ))
                             )}
-                            {/* {
-                                productos.length != 0 && Array.isArray(promociones) && promociones.length != undefined ?
-                                    promociones.map((prom) => (
-                                        <CardPromocion key={prom._id} promocion={prom} />
-                                    ))
-                                    :
-                                    ""
-                            } */}
                             {productos.length != 0 ?
                                 Array.isArray(promociones) ?
                                     promociones.length > 0 ? promociones.map((prom) => (
@@ -342,6 +423,108 @@ const page = ({ params }) => {
                 </div>
 
             )}
+            {isModalOpenEditarUsuario && (
+                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="fixed inset-0 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                    <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 max-h-[500px] overflow-y-auto">
+                                    <h2 className="text-2xl font-bold mb-4">Editar mis datos</h2>
+                                    {/* Formulario de edición */}
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700" htmlFor="nombre">
+                                            Nombre
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="nombre"
+                                            className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            value={usuarioTemporal.nombre}
+                                            onChange={(e) => setUsuarioTemporal({ ...usuarioTemporal, nombre: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700" htmlFor="apellido">
+                                            Apellido
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="apellido"
+                                            className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            value={usuarioTemporal.apellido}
+                                            onChange={(e) => setUsuarioTemporal({ ...usuarioTemporal, apellido: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700" htmlFor="email">
+                                            Email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            className={`mt-2 block w-full p-2.5 border ${errores.email ? "border-red-500" : "border-gray-300"} rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                                            value={usuarioTemporal.email}
+                                            onChange={(e) => {
+                                                setUsuarioTemporal({ ...usuarioTemporal, email: e.target.value });
+                                                setErrores({ ...errores, email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value) });
+                                            }}
+                                        />
+                                        {errores.email && <p className="text-red-500 text-sm mt-1">Por favor, ingrese un email válido.</p>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700" htmlFor="dni">
+                                            DNI
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="dni"
+                                            className={`mt-2 block w-full p-2.5 border ${errores.dni ? "border-red-500" : "border-gray-300"
+                                                } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                                            value={usuarioTemporal.dni}
+                                            onChange={(e) => {
+                                                const valor = e.target.value;
+                                                setUsuarioTemporal({ ...usuarioTemporal, dni: valor });
+                                                // Validar si el DNI es numérico y tiene exactamente 10 dígitos
+                                                setErrores({
+                                                    ...errores,
+                                                    dni: isNaN(valor) || valor.length !== 8,
+                                                });
+                                            }}
+                                        />
+                                        {errores.dni && (
+                                            <p className="text-red-500 text-sm mt-1">
+                                                El DNI debe ser un número de 10 dígitos.
+                                            </p>
+                                        )}
+                                    </div>
+                                    {/* Botón Guardar */}
+                                    <div className="mt-6">
+                                        <button
+                                            type="button"
+                                            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            onClick={handleUpdateUsuario}
+                                            disabled={Object.values(errores).some((error) => error)}
+                                        >
+                                            {loadingForm ? <Spinner color="default" size="sm" /> : "Guardar cambios"}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                    <button
+                                        type="button"
+                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                        onClick={handleCloseModalEditarUsuario}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {isModalOpenPromocion && (
                 <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="fixed inset-0 bg-opacity-75 transition-opacity" aria-hidden="true"></div>

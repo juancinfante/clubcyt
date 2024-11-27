@@ -65,7 +65,10 @@ const handler = NextAuth({
           id: user.id,
           email: user.email,
           role: user.role || "user",
-          suscripto: user.suscripto
+          suscripto: user.suscripto,
+          nombre: user.nombre,
+          apellido: user.apellido,
+          dni: user.dni
         };
       }
 
@@ -79,6 +82,7 @@ const handler = NextAuth({
           email: userFromDB.email,
           role: userFromDB.role || "user",
           suscripto: userFromDB.suscripto,
+          dni: userFromDB.dni
         };
       }
 

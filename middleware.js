@@ -17,7 +17,7 @@ export async function middleware(req) {
   }
 
   // Rutas protegidas generales (requieren autenticación)
-  const protectedPaths = ["/cuenta", "/cuenta/new", "/cuenta/edit", "/cuenta/:path*", "/admin"];
+  const protectedPaths = ["/cuenta/new", "/cuenta/edit", "/cuenta/:path*", "/admin"];
   const isProtectedPath = protectedPaths.some((path) => url.pathname.startsWith(path));
 
   if (isProtectedPath) {
