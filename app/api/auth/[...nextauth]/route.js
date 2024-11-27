@@ -49,6 +49,7 @@ const handler = NextAuth({
               email: profile.email,
               nombre: profile.given_name || profile.name || "Nombre no proporcionado",
               apellido: profile.family_name || "Apellido no proporcionado",
+              picture: profile,
               dni: "00000000", // Valor predeterminado
               password: "google-oauth", // Valor no usado, pero requerido por el esquema
               email_verificado: true,
@@ -58,7 +59,7 @@ const handler = NextAuth({
         }
         return true;
       },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       // Añadir datos del usuario al token
       if (user) {
         token.user = {
@@ -72,6 +73,22 @@ const handler = NextAuth({
         };
       }
 
+      // Si el trigger es 'update', actualizamos el token con los datos más recientes
+  if (trigger === "update") {
+    const updatedUser = await Usuario.findById(token.user.id);
+    if (updatedUser) {
+      token.user = {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        role: updatedUser.role || "user",
+        suscripto: updatedUser.suscripto,
+        nombre: updatedUser.nombre,
+        apellido: updatedUser.apellido,
+        dni: updatedUser.dni,
+      };
+    }
+  }
+
       // Manejo adicional para Google
       if (account?.provider === "google" && user?.email) {
         const userFromDB = await Usuario.findOne({ email: user.email });
@@ -82,18 +99,26 @@ const handler = NextAuth({
           email: userFromDB.email,
           role: userFromDB.role || "user",
           suscripto: userFromDB.suscripto,
-          dni: userFromDB.dni
+          dni: userFromDB.dni,
+          picture: userFromDB.picture
         };
       }
 
       console.log("JWT Token:", token);
       return token;
     },
-    async session({ session, token }) {
-      // Incluir datos del token en la sesión
-      session.user = token.user;
+    async session({ session, token, trigger }) {
+      if (trigger === "update") {
+        // Si es un trigger de actualización, usamos los datos del token actualizado
+        session.user = token.user;
+        return session;
+      }
+    
+      // Comportamiento normal: asignar datos del token a la sesión
+      session.user = token.user || session.user;
+    
       return session;
-    },
+    }
   },
 });
 

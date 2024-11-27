@@ -42,6 +42,9 @@ const UsuarioSchema = new Schema({
     status: {
         type: String
     },
+    picture: {
+        type: String
+    },
     role: { type: String, default: "user" },
     dateSuscription: {
         type: Date,

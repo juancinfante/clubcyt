@@ -97,7 +97,7 @@ const Navbar = () => {
                                                 <Link href={`/admin`} >ADMIN</Link>
                                             </DropdownItem> : ""}
                                         <DropdownItem key="edit" textValue='a'>
-                                            <Link href="" onClick={() => { signOut({ callbackUrl: "/login" }) }}>SALIR</Link>
+                                            <Link href="" onClick={() => { signOut({ callbackUrl: "/" }) }}>SALIR</Link>
                                         </DropdownItem>
                                     </DropdownMenu>
                             }
@@ -106,14 +106,14 @@ const Navbar = () => {
                 </nav>
             </div>
             {session?.data?.user?.role !== "admin" && !session?.data?.user?.suscripto ?
-                <div className="w-full bg-gray-100 py-3 flex justify-center items-center gap-2">
+                <div className="w-full bg-gray-100 py-2 flex justify-center items-center gap-2">
                     <Link href={"/suscribirse"} className='px-3 py-2 text-xs font-semibold bg-yellow-200 rounded-full'>SUSCRIBITE POR $1.500</Link>
                     {/* <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link> */}
                 </div>
                 : ""
             }{
                 session?.data?.user?.dni == 0 ? 
-            <div className="w-full bg-gray-100 py-3 flex justify-center items-center gap-2">
+            <div className="w-full bg-gray-200 py-2 flex justify-center items-center gap-2">
                 <Link href={"/cuenta"} className='px-3 py-2 text-xs font-semibold bg-blue-200 rounded-full underline'>Completa los datos de tu perfil →</Link>
                 {/* <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link> */}
             </div>

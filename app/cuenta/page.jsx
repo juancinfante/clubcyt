@@ -14,8 +14,9 @@ import { useSession } from 'next-auth/react'
 
 const page = ({ params }) => {
 
-    const { data: session, status } = useSession();
+    const { data: session, status, update } = useSession();
     console.log(session)
+
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
     const [isModalOpenPromocion, setIsModalOpenPromocion] = useState(false); // Estado para manejar el modal
     const [isModalOpenEditarUsuario, setIsModalOpenEditarUsuario] = useState(false); // Estado para manejar el modal
@@ -53,6 +54,15 @@ const page = ({ params }) => {
         setIsModalOpenEditarUsuario(false); // Cambiar el estado para cerrar el modal
     };
 
+    async function updateSession(usuario) {
+        await update({
+            ...session,
+            user: {
+                usuario
+            }
+        })
+    }
+
 
     const handleUpdateUsuario = async () => {
         setLoadingForm(true)
@@ -84,6 +94,17 @@ const page = ({ params }) => {
                     icon: "success",
                     text: "Datos editados.",
                 });
+
+                const data = await response.json();
+
+                // Actualizar el estado local/global con los datos nuevos
+                setUsuario(data);
+                await update({
+                    ...session,
+                    user: {
+                        usuario
+                    }
+                })
                 setTimeout(function () {
                     window.location.reload(true);
                 }, 1500);
@@ -95,12 +116,6 @@ const page = ({ params }) => {
                     text: "Hubo un error al editar los datos.",
                 });
             }
-
-            const data = await response.json();
-
-            // Actualizar el estado local/global con los datos nuevos
-            setUsuario(data);
-
             // Cerrar el modal
             handleCloseModalEditarUsuario();
         } catch (error) {
@@ -171,10 +186,13 @@ const page = ({ params }) => {
 
             // Convertimos la respuesta a JSON
             const data = await response.json();
+
+
             setUsuario(data)
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
         }
+
         setLoading(false);
 
     }
@@ -285,7 +303,7 @@ const page = ({ params }) => {
 
     // }, [])
     useEffect(() => {
-        if (status === "authenticated" && session?.user?.id) {
+        if (session?.user?.id) {
             fetchProductos(session.user.id);
             fetchUsuario(session.user.id);
             fetchPromociones(session.user.id)
@@ -315,7 +333,12 @@ const page = ({ params }) => {
                         </div>
                         :
                         <div className="col-span-12 md:col-span-3 h-96 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center">
-                            <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
+                            {usuario.picture ?
+                                <img src={usuario.picture} alt="" className='w-20' />
+
+                                :
+                                <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
+                            }
                             <p className='text-sm'>{usuario.nombre + " " + usuario.apellido} </p>
                             <p className='text-sm'>{usuario.email}</p>
                             {
@@ -325,8 +348,7 @@ const page = ({ params }) => {
                                         className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Ver credencial</button>
                                     :
                                     <a onClick={() => suscribirse(usuario.email)}
-                                        href='https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808478702c10017894f400252577'
-                                        className='bg-yellow-400 text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
+                                        className='bg-yellow-400 cursor-pointer text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
                             }
                             {Array.isArray(productos) && productos.length ?
                                 <button
@@ -337,7 +359,10 @@ const page = ({ params }) => {
                                 ""
                             }
                             <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
-                            <button onClick={handleOpenModalEditarUsuario}
+                            <button onClick={
+                                handleOpenModalEditarUsuario
+
+                            }
                                 className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar datos {usuario.dni == 0 ? "⚠️" : ""} </button>
                         </div>}
 
