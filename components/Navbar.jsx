@@ -12,6 +12,7 @@ const Navbar = () => {
 
 
     const session = useSession()
+    console.log(session)
     const [usuario, setUsuario] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -62,13 +63,41 @@ const Navbar = () => {
                                     variant="bordered"
                                 >
                                     {
-                                        !session.data ?
-                                            <MenuSvg className="w-10 h-10 md:hidden" />
-                                            :
-                                            <p className='bg-gray-300 rounded-full px-3 py-3 me-2'>
-                                                <svg width="18px" height="18px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#808080"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#808080"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#808080"></path> </g></svg>
-                                            </p>
+                                        session?.data ? (
+                                            session.data.user.picture ? (
+                                                <img
+                                                    src={session.data.user.picture}
+                                                    alt="Foto de perfil"
+                                                    className="w-10 h-10 rounded-full"
+                                                />
+                                            ) : (
+                                                <p className="bg-gray-300 rounded-full px-3 py-3 me-2">
+                                                    <svg
+                                                        width="18px"
+                                                        height="18px"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        stroke="#808080"
+                                                    >
+                                                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                                        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                                        <g id="SVGRepo_iconCarrier">
+                                                            <path
+                                                                d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z"
+                                                                fill="#808080">
+                                                            </path>
+                                                            <path
+                                                                d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z"
+                                                                fill="#808080">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                </p>
+                                            )
+                                        ) : null
                                     }
+
                                 </button>
                             </DropdownTrigger>
                             {
@@ -112,13 +141,13 @@ const Navbar = () => {
                 </div>
                 : ""
             }{
-                session?.data?.user?.dni == 0 ? 
-            <div className="w-full bg-gray-200 py-2 flex justify-center items-center gap-2">
-                <Link href={"/cuenta"} className='px-3 py-2 text-xs font-semibold bg-blue-200 rounded-full underline'>Completa los datos de tu perfil →</Link>
-                {/* <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link> */}
-            </div>
-                : 
-                ""
+                session?.data?.user?.dni == 0 ?
+                    <div className="w-full bg-gray-200 py-2 flex justify-center items-center gap-2">
+                        <Link href={"/cuenta"} className='px-3 py-2 text-xs font-semibold bg-blue-200 rounded-full underline'>Completa los datos de tu perfil →</Link>
+                        {/* <Link href={"/login"} className='px-3 py-2 text-xs font-semibold'>INICIAR SESIÓN</Link> */}
+                    </div>
+                    :
+                    ""
             }
         </>
     )

@@ -49,7 +49,7 @@ const handler = NextAuth({
               email: profile.email,
               nombre: profile.given_name || profile.name || "Nombre no proporcionado",
               apellido: profile.family_name || "Apellido no proporcionado",
-              picture: profile,
+              picture: profile.picture,
               dni: "00000000", // Valor predeterminado
               password: "google-oauth", // Valor no usado, pero requerido por el esquema
               email_verificado: true,
@@ -69,7 +69,8 @@ const handler = NextAuth({
           suscripto: user.suscripto,
           nombre: user.nombre,
           apellido: user.apellido,
-          dni: user.dni
+          dni: user.dni,
+          picture: user.picture
         };
       }
 
