@@ -35,7 +35,7 @@ const Navbar = () => {
                 <div className="py-1">
                     {obtenerFechaFormateada()}
                 </div>
-                <nav className='flex justify-between items-center  py-4 '>
+                <nav className='flex justify-between items-center py-4 '>
                     <Link href="/">
                         <Image src={logo}
                             width={150}
@@ -45,13 +45,26 @@ const Navbar = () => {
                         {
                             !session.data ?
                                 <>
-                                    {/* <Link href="/suscribirse" className='bg-yellow-200 px-3 py-1 rounded-full md:hidden'>SUSCRIBITE</Link> */}
                                     <li>
-                                        <Link href="/nosotros" className='hidden md:block'>NOSOTROS</Link>
+                                        <Link href="/register" className='hidden md:block text-lg'>REGISTRARTE</Link>
                                     </li>
                                     <li>
-                                        <Link href="/login" className='hidden md:block'>INICIAR SESION</Link>
+                                        <Link href="/login" className='text-sm md:text-lg'>INICIAR SESION</Link>
                                     </li>
+                                    {/* <Dropdown>
+                                        <DropdownTrigger>
+                                            <button>=
+                                            </button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu aria-label="Static Actions">
+                                            <DropdownItem key="new">New file</DropdownItem>
+                                            <DropdownItem key="copy">Copy link</DropdownItem>
+                                            <DropdownItem key="edit">Edit file</DropdownItem>
+                                            <DropdownItem key="delete" className="text-danger" color="danger">
+                                                Delete file
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown> */}
                                 </>
                                 :
                                 ""
