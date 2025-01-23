@@ -314,7 +314,7 @@ const page = ({ params }) => {
         <>
             <Navbar />
             <Separador texto={"Cuenta"} />
-            <div className="container max-w-6xl mx-auto px-3 lg:p-0">
+            <div className="container max-w-7xl mx-auto px-3 lg:p-0">
                 <div className="grid grid-cols-12 gap-6 mt-5 py-4">
                     {loading ?
                         <div className="col-span-12 md:col-span-3 h-96 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center animate-pulse">
@@ -332,37 +332,67 @@ const page = ({ params }) => {
                         </div>
                         :
                         <div className="col-span-12 md:col-span-3 h-96 p-9 rounded-lg border border-slate-200 card-user flex flex-col items-center">
-                            {usuario.picture ?
-                                <img src={usuario.picture} alt="" className='w-20 h-20 rounded-full' />
-
-                                :
-                                <img src="https://th.bing.com/th/id/R.19fa7497013a87bd77f7adb96beaf768?rik=144XvMigWWj2bw&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fUser-Profile-PNG-High-Quality-Image.png&ehk=%2bat%2brmqQuJrWL609bAlrUPYgzj%2b%2f7L1ErXRTN6ZyxR0%3d&risl=&pid=ImgRaw&r=0" alt="" className='w-20' />
-                            }
-                            <p className='text-sm'>{usuario.nombre + " " + usuario.apellido} </p>
-                            <p className='text-sm'>{usuario.email}</p>
-                            {
-                                usuario.suscripto ?
-                                    <button
-                                        onClick={handleOpenModal}
-                                        className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Ver credencial</button>
-                                    :
-                                    <a onClick={() => suscribirse(usuario.email)}
-                                        className='bg-yellow-400 cursor-pointer text-white px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid'>Suscribirse</a>
-                            }
-                            {Array.isArray(productos) && productos.length ?
+                            {/* Foto de perfil */}
+                            {usuario.picture ? (
+                                <img src={usuario.picture} alt="Foto de perfil" className="w-20 h-20 rounded-full mb-4" />
+                            ) : (
+                                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-2xl font-bold text-gray-500 mb-4">
+                                    {usuario.nombre}
+                                </div>
+                            )}
+                            {/* Información del usuario */}
+                            <p className="text-lg font-semibold text-gray-700 flex items-center">
+                                <svg className="w-5 h-5 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 12.879l7.072 7.072M5.121 5.121l7.072 7.072M3 12h18" />
+                                </svg>
+                                {usuario.nombre} {usuario.apellido}
+                            </p>
+                            {/* Botones */}
+                            {usuario.suscripto ? (
+                                <button
+                                    onClick={handleOpenModal}
+                                    className="bg-gray-200 w-48 text-gray-500 px-3 py-2 text-sm rounded-md mt-3 flex justify-center items-center hover:bg-gray-300">
+                                    <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16h10M7 12h10M7 8h10" />
+                                    </svg>
+                                    Ver credencial
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => suscribirse(usuario.email)}
+                                    className="bg-yellow-500 text-white px-3 py-2 text-sm rounded-md mt-3 w-48 flex justify-center items-center hover:bg-yellow-600">
+                                    <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+                                    </svg>
+                                    Suscribirse
+                                </button>
+                            )}
+                            {Array.isArray(productos) && productos.length > 0 && (
                                 <button
                                     onClick={handleOpenModalPromocion}
-                                    className='bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2'>Agregar promocion
+                                    className="bg-gray-200 text-gray-500 px-3 py-2 text-sm rounded-md mt-3 w-48 flex items-center hover:bg-gray-300">
+                                    <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 0v4m-4-4h4m0 0h4" />
+                                    </svg>
+                                    Agregar promoción
                                 </button>
-                                :
-                                ""
-                            }
-                            <Link href="/cuenta/new" className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm mt-3 hover:border-solid border-2">Agregar comercio</Link>
-                            <button onClick={
-                                handleOpenModalEditarUsuario
+                            )}
 
-                            }
-                                className='bg-gray-200 text-gray-500 px-2 py-1 text-sm  rounded-sm mt-3 hover:border-solid border-2'>Editar datos {usuario.dni == 0 ? "⚠️" : ""} </button>
+                            <Link href="/cuenta/new" className="w-48 justify-center bg-gray-200 text-gray-500 px-3 py-2 text-sm rounded-md mt-3 flex items-center hover:bg-gray-300">
+                                <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                                Agregar comercio
+                            </Link>
+
+                            <button
+                                onClick={handleOpenModalEditarUsuario}
+                                className="bg-gray-200 w-48 text-gray-500 px-3 py-2 text-sm rounded-md mt-3 flex justify-center items-center hover:bg-gray-300">
+                                <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12h.01M19 20l-7-7m-2-5h3M10 7H7m3 0V4m0 3h3" />
+                                </svg>
+                                Editar datos {usuario.dni === 0 && <span className="text-red-500 ml-2">⚠️</span>}
+                            </button>
                         </div>}
 
                     <div className="col-span-12 md:col-span-9">

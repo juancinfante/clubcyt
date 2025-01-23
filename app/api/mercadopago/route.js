@@ -9,7 +9,7 @@ const mercadopago = new MercadoPagoConfig({
 export async function POST(request) {
   // Obtenemos el cuerpo de la petición que incluye el tipo de notificación
   const body = await request.json();
-
+  console.log(body)
   // Solo nos interesan las notificaciones de suscripciones
   if (body.type === "subscription_preapproval") {
     // Obtenemos la suscripción

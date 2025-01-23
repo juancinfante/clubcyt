@@ -31,7 +31,7 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="container mx-auto max-w-6xl ps-3 lg:p-0">
+            <div className="container mx-auto max-w-7xl px-3 lg:p-0">
                 <div className="py-1">
                     {obtenerFechaFormateada()}
                 </div>
@@ -120,7 +120,7 @@ const Navbar = () => {
                                         <DropdownItem key="copy" textValue='a'>
                                             <Link href={`/cuenta/`} >CUENTA</Link>
                                         </DropdownItem>
-                                        {session?.data?.user?.role == "admin" ?
+                                        {session?.data?.user?.role === "admin" ?
                                             <DropdownItem key="admin" textValue='a'>
                                                 <Link href={`/admin`} >ADMIN</Link>
                                             </DropdownItem> : ""}

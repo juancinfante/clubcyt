@@ -55,7 +55,7 @@ function esFechaPasada(dateString) {
     ]
   };
   return (
-    <div className="container mx-auto max-w-6xl mb-20 mt-20">
+    <div className="container mx-auto max-w-7xl mb-20 mt-20">
       <h1 className="ms-3 text-2xl font-semibold mb-8">Disfruta de las mejores promociones</h1>
       <Slider {...settings}>
         {

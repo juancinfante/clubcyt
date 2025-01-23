@@ -119,11 +119,11 @@ const CardProducto = ({ producto, loading , email }) => {
   }
 
   return (
-    <div className={pathName.startsWith("/cuenta") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : " col-span-12 md:col-span-4 lg:col-span-3 rounded-xl overflow-hidden"}>
+    <div className={pathName.startsWith("/cuenta") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "col-span-12 md:col-span-4 rounded-xl overflow-hidden"}>
       <Link href={`/comercio/${producto.slug}`}>
-        <img src={producto.logo} alt="" className='h-40 w-full object-cover' />
-        <div className="py-3 px-1">
-          <div className="flex gap-4 pb-3">
+        <img src={producto.logo} alt="" className='h-56 w-full object-cover rounded-xl' />
+        <div className=" pt-3">
+          <div className="flex gap-4 pb-2">
             {
               producto.descuento != "Ninguno" ? 
               <span className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-md'>{producto.descuento}</span>
