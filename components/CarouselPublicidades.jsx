@@ -4,14 +4,12 @@ import Image from 'next/image';
 import React from 'react';
 
 const logos = [
-    '/publicidad/casaterrav.png',
-    '/publicidad/espiritus.jpg',
-    '/publicidad/historias.jpg',
-    '/publicidad/terraviva.png',
-    '/publicidad/casaterrav.png',
-    '/publicidad/espiritus.jpg',
-    '/publicidad/historias.jpg',
-    '/publicidad/terraviva.png',
+    'https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737639730/clubcyt/terraviva_qvimam.png',
+    'https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737639729/clubcyt/metacraneo_fk7mc2.png',
+    'https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737639728/clubcyt/hiar_u0pqr3.png',
+    'https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737639726/clubcyt/espiritus_vtk4ko.png',
+    'https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737639725/clubcyt/dlt_i3lfkp.png',
+    'https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737639721/clubcyt/casa_lwhgh9.png',
 ];
 
 const CarouselPublicidades = () => {
@@ -21,13 +19,12 @@ const CarouselPublicidades = () => {
             <div className="flex animate-slide">
                 {logos.map((logo, index) => (
                     <Image
-                        width={80}
-                        height={20}
+                        width={120}
+                        height={0}
                         className='mx-10'
                         key={index}
                         src={logo}
                         alt={`Logo ${index}`}
-                        style={{height: "auto", width: "auto"}}
                     />
                 ))}
                 {/* Clonamos los logos para el efecto de carrusel continuo */}
@@ -36,11 +33,10 @@ const CarouselPublicidades = () => {
                     <Image
                         key={index + logos.length} // Asegura un key único
                         src={logo}
-                        width={80}
+                        width={120}
                         height={20}
                         className='mx-10'
                         alt={`Logo ${index}`}
-                        style={{height: "auto", width: "auto"}}
                     />
                 ))}
             </div>

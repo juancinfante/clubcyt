@@ -25,7 +25,7 @@ export async function POST(req) {
         }
       );
     }
-    let amount = 1500 ;
+    let amount = 20 ;
     let reason = "Suscripcion ClubCyT"
     if (producto) {
       amount = 200

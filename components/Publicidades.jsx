@@ -5,7 +5,7 @@ const Publicidades = () => {
         <div className="container mx-auto max-w-7xl hidden lg:block">
             <div className="w-full grid grid-cols-8 gap-4">
                 <div className="col-span-4 h-[180px] bg-gray-200 flex justify-center items-center rounded-xl overflow-hidden">
-                    <img className='w-full h-full object-fill' src="https://bucket.glanacion.com/Club.LN/anexos/fotos/landings/Header_Club_LA_NACION.JPG" alt="" />
+                    <img className='w-full h-full object-fill' src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1737637647/clubcyt/HIAR_632x180_f7pqbx.gif" alt="" />
                 </div>
                 <div className="col-span-2 h-[180px] bg-gray-200 flex justify-center items-center rounded-xl overflow-hidden">
                     <img className='w-full h-full object-fill' src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1720559811/terraviva/b7cabc3k1nucsgaibs01.gif" alt="" />
