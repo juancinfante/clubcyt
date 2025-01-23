@@ -1,5 +1,6 @@
 import Producto from "@/models/productos";
 import Usuario from "@/models/usuarios";
+import QRCode from "qrcode";
 import { MercadoPagoConfig, PreApproval } from "mercadopago";
 
 const mercadopago = new MercadoPagoConfig({
@@ -23,20 +24,20 @@ export async function POST(request) {
       if (preapproval.status === "authorized") {
         await Producto.findOneAndUpdate(
           { suscriptionId: preapproval.id },
-          { 
-            status: "authorized", 
-            activado: true, 
-            dateSuscription: new Date() 
+          {
+            status: "authorized",
+            activado: true,
+            dateSuscription: new Date()
           },
           { new: true, runValidators: true }
         );
       } else if (preapproval.status === "cancelled") {
         await Producto.findOneAndUpdate(
           { suscriptionId: preapproval.id },
-          { 
-            status: "cancelled", 
-            activado: false, 
-            dateCancelation: new Date() 
+          {
+            status: "cancelled",
+            activado: false,
+            dateCancelation: new Date()
           },
           { new: true, runValidators: true }
         );
@@ -46,29 +47,35 @@ export async function POST(request) {
       let usuario = await Usuario.findOne({ suscriptionId: preapproval.id });
 
       if (usuario) {
-        // Actualiza el estado correspondiente y lastUpdated
+        let updates = {};
+
         if (preapproval.status === "authorized") {
-          await Usuario.findOneAndUpdate(
-            { suscriptionId: preapproval.id },
-            { 
-              status: "authorized", 
-              suscripto: true, 
-              dateSuscription: new Date() 
-            },
-            { new: true, runValidators: true }
-          );
+          // Genera el QR con la ruta específica del usuario
+          const qrCodeData = `https://clubcyt.vercel.com/user/${usuario._id}`;
+          const qrCodeImage = await QRCode.toDataURL(qrCodeData);
+
+          updates = {
+            status: "authorized",
+            suscripto: true,
+            dateSuscription: new Date(),
+            qrcode: qrCodeImage, // Inserta el QR generado
+          };
         } else if (preapproval.status === "cancelled") {
-          await Usuario.findOneAndUpdate(
-            { suscriptionId: preapproval.id },
-            { 
-              status: "cancelled", 
-              suscripto: false, 
-              dateCancelation: new Date() 
-            },
-            { new: true, runValidators: true }
-          );
+          updates = {
+            status: "cancelled",
+            suscripto: false,
+            dateCancelation: new Date(),
+          };
         }
+
+        // Actualiza el usuario con los cambios correspondientes
+        await Usuario.findOneAndUpdate(
+          { suscriptionId: preapproval.id },
+          updates,
+          { new: true, runValidators: true }
+        );
       }
+
     }
   }
 

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   try {
     const suscription = await new PreApproval(mercadopago).create({
       body: {
-        back_url: "localhost:3000",
+        back_url: "https://clubcyt.vercel.app/cuenta",
         reason: "Suscripción clubcyt",
         auto_recurring: {
           frequency: 1,
