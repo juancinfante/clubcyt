@@ -28,14 +28,6 @@ const Products = () => {
   // Fetch products with filters and pagination
   const fetchProductos = async () => {
     setLoading(true);
-    if(categoria == "Promociones") {
-      try {
-        const response = await fetch('api/promociones');
-        setProductos()
-      } catch (error) {
-        
-      }
-    }else{
       try {
         const res = await fetch(`/api/productos?text=${searchText}&categoria=${categoria}&provincia=${provincia}&page=${currentPage}&limit=${limit}&admin=false`);
         const data = await res.json();
@@ -44,9 +36,9 @@ const Products = () => {
         setTotalProductos(data.totalProductos); // Total de productos
       } catch (error) {
         console.error("Error fetching products:", error);
+      }finally{
+        setLoading(false); // Termina la carga
       }
-      setLoading(false); // Termina la carga
-    }
   };
 
   useEffect(() => {

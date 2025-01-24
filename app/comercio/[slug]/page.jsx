@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar'
 import Slider from '@/components/Slider';
 import { getProdBySlug, getPromociones } from '@/lib/actions/page'
-import React from 'react'
+import React, { Suspense } from 'react'
 import Wp from '@/public/assets/whatsapp.svg'
 import Fb from '@/public/assets/facebook.svg'
 import Ig from '@/public/assets/instagram.svg'
@@ -9,12 +9,22 @@ import Web from '@/public/assets/web-link.svg'
 import Pin from '@/public/assets/pin.svg'
 import Image from 'next/image';
 import SliderPromo from '@/components/SliderPromo';
+import DescripcionProducto from '@/components/DescripcionProducto';
 
 export default async function page({ params }) {
     const producto = await getProdBySlug(params.slug);
-    function insertarHTML(html) {
-        return { __html: html };
+
+    if (!producto || producto.error) {
+        // Manejo de producto no encontrado (puedes personalizar esta página)
+        return (
+            <div className="container mx-auto text-center mt-20">
+                <h1 className="text-2xl font-bold text-red-600">Producto no encontrado</h1>
+                <p className="text-gray-600 mt-4">El producto que estás buscando no existe o fue eliminado.</p>
+            </div>
+        );
     }
+
+    const { nombre, descripcion, precio, promociones } = producto;
 
     const getSelectedServices = () => {
         const selected = {
@@ -76,16 +86,15 @@ export default async function page({ params }) {
                             <div className="flex items-center gap-2">
                                 <Pin className="w-4 h-4" />
                                 <p>{producto.ubicacion}</p>
-                                {/* <a href={`https://www.google.com/maps/search/?api=${process.env.GOOGLE_MAPS_EMBED_API_KEY}&query=${encodeURIComponent(producto.ubicacion)}`} className='text-blue-900 font-semibold text-sm hover:underline'>Ver ubicacion mapa</a> */}
                             </div>
                             <p>
 
                             </p>
                         </div>
 
-                        <div className="w-full border border-gray-200 rounded-xl p-4 mt-5">
-                            <p className='text-sm md:text-lg text-gray-700 w-full' dangerouslySetInnerHTML={insertarHTML(producto.descripcion)}></p>
-                        </div>
+                        <Suspense fallback={<div>Cargando descripción...</div>}>
+                            <DescripcionProducto descripcion={descripcion} />
+                        </Suspense>
                         {
                             producto.categoria == "Hotel" ?
                                 <div className="col-span-12 border border-gray-200 rounded-xl p-4 mt-5">
@@ -348,8 +357,8 @@ export default async function page({ params }) {
                                             ""}
                                     </div>
                                 </div>
-                                <div className="col-span-6 md:col-span-2 border border-gray-200 rounded-xl p-4">
-                                    {producto.web != '' ?
+                                {producto.web != '' ?
+                                    <div className="col-span-6 md:col-span-2 border border-gray-200 rounded-xl p-4">
                                         <a href={`https://${producto.web}`} className='flex items-center justify-between' target="_blank">
                                             <h1 className='font-semibold text-md mb-2'>
                                                 <span className='pe-2'>🌐</span>
@@ -360,9 +369,9 @@ export default async function page({ params }) {
                                                 <p>{producto.web}</p>
                                             </div>
                                         </a>
-                                        :
-                                        ""}
-                                </div>
+                                    </div>
+                                    : ""
+                                }
                             </div>
                         </div>
                         <div className="w-full mt-4">
@@ -379,7 +388,7 @@ export default async function page({ params }) {
                                         style={{ height: "400px", width: "100%" }}
                                         allowFullScreen=""
                                         loading="lazy"
-                                        referrerpolicy="no-referrer-when-downgrade">
+                                        referrerPolicy="no-referrer-when-downgrade">
                                     </iframe>
                                 </div>
                             </div>

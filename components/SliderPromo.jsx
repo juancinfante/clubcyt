@@ -48,7 +48,7 @@ function esFechaPasada(dateString) {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 1.3,
           slidesToScroll: 1
         }
       }
@@ -57,7 +57,7 @@ function esFechaPasada(dateString) {
   return (
     <div className="container mx-auto max-w-7xl mb-20 mt-20">
       <h1 className="ms-3 text-2xl font-semibold mb-8">Disfruta de las mejores promociones</h1>
-      <Slider {...settings}>
+      <Slider {...settings} className="w-full h-full overflow-hidden">
         {
 
           [...promociones].reverse().map((prom, index) => (
