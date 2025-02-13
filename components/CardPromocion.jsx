@@ -52,15 +52,15 @@ const CardPromocion = ({ promocion, producto }) => {
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "albums"); // Configurado en Cloudinary
+        formData.append("nombreComercio", "promociones");
 
-        const response = await fetch(`https://api.cloudinary.com/v1_1/dwjhbrsmf/image/upload`, {
+        const response = await fetch("/api/cloudinary", {
             method: "POST",
             body: formData
         });
 
         const data = await response.json();
-        return data.secure_url; // Retorna el URL seguro de la imagen
+        return data.imageUrl; // URL de la imagen en Cloudinary
     };
 
     const handleDelete = async (id) => {

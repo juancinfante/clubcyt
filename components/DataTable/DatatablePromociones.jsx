@@ -21,9 +21,15 @@ const DatatablePromociones = () => {
 
   const [loadingForm, setLoadingForm] = useState(false);
 
-  const fetchProductos = async () => {
-    const response = await fetch("api/promociones");
+  const fetchPromociones = async () => {
+    const response = await fetch("/api/promociones", {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      },
+  });
     const data = await response.json();
+    console.log(data)
     setProductos(data);
   };
 
@@ -88,12 +94,12 @@ const uploadImage = async (file) => {
 }
 
 
-  // Filtrar los productos según el texto ingresado
-  const productosFiltrados = productos.filter(producto =>
-    producto.productoId.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-    producto.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
-    producto.provincia.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  // // Filtrar los productos según el texto ingresado
+  // const productosFiltrados = productos.filter(producto =>
+  //   producto.productoId.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+  //   producto.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
+  //   producto.provincia.toLowerCase().includes(busqueda.toLowerCase())
+  // );
 
   function convertirFecha(fechaISO) {
     const [año, mes, día] = fechaISO.split('-');
@@ -229,7 +235,7 @@ const uploadImage = async (file) => {
     });
 };
   useEffect(() => {
-    fetchProductos();
+    fetchPromociones();
   }, []);
 
   return (

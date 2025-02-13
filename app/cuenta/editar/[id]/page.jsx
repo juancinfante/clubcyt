@@ -34,7 +34,7 @@ const page = ({ params }) => {
     const [video_youtube, setVideoYoutube] = useState("")
     const [logo, setLogo] = useState(null)
     const [portada, setPortada] = useState(null)
-    const [galeria, setGaleria] = useState([]) // Tres imágenes para la galería
+    const [galeria, setGaleria] = useState([])
     const [logoPreview, setLogoPreview] = useState("")
     const [portadaPreview, setPortadaPreview] = useState("")
     const [galeriaPreviews, setGaleriaPreviews] = useState([]);
@@ -43,6 +43,12 @@ const page = ({ params }) => {
     // Estado para los tags
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState("");
+
+    const [oldLogoPublicId, setOldLogoPublicId] = useState(null);  // Guardar public_id del logo viejo
+    const [oldPortadaPublicId, setOldPortadaPublicId] = useState(null);  // Guardar public_id de la portada vieja
+    const [oldGaleriaPublicIds, setOldGaleriaPublicIds] = useState([]);  // Guardar public_ids de la galería vieja
+
+    const [publicIdAeliminar, setPublicIdAeliminar] = useState([]);
 
     const router = useRouter()
 
@@ -134,6 +140,17 @@ const page = ({ params }) => {
             .replace(/^./, str => str.toUpperCase()); // Capitalizar la primera letra
     };
 
+    const extractPublicId = (url) => {
+        // Extraemos el public_id de la URL
+        const match = url.match(/\/image\/upload\/[^\/]+\/(.*)\./);
+        if (match) {
+            // Decodificamos cualquier parte de la URL que esté codificada, como el %20
+            return decodeURIComponent(match[1]);
+        }
+        return null;
+    };
+
+
     const fetchProd = async () => {
         try {
             const res = await fetch(`/api/productos/${params.id}`)
@@ -156,6 +173,17 @@ const page = ({ params }) => {
             setLogoPreview(data.logo)
             setPortadaPreview(data.portada)
             setGaleriaPreviews(data.fotos)
+
+            // Extraer y guardar los public_id de logo y portada
+            setOldLogoPublicId(extractPublicId(data.logo));
+            setOldPortadaPublicId(extractPublicId(data.portada));
+
+            setLogoPreview(data.logo);
+            setPortadaPreview(data.portada);
+
+            // Extraer los public_id de las fotos de la galería
+            const galeriaPublicIds = data.fotos.map((url) => extractPublicId(url));
+            setOldGaleriaPublicIds(galeriaPublicIds);
 
             if (data.categoria == "Hotel") {
                 console.log(data.services)
@@ -198,30 +226,71 @@ const page = ({ params }) => {
     // Función para manejar el cambio de las imágenes de la galería
     const handleImagesChange = (e) => {
         const files = Array.from(e.target.files);
-        const newPreviews = files.map((file) => URL.createObjectURL(file));
+        const newPreviews = files.map((file) => ({
+            name: file.name,
+            url: URL.createObjectURL(file)
+        }));
+
         setGaleriaPreviews((prev) => [...prev, ...newPreviews]);
         setGaleria((prev) => [...prev, ...files]); // Guardar archivos para subir a Cloudinary
     };
 
-    // Función para eliminar una imagen del array
+
     const handleRemoveImage = (index) => {
-        setGaleriaPreviews((prev) => prev.filter((_, i) => i !== index));
-        setGaleria((prev) => prev.filter((_, i) => i !== index)); // Asegurarse de eliminar también del arreglo de archivos
+        setGaleriaPreviews((prev) => {
+            const newGaleria = [...prev];
+            const imageToRemove = newGaleria[index];
+
+            if (typeof imageToRemove === "string" && imageToRemove.startsWith("http")) {
+                // Imagen ya subida a Cloudinary (solo URL en la base de datos)
+                const publicId = extractPublicId(imageToRemove);
+                if (publicId) {
+                    setPublicIdAeliminar((prev) => [...prev, publicId]);
+                }
+            } else if (imageToRemove && imageToRemove.name) {
+                // Imagen nueva (blob), eliminar por `name`
+                setGaleria((prev) => prev.filter((file) => file.name !== imageToRemove.name));
+            } else {
+                // Caso de error si la imagen no tiene URL ni `name`
+                console.warn("Imagen no válida para eliminar");
+            }
+
+            // Filtrar y eliminar la imagen seleccionada
+            return newGaleria.filter((_, i) => i !== index);
+        });
     };
 
 
-    // Función para subir imágenes a Cloudinary
-    const uploadImage = async (image) => {
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append("upload_preset", "albums"); // Configurado en Cloudinary
 
-        const response = await fetch(`https://api.cloudinary.com/v1_1/dwjhbrsmf/image/upload`, {
+
+
+
+    // Función para subir la imagen a Cloudinary
+    const uploadImage = async (file, nombreComercio) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("nombreComercio", nombreComercio);
+
+        const response = await fetch("/api/cloudinary", {
             method: "POST",
             body: formData
         });
+
         const data = await response.json();
-        return data.secure_url; // URL de la imagen subida
+        return data;
+    };
+
+    // Eliminar imagen de Cloudinary
+    const deleteImage = async (publicId) => {
+        const response = await fetch('/api/cloudinary', {  // Necesitarás una ruta en el backend para manejar la eliminación
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ publicId }),
+        });
+        const data = await response.json();
+        return data.success;
     };
 
     // Manejo del formulario
@@ -234,32 +303,58 @@ const page = ({ params }) => {
         let portadaUrl = portadaPreview;
         let galeriaUrls = [...galeriaPreviews];
 
+        // Eliminar las imágenes viejas de Cloudinary si no están siendo reemplazadas
+        if (oldLogoPublicId && logo) {
+            const deletedLogo = await deleteImage(oldLogoPublicId);
+            if (deletedLogo) setOldLogoPublicId(null);  // Reseteamos el public_id si la eliminación fue exitosa
+        }
+        if (oldPortadaPublicId && portada) {
+            const deletedPortada = await deleteImage(oldPortadaPublicId);
+            if (deletedPortada) setOldPortadaPublicId(null);  // Reseteamos el public_id si la eliminación fue exitosa
+        }
+
+        // Subir logo y portada si es necesario
         if (logo) {
-            logoUrl = await uploadImage(logo);
+            const logoData = await uploadImage(logo, nombre);
+            logoUrl = logoData.imageUrl;
+            setOldLogoPublicId(logoData.public_id);  // Guardar el public_id para eliminación futura
         }
         if (portada) {
-            portadaUrl = await uploadImage(portada);
+            const portadaData = await uploadImage(portada, nombre);
+            portadaUrl = portadaData.imageUrl;
+            setOldPortadaPublicId(portadaData.public_id);  // Guardar el public_id para eliminación futura
         }
 
         // Subir las nuevas imágenes de la galería si hay
         const nuevasGaleriaUrls = await Promise.all(
             galeria.map(async (file, index) => {
-                const cloudinaryUrl = await uploadImage(file);
+                const cloudinaryData = await uploadImage(file, nombre);
+                const cloudinaryUrl = cloudinaryData.imageUrl;
+                const cloudinaryPublicId = cloudinaryData.public_id;
 
                 // Reemplazar el blob URL por la URL de Cloudinary en galeriaPreviews
                 setGaleriaPreviews((prev) => {
                     const newPreviews = [...prev];
-                    // Reemplazamos el blob con la URL retornada de Cloudinary
                     newPreviews[prev.indexOf(URL.createObjectURL(file))] = cloudinaryUrl;
                     return newPreviews;
                 });
 
-                return cloudinaryUrl; // Devolver la URL de Cloudinary
+                return { url: cloudinaryUrl, publicId: cloudinaryPublicId };  // Devolver la URL de Cloudinary y el public_id
             })
         );
 
         // Combinar las imágenes anteriores con las nuevas (reemplazadas correctamente)
-        galeriaUrls = [...galeriaUrls.filter(url => !url.startsWith('blob:')), ...nuevasGaleriaUrls];
+        galeriaUrls = [
+            // Filtrar las imágenes ya subidas (URLs) y excluir las que son blobs
+            ...galeriaUrls.filter((item) => typeof item === "string" && item.startsWith("http")),
+
+            // Agregar las nuevas imágenes (URLs) desde las seleccionadas por el usuario
+            ...nuevasGaleriaUrls.map((item) => item.url || item), // Usamos solo las URLs para combinar
+        ];
+
+
+        // Eliminar de Cloudinary las imágenes que fueron eliminadas de la galería
+        await Promise.all(publicIdAeliminar.map(publicId => deleteImage(publicId)));
 
         // Preparar datos para la actualización del producto
         const updatedProduct = {
@@ -595,7 +690,11 @@ const page = ({ params }) => {
                         </div>
                         {galeriaPreviews.map((preview, index) => (
                             <div key={index} className="relative col-span-6 md:col-span-4 lg:col-span-3 h-44">
-                                <img src={preview} alt={`Imagen ${index + 1}`} className="w-full h-full object-cover" />
+                                <img
+                                    src={preview.url || preview} // Si tiene objeto con `url`, usa eso. Si es un string (blob), usa ese string.
+                                    alt={`Imagen ${index + 1}`}
+                                    className="w-full h-full object-cover"
+                                />
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveImage(index)}
@@ -605,6 +704,7 @@ const page = ({ params }) => {
                                 </button>
                             </div>
                         ))}
+
                     </div>
                     <button
                         type="submit"

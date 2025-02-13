@@ -24,12 +24,9 @@ export default async function page() {
 
       {/* <Hero /> */}
       <Products />
-      {
-        promociones?.length > 0  ?
-          <SliderPromo promociones={promociones} />
-          :
-          ""
-      }
+      {promociones?.length > 0 ?
+        <SliderPromo promociones={promociones} />
+        : null}
       <Publicidades />
       <CarouselPublicidades />
     </>

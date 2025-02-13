@@ -244,18 +244,18 @@ const Page = () => {
 
 
     // Función para subir la imagen a Cloudinary
-    const uploadImage = async (file) => {
+    const uploadImage = async (file, nombreComercio) => {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "clubcyt"); // Configurado en Cloudinary
+        formData.append("nombreComercio", nombreComercio);
 
-        const response = await fetch(`https://api.cloudinary.com/v1_1/dwjhbrsmf/image/upload`, {
+        const response = await fetch("/api/cloudinary", {
             method: "POST",
             body: formData
         });
 
         const data = await response.json();
-        return data.secure_url; // Retorna el URL seguro de la imagen
+        return data.imageUrl; // URL de la imagen en Cloudinary
     };
 
     const handleForm = async (e) => {
@@ -267,50 +267,50 @@ const Page = () => {
         const erroresFacturacion = [];
 
         // Validaciones generales
-    if (!nombre) Nerrores.push("nombre");
-    if (!ubicacion) Nerrores.push("ubicacion");
-    if (!descuento) Nerrores.push("descuento");
-    if (!categoria) Nerrores.push("categoria");
-    if (!provincia) Nerrores.push("provincia");
-    if (!celular) Nerrores.push("celular");
+        if (!nombre) Nerrores.push("nombre");
+        if (!ubicacion) Nerrores.push("ubicacion");
+        if (!descuento) Nerrores.push("descuento");
+        if (!categoria) Nerrores.push("categoria");
+        if (!provincia) Nerrores.push("provincia");
+        if (!celular) Nerrores.push("celular");
 
-    // Validaciones específicas de facturación
-    if (!cuit || cuit.length !== 11 || !/^\d+$/.test(cuit)) erroresFacturacion.push("cuit");
-    if (!razonSocial) erroresFacturacion.push("razonSocial");
-    if (!direccionFiscal) erroresFacturacion.push("direccionFiscal");
+        // Validaciones específicas de facturación
+        if (!cuit || cuit.length !== 11 || !/^\d+$/.test(cuit)) erroresFacturacion.push("cuit");
+        if (!razonSocial) erroresFacturacion.push("razonSocial");
+        if (!direccionFiscal) erroresFacturacion.push("direccionFiscal");
 
-    // Verifica si la categoría requiere datos de facturación
-    if (categoria === "Gastronomia" || categoria === "Area Comercial") {
-        if (erroresFacturacion.length > 0) {
-            setErrores([...Nerrores, ...erroresFacturacion]); // Combina los errores
+        // Verifica si la categoría requiere datos de facturación
+        if (categoria === "Gastronomia" || categoria === "Area Comercial") {
+            if (erroresFacturacion.length > 0) {
+                setErrores([...Nerrores, ...erroresFacturacion]); // Combina los errores
+                Swal.fire({
+                    icon: "warning",
+                    text: "Completa los datos de facturación obligatorios!",
+                });
+                setLoading(false);
+                return; // Salir si hay errores de facturación
+            }
+        }
+
+        // Si hay errores generales, detener la ejecución
+        if (Nerrores.length > 0) {
+            setErrores(Nerrores);
             Swal.fire({
                 icon: "warning",
-                text: "Completa los datos de facturación obligatorios!",
+                text: "Completa los campos obligatorios!",
             });
             setLoading(false);
-            return; // Salir si hay errores de facturación
+            return; // Salir si hay errores generales
         }
-    }
-
-    // Si hay errores generales, detener la ejecución
-    if (Nerrores.length > 0) {
-        setErrores(Nerrores);
-        Swal.fire({
-            icon: "warning",
-            text: "Completa los campos obligatorios!",
-        });
-        setLoading(false);
-        return; // Salir si hay errores generales
-    }
 
         try {
             // Subir logo y portada
-            const uploadedLogoUrl = logo ? await uploadImage(logo) : null;
-            const uploadedPortadaUrl = portada ? await uploadImage(portada) : null;
+            const uploadedLogoUrl = logo ? await uploadImage(logo, nombre) : null;
+            const uploadedPortadaUrl = portada ? await uploadImage(portada, nombre) : null;
 
             // Subir imágenes de la galería
             const uploadedGaleriaUrls = await Promise.all(
-                imagenes.map(async (file) => (file ? await uploadImage(file) : null))
+                imagenes.map(async (file) => (file ? await uploadImage(file, nombre) : null))
             );
 
             // Guardar los URLs en los estados correspondientes
