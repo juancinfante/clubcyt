@@ -51,7 +51,7 @@ export async function POST(request) {
 
         if (preapproval.status === "authorized") {
           // Genera el QR con la ruta específica del usuario
-          const qrCodeData = `https://clubcyt.vercel.app/user/${usuario._id}`;
+          const qrCodeData = `https://clubcyt.com/user/${usuario._id}`;
           const qrCodeImage = await QRCode.toDataURL(qrCodeData);
 
           updates = {
