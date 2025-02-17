@@ -61,7 +61,7 @@ const page = () => {
                         </h1>
 
                         <p className="mt-4">
-                            Solo cuesta $ 1.500 por mes. Cancelá cuando quieras.
+                            Solo cuesta $ 2000 por mes. Cancelá cuando quieras.
                         </p>
 
                         <div className="mt-8 flex gap-4 justify-start">
