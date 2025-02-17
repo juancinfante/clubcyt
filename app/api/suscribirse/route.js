@@ -25,16 +25,16 @@ export async function POST(req) {
         }
       );
     }
-    let amount = 20 ;
+    let amount = 2000 ;
     let reason = "Suscripcion ClubCyT"
     if (producto) {
-      amount = 200
+      amount = 8000
       reason = "Suscripcion ClubCyt: " + producto.nombre;
     }
     // Crea la suscripción en Mercado Pago
     const suscription = await new PreApproval(mercadopago).create({
       body: {
-        back_url: "https://clubcyt.vercel.app/cuenta",
+        back_url: "https://clubcyt.com/cuenta",
         reason: reason,
         auto_recurring: {
           frequency: 1,
