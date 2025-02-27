@@ -13,18 +13,18 @@ export async function POST(request) {
     const qrCodeData = `https://clubcyt.com/user/${userId}`;
     const qrCodeImage = await QRCode.toDataURL(qrCodeData);
     console.log(qrCodeImage)
-    // // Guardar el QR en la base de datos
-    // const usuarioActualizado = await Usuario.findOneAndUpdate(
-    //   { _id: userId},
-    //   { qrcode: qrCodeImage,
-    //     status: "authorized",
-    //    },
-    //   { new: true, runValidators: true }
-    // );
+    // Guardar el QR en la base de datos
+    const usuarioActualizado = await Usuario.findOneAndUpdate(
+      { _id: userId},
+      { qrcode: qrCodeImage,
+        status: "authorized",
+       },
+      { new: true, runValidators: true }
+    );
 
-    // if (!usuarioActualizado) {
-    //   return new Response(JSON.stringify({ error: "Usuario no encontrado" }), { status: 404 });
-    // }
+    if (!usuarioActualizado) {
+      return new Response(JSON.stringify({ error: "Usuario no encontrado" }), { status: 404 });
+    }
 
     return new Response(JSON.stringify({ message: "QR generado exitosamente", qr: qrCodeImage }), { status: 200 });
   } catch (error) {
