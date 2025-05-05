@@ -21,6 +21,7 @@ const Publicidades = () => {
                 </div>
             </div>
         </div>
+        
     )
 }
 
