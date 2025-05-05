@@ -12,7 +12,6 @@ export async function POST(request) {
     // Generar el QR con la URL del usuario
     const qrCodeData = `https://clubcyt.com/user/${userId}`;
     const qrCodeImage = await QRCode.toDataURL(qrCodeData);
-    console.log(qrCodeImage)
     // Guardar el QR en la base de datos
     const usuarioActualizado = await Usuario.findOneAndUpdate(
       { _id: userId},

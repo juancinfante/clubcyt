@@ -66,7 +66,6 @@ export async function POST(req) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error al crear la suscripción:", error);
     return new Response(
       JSON.stringify({ error: "Error al crear la suscripción" }),
       {

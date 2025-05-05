@@ -11,7 +11,7 @@ const Publicidades = () => {
                 </div>
                 <div className="col-span-12 md:col-span-2 h-[180px] bg-gray-200 flex justify-center items-center rounded-xl overflow-hidden">
                     <a href="https://sde.gob.ar/" target='_blank' className='w-full h-full object-fill'>
-                        <img className='w-full h-full object-fill' src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1720559811/terraviva/b7cabc3k1nucsgaibs01.gif" alt="" />
+                        <img className='w-full h-full object-fill' src="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1746484343/clubcyt/publicidad/mo6unknqfbe8al36look.gif" alt="" />
                     </a>
                 </div>
                 <div className="col-span-12 md:col-span-2 h-[180px] bg-gray-200 flex justify-center items-center rounded-xl overflow-hidden">
