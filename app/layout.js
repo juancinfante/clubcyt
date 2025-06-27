@@ -2,10 +2,6 @@ import '../styles/globals.css'
 import Footer from "@/components/Footer"
 import Provider from "./Provider"
 import Image from 'next/image'
-export const metadata = {
-  title: 'Club C&t',
-  description: 'Club de cultura y turismo',
-}
 
 export default function RootLayout({ children }) {
 
