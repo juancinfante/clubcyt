@@ -12,34 +12,50 @@ import SliderPromo from '@/components/SliderPromo';
 import DescripcionProducto from '@/components/DescripcionProducto';
 
 export async function generateMetadata({ params }) {
-  const producto = await getProdBySlug(params.slug)
+  try {
+    const { slug } = params;
+    // Supongo que getProdBySlug puede devolver null o undefined si no encuentra el producto
+    const producto = await getProdBySlug(slug);
 
-  const pageTitle = `${producto.nombre}`
-  const pageDesc = `${producto.ubicacion} - ${producto.categoria}`
-  
-  return {
-    title: pageTitle,
-    description: pageDesc,
-    openGraph: {
-      title: pageTitle,
-      description: pageDesc,
-      images: [
-        {
-          url: producto.portada,
-          width: 1200,
-          height: 630,
-          alt: `Imagen de ${producto.nombre}`,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: pageTitle,
-      description: pageDesc,
-      images: [producto.imagen],
-    },
+    if (!producto) {
+      return {
+        title: 'Producto no encontrado',
+        description: 'No pudimos encontrar el producto solicitado.',
+      };
+    }
+
+    return {
+      title: `${producto.nombre}`,  // cambia "Mi Tienda" por el nombre que quieras
+      description: `${producto.ubicacion} - ${producto.categoria}`,
+      openGraph: {
+        title: `${producto.nombre}`,
+        description: `${producto.ubicacion} - ${producto.categoria}`,
+        images: [
+          {
+            url: producto.portada,
+            width: 1200,
+            height: 630,
+            alt: `Imagen de ${producto.nombre}`,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${producto.nombre}`,
+        description: `${producto.ubicacion} - ${producto.categoria}`,
+        images: [producto.imagen || producto.portada],
+      },
+      // Opcionalmente, control de cache (para Next.js)
+      // revalidate: 0, // para evitar cache si lo deseas
+    };
+  } catch (error) {
+    return {
+      title: 'Error al cargar producto',
+      description: 'Hubo un problema al obtener los datos del producto.',
+    };
   }
 }
+
 
 export default async function page({ params }) {
     const producto = await getProdBySlug(params.slug);
