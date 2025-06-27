@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import { useSession } from 'next-auth/react'
 import html2canvas from "html2canvas";
 import { useRef } from "react";
+
 const page = ({ params }) => {
     const modalRef = useRef();
     const { data: session, status, update } = useSession();
@@ -448,7 +449,7 @@ const page = ({ params }) => {
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div className="sm:flex sm:items-start">
                                         <div className="container mx-auto flex justify-center mt-10">
-                                            <div className="relative">
+                                            <div className="relative" ref={modalRef}>
                                                 {/* Imagen de fondo con borde redondeado */}
                                                 <Image
                                                     src={qrcontainer}
@@ -602,7 +603,7 @@ const page = ({ params }) => {
             )}
 
             {isModalOpenPromocion && (
-                <div className="relative z-10" ref={modalRef} aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div className="relative z-10"  aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="fixed inset-0 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
