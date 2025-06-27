@@ -476,7 +476,7 @@ const page = ({ params }) => {
                                                 <img
                                                     src={usuario.qrcode}
                                                     alt="Generated QR Code"
-                                                    className="absolute top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px]" // Centrado
+                                                    className="absolute mt-1 top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px]" // Centrado
                                                 />
 
                                                 {/* Texto debajo del código QR */}
