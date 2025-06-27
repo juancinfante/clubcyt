@@ -11,8 +11,8 @@ import qrcontainer from '@/public/assets/qrcontainer.jpeg';
 import { Spinner } from '@nextui-org/spinner'
 import Swal from 'sweetalert2'
 import { useSession } from 'next-auth/react'
-import html2canvas from "html2canvas";
 import { useRef } from "react";
+import jsPDF from "jspdf";
 
 const page = ({ params }) => {
     const modalRef = useRef();
@@ -278,18 +278,24 @@ const page = ({ params }) => {
 
     }
 
-    const handleDownload = async () => {
+    const handleDownloadPDF = async (usuario) => {
         if (!modalRef.current) return;
 
         const canvas = await html2canvas(modalRef.current);
-        const dataURL = canvas.toDataURL("image/jpeg", 1.0);
+        const imgData = canvas.toDataURL('image/png');
 
-        const link = document.createElement("a");
-        link.href = dataURL;
-        link.download = "usuario_qr.jpg";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "px",
+            format: [canvas.width, canvas.height]
+        });
+
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+
+        // nombre dinámico
+        const fileName = `${usuario.nombre}_clubcyt.pdf`;
+
+        pdf.save(fileName);
     };
 
     const suscribirse = async (email) => {
@@ -451,8 +457,8 @@ const page = ({ params }) => {
                                         <div className="container mx-auto flex justify-center mt-10">
                                             <div className="relative" ref={modalRef}>
                                                 {/* Imagen de fondo con borde redondeado */}
-                                                <Image
-                                                    src={qrcontainer}
+                                                <img
+                                                    src={qrcontainer.src}
                                                     height={500}
                                                     width={300}
                                                     alt="QR Container"
@@ -472,7 +478,7 @@ const page = ({ params }) => {
                                                 />
 
                                                 {/* Texto debajo del código QR */}
-                                                <p className="absolute bottom-28 bg-yellow-200 py-1 px-2 rounded-lg left-1/2 transform -translate-x-1/2 text-black text-lg">
+                                                <p className="absolute bottom-28 font-bold py-1 px-2 rounded-lg left-1/2 transform -translate-x-1/2 text-black text-lg">
                                                     Activo
                                                 </p>
                                             </div>
@@ -488,7 +494,7 @@ const page = ({ params }) => {
                                         cerrar
                                     </button>
                                     <button
-                                        onClick={handleDownload}
+                                        onClick={handleDownloadPDF(usuario)}
                                         className="mt-3 inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
                                     >
                                         Descargar imagen
@@ -603,7 +609,7 @@ const page = ({ params }) => {
             )}
 
             {isModalOpenPromocion && (
-                <div className="relative z-10"  aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="fixed inset-0 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
