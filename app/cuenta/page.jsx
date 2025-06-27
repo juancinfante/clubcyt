@@ -494,7 +494,7 @@ const page = ({ params }) => {
                                         cerrar
                                     </button>
                                     <button
-                                        onClick={handleDownloadPDF(usuario)}
+                                        onClick={() => handleDownloadPDF(usuario)}
                                         className="mt-3 inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
                                     >
                                         Descargar imagen
