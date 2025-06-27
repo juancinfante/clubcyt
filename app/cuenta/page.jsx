@@ -11,9 +11,10 @@ import qrcontainer from '@/public/assets/qrcontainer.jpeg';
 import { Spinner } from '@nextui-org/spinner'
 import Swal from 'sweetalert2'
 import { useSession } from 'next-auth/react'
-
+import html2canvas from "html2canvas";
+import { useRef } from "react";
 const page = ({ params }) => {
-    
+    const modalRef = useRef();
     const { data: session, status, update } = useSession();
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
@@ -324,6 +325,7 @@ const page = ({ params }) => {
     }, [session, status]);
 
 
+
     return (
         <>
             <Navbar />
@@ -600,7 +602,7 @@ const page = ({ params }) => {
             )}
 
             {isModalOpenPromocion && (
-                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div className="relative z-10" ref={modalRef} aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="fixed inset-0 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -733,6 +735,12 @@ const page = ({ params }) => {
                                         onClick={handleCloseModalPromocion} // Cierra el modal
                                     >
                                         cerrar
+                                    </button>
+                                    <button
+                                        onClick={handleDownload}
+                                        className="mt-3 inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+                                    >
+                                        Descargar imagen
                                     </button>
                                 </div>
                             </div>
