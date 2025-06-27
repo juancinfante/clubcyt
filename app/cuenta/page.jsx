@@ -13,6 +13,8 @@ import Swal from 'sweetalert2'
 import { useSession } from 'next-auth/react'
 import { useRef } from "react";
 import jsPDF from "jspdf";
+import html2canvas from 'html2canvas';
+
 
 const page = ({ params }) => {
     const modalRef = useRef();
