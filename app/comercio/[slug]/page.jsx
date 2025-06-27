@@ -11,6 +11,36 @@ import Image from 'next/image';
 import SliderPromo from '@/components/SliderPromo';
 import DescripcionProducto from '@/components/DescripcionProducto';
 
+export async function generateMetadata({ params }) {
+  const producto = await getProdBySlug(params.slug)
+
+  const pageTitle = `${producto.nombre} | ClubCyt`
+  const pageDesc = `${producto.nombre} - ${producto.descripcion?.slice(0, 150)}`
+  
+  return {
+    title: pageTitle,
+    description: pageDesc,
+    openGraph: {
+      title: pageTitle,
+      description: pageDesc,
+      images: [
+        {
+          url: producto.imagen,
+          width: 1200,
+          height: 630,
+          alt: `Imagen de ${producto.nombre}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDesc,
+      images: [producto.imagen],
+    },
+  }
+}
+
 export default async function page({ params }) {
     const producto = await getProdBySlug(params.slug);
 

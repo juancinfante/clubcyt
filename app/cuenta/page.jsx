@@ -11,13 +11,9 @@ import qrcontainer from '@/public/assets/qrcontainer.jpeg';
 import { Spinner } from '@nextui-org/spinner'
 import Swal from 'sweetalert2'
 import { useSession } from 'next-auth/react'
-import html2canvas from "html2canvas";
-import { useRef } from "react";
-
 
 const page = ({ params }) => {
     
-    const modalRef = useRef();
     const { data: session, status, update } = useSession();
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
@@ -442,7 +438,7 @@ const page = ({ params }) => {
             </div>
             {/* Componente del Modal */}
             {isModalOpen && (
-                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" ref={modalRef}>
+                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
