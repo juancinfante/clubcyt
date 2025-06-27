@@ -468,7 +468,7 @@ const page = ({ params }) => {
                                                 />
 
                                                 {/* Nombre del usuario encima del código QR */}
-                                                <h3 className="absolute top-32 left-1/2 transform -translate-x-1/2 text-sm font-semibold text-gray-900">
+                                                <h3 className="absolute top-28 left-1/2 transform -translate-x-1/2 text-sm font-semibold text-gray-900">
                                                     {usuario.nombre} {usuario.apellido}
                                                 </h3>
 
