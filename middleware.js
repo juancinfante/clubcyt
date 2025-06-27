@@ -47,6 +47,7 @@ export async function middleware(req) {
 // Configuración de las rutas protegidas
 export const config = {
   matcher: [
+    "/cuenta", 
     "/cuenta/:path*", 
     "/cuenta/new", 
     "/cuenta/edit", 

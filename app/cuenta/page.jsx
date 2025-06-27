@@ -11,6 +11,10 @@ import qrcontainer from '@/public/assets/qrcontainer.jpeg';
 import { Spinner } from '@nextui-org/spinner'
 import Swal from 'sweetalert2'
 import { useSession } from 'next-auth/react'
+import html2canvas from "html2canvas";
+import { useRef } from "react";
+
+const modalRef = useRef();
 
 const page = ({ params }) => {
 
@@ -276,6 +280,20 @@ const page = ({ params }) => {
 
     }
 
+    const handleDownload = async () => {
+        if (!modalRef.current) return;
+
+        const canvas = await html2canvas(modalRef.current);
+        const dataURL = canvas.toDataURL("image/jpeg", 1.0);
+
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "usuario_qr.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const suscribirse = async (email) => {
 
         try {
@@ -424,7 +442,7 @@ const page = ({ params }) => {
             </div>
             {/* Componente del Modal */}
             {isModalOpen && (
-                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" ref={modalRef}>
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -469,6 +487,12 @@ const page = ({ params }) => {
                                         onClick={handleCloseModal} // Cierra el modal
                                     >
                                         cerrar
+                                    </button>
+                                    <button
+                                        onClick={handleDownload}
+                                        className="mt-3 inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+                                    >
+                                        Descargar imagen
                                     </button>
                                 </div>
                             </div>
@@ -635,16 +659,12 @@ const page = ({ params }) => {
                                                     <label className="block text-sm font-medium text-gray-700" htmlFor="promotion">
                                                         Promoción
                                                     </label>
-                                                    <select
+                                                    <input
+                                                        type="text"
                                                         id="promotion"
                                                         className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                                         onChange={(e) => setPromocion(e.target.value)}
-                                                    >
-                                                        <option value="">Selecciona una promoción</option>
-                                                        <option value="2x1">2x1</option>
-                                                        <option value="3x1">3x1</option>
-                                                        <option value="50% off">50% off</option>
-                                                    </select>
+                                                    />
                                                 </div>
 
                                                 {/* Seleccionar Producto */}
