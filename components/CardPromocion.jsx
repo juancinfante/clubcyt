@@ -237,17 +237,13 @@ const CardPromocion = ({ promocion, producto }) => {
                                                 <label className="block text-sm font-medium text-gray-700" htmlFor="promotion">
                                                     Promoción
                                                 </label>
-                                                <select
+                                                <input
+                                                    type='text'
                                                     value={promocionP}
                                                     id="promotion"
                                                     className="mt-2 block w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                                     onChange={(e) => setPromocionP(e.target.value)}
-                                                >
-                                                    <option value="">Selecciona una promoción</option>
-                                                    <option value="2x1">2x1</option>
-                                                    <option value="3x1">3x1</option>
-                                                    <option value="50% off">50% off</option>
-                                                </select>
+                                                />
                                             </div>
                                             {/* Fecha de inicio */}
                                             <div className="mb-4">
