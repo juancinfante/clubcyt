@@ -468,7 +468,7 @@ const page = ({ params }) => {
                                                 />
 
                                                 {/* Nombre del usuario encima del código QR */}
-                                                <h3 className="absolute top-28 left-1/2 transform -translate-x-1/2 text-sm font-semibold text-gray-900">
+                                                <h3 className="absolute top-32 left-1/2 transform -translate-x-1/2 text-sm font-semibold text-gray-900">
                                                     {usuario.nombre} {usuario.apellido}
                                                 </h3>
 
@@ -476,7 +476,7 @@ const page = ({ params }) => {
                                                 <img
                                                     src={usuario.qrcode}
                                                     alt="Generated QR Code"
-                                                    className="absolute mt-1 top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px]" // Centrado
+                                                    className="absolute top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px]" // Centrado
                                                 />
 
                                                 {/* Texto debajo del código QR */}
@@ -744,12 +744,6 @@ const page = ({ params }) => {
                                         onClick={handleCloseModalPromocion} // Cierra el modal
                                     >
                                         cerrar
-                                    </button>
-                                    <button
-                                        onClick={handleDownload}
-                                        className="mt-3 inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
-                                    >
-                                        Descargar imagen
                                     </button>
                                 </div>
                             </div>
