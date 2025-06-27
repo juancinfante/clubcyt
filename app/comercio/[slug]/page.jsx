@@ -14,8 +14,8 @@ import DescripcionProducto from '@/components/DescripcionProducto';
 export async function generateMetadata({ params }) {
   const producto = await getProdBySlug(params.slug)
 
-  const pageTitle = `${producto.nombre} | ClubCyt`
-  const pageDesc = `${producto.nombre} - ${producto.descripcion?.slice(0, 150)}`
+  const pageTitle = `${producto.nombre}`
+  const pageDesc = `${producto.ubicacion} - ${producto.categoria}`
   
   return {
     title: pageTitle,
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
       description: pageDesc,
       images: [
         {
-          url: producto.imagen,
+          url: producto.portada,
           width: 1200,
           height: 630,
           alt: `Imagen de ${producto.nombre}`,
