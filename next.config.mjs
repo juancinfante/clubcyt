@@ -11,7 +11,7 @@ const nextConfig = {
     return config;
   },
   experimental: {
-    turbo: true,
+    turbo: {},
   },
 };
 
