@@ -14,10 +14,10 @@ import { useSession } from 'next-auth/react'
 import html2canvas from "html2canvas";
 import { useRef } from "react";
 
-const modalRef = useRef();
 
 const page = ({ params }) => {
-
+    
+    const modalRef = useRef();
     const { data: session, status, update } = useSession();
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
