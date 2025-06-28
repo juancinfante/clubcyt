@@ -4,7 +4,7 @@ import Xlogo from '@/public/assets/x-logo.svg'
 export default function BotonCompartirX({ url, texto = '' }) {
   const handleClick = () => {
     // URL para compartir en Twitter/X
-    const twitterUrl = `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(texto)}`;
+    const twitterUrl = `https://x.com/intent/post?text=${encodeURIComponent(texto)}&url=${encodeURIComponent(url)}`;
 
     window.open(
       twitterUrl,
