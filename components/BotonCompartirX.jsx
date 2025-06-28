@@ -1,10 +1,10 @@
 'use client';
 import Xlogo from '@/public/assets/x-logo.svg'
 
-export default function BotonCompartirX({ url }) {
+export default function BotonCompartirX({ url, texto = '' }) {
   const handleClick = () => {
     // URL para compartir en Twitter/X
-    const twitterUrl = `https://x.com/intent/post?url=${encodeURIComponent(url)}}`;
+    const twitterUrl = `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(texto)}`;
 
     window.open(
       twitterUrl,

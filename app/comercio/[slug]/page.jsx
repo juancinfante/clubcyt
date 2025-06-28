@@ -64,7 +64,7 @@ export async function generateMetadata({ params }) {
 
 export default async function page({ params }) {
     const producto = await getProdBySlug(params.slug);
-
+    const texto = " ";
     const urlProducto = `https://clubcyt.com/comercio/${producto.slug}`;
 
     if (!producto || producto.error) {
@@ -142,7 +142,7 @@ export default async function page({ params }) {
                             </div>
                             <div className="flex gap-1">
                             <BotonCompartirFacebook url={urlProducto}/>
-                            <BotonCompartirX url={urlProducto}/>
+                            <BotonCompartirX url={urlProducto} texto={texto}/>
                             </div>
                         </div>
 
