@@ -1,21 +1,23 @@
 'use client';
 import Fb from '@/public/assets/facebook.svg'
 
-
 export default function BotonCompartirFacebook({ url }) {
-  return (
-    <button
-      onClick={() =>
+    const handleClick = () => {
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+
         window.open(
-          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-          '_blank',
-          'noopener,noreferrer'
-        )
-      }
-      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-    >
-      <Fb className="w-8 h-8" />
-      Compartir
-    </button>
-  );
+            facebookUrl,
+            'Compartir en Facebook',
+            'width=600,height=400,scrollbars=no,toolbar=no,menubar=no'
+        );
+    };
+
+    return (
+        <button
+            onClick={handleClick}
+            className="flex items-center"
+        >
+            <Fb className="w-6 h-6" />
+        </button>
+    );
 }
