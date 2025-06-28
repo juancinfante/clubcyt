@@ -12,50 +12,50 @@ import SliderPromo from '@/components/SliderPromo';
 import DescripcionProducto from '@/components/DescripcionProducto';
 
 export async function generateMetadata({ params }) {
-  try {
-    const { slug } = params;
-    const producto = await getProdBySlug(slug);
+    try {
+        const { slug } = params;
+        const producto = await getProdBySlug(slug);
 
-    if (!producto) {
-      return {
-        title: 'Producto no encontrado',
-        description: 'No pudimos encontrar el producto solicitado.',
-      };
+        if (!producto) {
+            return {
+                title: 'Producto no encontrado',
+                description: 'No pudimos encontrar el producto solicitado.',
+            };
+        }
+
+        // Función rápida para quitar etiquetas HTML
+        const stripHtml = (html) => html.replace(/<[^>]*>?/gm, '').trim();
+
+        const descripcionLimpia = stripHtml(producto.descripcion);
+
+        return {
+            title: `${producto.nombre} - ${producto.categoria}`,
+            description: descripcionLimpia,
+            openGraph: {
+                title: `${producto.nombre} - ${producto.categoria}`,
+                description: descripcionLimpia,
+                images: [
+                    {
+                        url: producto.portada,
+                        width: 1200,
+                        height: 630,
+                        alt: `Imagen de ${producto.nombre}`,
+                    },
+                ],
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: `${producto.nombre} - ${producto.categoria}`,
+                description: descripcionLimpia,
+                images: [producto.portada],
+            },
+        };
+    } catch (error) {
+        return {
+            title: 'Error al cargar producto',
+            description: 'Hubo un problema al obtener los datos del producto.',
+        };
     }
-
-    // Función rápida para quitar etiquetas HTML
-    const stripHtml = (html) => html.replace(/<[^>]*>?/gm, '').trim();
-
-    const descripcionLimpia = stripHtml(producto.descripcion);
-
-    return {
-      title: `${producto.nombre} - ${producto.categoria}`,
-      description: descripcionLimpia,
-      openGraph: {
-        title: `${producto.nombre} - ${producto.categoria}`,
-        description: descripcionLimpia,
-        images: [
-          {
-            url: producto.portada,
-            width: 1200,
-            height: 630,
-            alt: `Imagen de ${producto.nombre}`,
-          },
-        ],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: `${producto.nombre} - ${producto.categoria}`,
-        description: descripcionLimpia,
-        images: [ producto.portada ],
-      },
-    };
-  } catch (error) {
-    return {
-      title: 'Error al cargar producto',
-      description: 'Hubo un problema al obtener los datos del producto.',
-    };
-  }
 }
 
 
@@ -136,9 +136,12 @@ export default async function page({ params }) {
                                 <Pin className="w-4 h-4" />
                                 <p>{producto.ubicacion}</p>
                             </div>
-                            <p>
-
-                            </p>
+                            <button
+                                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=https://clubcyt.com/comercio/${producto.slug}`, '_blank')}
+                            >
+                                <Fb className="w-8 h-8" />
+                                Compartir en Facebook
+                            </button>
                         </div>
 
                         <Suspense fallback={<div>Cargando descripción...</div>}>
