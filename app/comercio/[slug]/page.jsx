@@ -14,7 +14,6 @@ import DescripcionProducto from '@/components/DescripcionProducto';
 export async function generateMetadata({ params }) {
   try {
     const { slug } = params;
-    // Supongo que getProdBySlug puede devolver null o undefined si no encuentra el producto
     const producto = await getProdBySlug(slug);
 
     if (!producto) {
@@ -24,12 +23,17 @@ export async function generateMetadata({ params }) {
       };
     }
 
+    // Función rápida para quitar etiquetas HTML
+    const stripHtml = (html) => html.replace(/<[^>]*>?/gm, '').trim();
+
+    const descripcionLimpia = stripHtml(producto.descripcion);
+
     return {
-      title: `${producto.nombre} - ${producto.categoria}`, 
-      description: `${producto.descripcion}`,
+      title: `${producto.nombre} - ${producto.categoria}`,
+      description: descripcionLimpia,
       openGraph: {
         title: `${producto.nombre} - ${producto.categoria}`,
-        description: `${producto.descripcion}`,
+        description: descripcionLimpia,
         images: [
           {
             url: producto.portada,
@@ -42,11 +46,9 @@ export async function generateMetadata({ params }) {
       twitter: {
         card: 'summary_large_image',
         title: `${producto.nombre} - ${producto.categoria}`,
-        description: `${producto.descripcion}`,
-        images: [ producto.portada],
+        description: descripcionLimpia,
+        images: [ producto.portada ],
       },
-      // Opcionalmente, control de cache (para Next.js)
-      // revalidate: 0, // para evitar cache si lo deseas
     };
   } catch (error) {
     return {
@@ -55,6 +57,7 @@ export async function generateMetadata({ params }) {
     };
   }
 }
+
 
 
 export default async function page({ params }) {
