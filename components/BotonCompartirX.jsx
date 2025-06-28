@@ -1,0 +1,25 @@
+'use client';
+import Xlogo from '@/public/assets/x-logo.svg'
+
+export default function BotonCompartirX({ url }) {
+  const handleClick = () => {
+    // URL para compartir en Twitter/X
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}}`;
+
+    window.open(
+      twitterUrl,
+      'Compartir en X',
+      'width=600,height=400,scrollbars=no,toolbar=no,menubar=no'
+    );
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="flex items-center"
+      aria-label="Compartir en X"
+    >
+      <Xlogo className="w-6 h-6"/>
+    </button>
+  );
+}

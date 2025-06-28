@@ -11,6 +11,7 @@ import Image from 'next/image';
 import SliderPromo from '@/components/SliderPromo';
 import DescripcionProducto from '@/components/DescripcionProducto';
 import BotonCompartirFacebook from '@/components/BotonCompartirFacebook';
+import BotonCompartirX from '@/components/BotonCompartirX';
 
 export async function generateMetadata({ params }) {
     try {
@@ -139,7 +140,10 @@ export default async function page({ params }) {
                                 <Pin className="w-4 h-4" />
                                 <p>{producto.ubicacion}</p>
                             </div>
+                            <div className="flex gap-1">
                             <BotonCompartirFacebook url={urlProducto}/>
+                            <BotonCompartirX url={urlProducto}/>
+                            </div>
                         </div>
 
                         <Suspense fallback={<div>Cargando descripción...</div>}>
