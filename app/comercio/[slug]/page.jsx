@@ -10,6 +10,7 @@ import Pin from '@/public/assets/pin.svg'
 import Image from 'next/image';
 import SliderPromo from '@/components/SliderPromo';
 import DescripcionProducto from '@/components/DescripcionProducto';
+import BotonCompartirFacebook from '@/components/BotonCompartirFacebook';
 
 export async function generateMetadata({ params }) {
     try {
@@ -62,6 +63,8 @@ export async function generateMetadata({ params }) {
 
 export default async function page({ params }) {
     const producto = await getProdBySlug(params.slug);
+
+    const urlProducto = `https://clubcyt.com/comercio/${producto.slug}`;
 
     if (!producto || producto.error) {
         // Manejo de producto no encontrado (puedes personalizar esta página)
@@ -136,12 +139,7 @@ export default async function page({ params }) {
                                 <Pin className="w-4 h-4" />
                                 <p>{producto.ubicacion}</p>
                             </div>
-                            <button
-                                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=https://clubcyt.com/comercio/${producto.slug}`, '_blank')}
-                            >
-                                <Fb className="w-8 h-8" />
-                                Compartir en Facebook
-                            </button>
+                            <BotonCompartirFacebook url={urlProducto}/>
                         </div>
 
                         <Suspense fallback={<div>Cargando descripción...</div>}>
