@@ -17,7 +17,7 @@ export default function BotonCompartirFacebook({ url }) {
             onClick={handleClick}
             className="flex items-center"
         >
-            <Fb className="w-6 h-6" />
+            <Fb />
         </button>
     );
 }

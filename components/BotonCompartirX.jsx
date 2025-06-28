@@ -19,7 +19,7 @@ export default function BotonCompartirX({ url, texto = '' }) {
       className="flex items-center"
       aria-label="Compartir en X"
     >
-      <Xlogo className="w-6 h-6"/>
+      <Xlogo />
     </button>
   );
 }
