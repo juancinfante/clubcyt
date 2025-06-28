@@ -8,8 +8,8 @@ export default function BotonCompartirX({ url, texto = '' }) {
 
     window.open(
       twitterUrl,
-      'Compartir en X',
-      'width=600,height=400,scrollbars=no,toolbar=no,menubar=no'
+      '_blank',
+      'width=600,height=400,scrollbars=no,toolbar=no,menubar=no,noopener,noreferrer'
     );
   };
 
