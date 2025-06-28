@@ -25,11 +25,11 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-      title: `${producto.nombre}`,  // cambia "Mi Tienda" por el nombre que quieras
-      description: `${producto.ubicacion} - ${producto.categoria}`,
+      title: `${producto.nombre} - ${producto.categoria}`, 
+      description: `${producto.descripcion}`,
       openGraph: {
-        title: `${producto.nombre}`,
-        description: `${producto.ubicacion} - ${producto.categoria}`,
+        title: `${producto.nombre} - ${producto.categoria}`,
+        description: `${producto.descripcion}`,
         images: [
           {
             url: producto.portada,
@@ -41,9 +41,9 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${producto.nombre}`,
-        description: `${producto.ubicacion} - ${producto.categoria}`,
-        images: [producto.imagen || producto.portada],
+        title: `${producto.nombre} - ${producto.categoria}`,
+        description: `${producto.descripcion}`,
+        images: [ producto.portada],
       },
       // Opcionalmente, control de cache (para Next.js)
       // revalidate: 0, // para evitar cache si lo deseas
