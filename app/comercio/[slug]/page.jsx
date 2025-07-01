@@ -12,6 +12,7 @@ import SliderPromo from '@/components/SliderPromo';
 import DescripcionProducto from '@/components/DescripcionProducto';
 import BotonCompartirFacebook from '@/components/BotonCompartirFacebook';
 import BotonCompartirX from '@/components/BotonCompartirX';
+import BotonCompartirWhatsApp from '@/components/BotonCompartirWhatsapp';
 
 export async function generateMetadata({ params }) {
     try {
@@ -143,6 +144,7 @@ export default async function page({ params }) {
                             <div className="flex gap-1">
                             <BotonCompartirFacebook url={urlProducto}/>
                             <BotonCompartirX url={urlProducto} texto={texto}/>
+                            <BotonCompartirWhatsApp url={urlProducto} />
                             </div>
                         </div>
 
