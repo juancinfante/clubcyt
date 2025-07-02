@@ -13,6 +13,8 @@ import DescripcionProducto from '@/components/DescripcionProducto';
 import BotonCompartirFacebook from '@/components/BotonCompartirFacebook';
 import BotonCompartirX from '@/components/BotonCompartirX';
 import BotonCompartirWhatsApp from '@/components/BotonCompartirWhatsapp';
+import { buildCloudinaryUrl } from '@/lib/utils';
+import OptimizedImage from '@/components/OptimizedImage';
 
 export async function generateMetadata({ params }) {
     try {
@@ -127,9 +129,23 @@ export default async function page({ params }) {
             <Navbar />
             <div className="container mx-auto max-w-6xl">
                 <div className='relative flex justify-center h-56 md:h-80 lg:h-96'>
-                    <img src={producto.portada} alt="" className='w-full h-full object-cover' />
-                    <img src={producto.logo}
-                        className='absolute -bottom-20 rounded-full w-40 h-40 md:w-52 md:h-52 md:-bottom-24 lg:-bottom-28 object-cover bg-white p-2' />
+                    <OptimizedImage
+                              url={producto.portada}
+                              alt={producto.nombre}
+                              crop="fill"
+                              className="h-full w-full object-cover"
+                            />
+                    <OptimizedImage
+                              url={producto.logo}
+                              alt={producto.nombre}
+                              width={200}
+                              height={200}
+                              crop="fill"
+                              className="absolute -bottom-20 rounded-full w-40 h-40 md:w-52 md:h-52 md:-bottom-24 lg:-bottom-28 object-cover bg-white p-2"
+                            />
+                    {/* <img src={portadaOptimizada} alt="" className='w-full h-full object-cover' />
+                    <img src={logoOptimizado}
+                        className='absolute -bottom-20 rounded-full w-40 h-40 md:w-52 md:h-52 md:-bottom-24 lg:-bottom-28 object-cover bg-white p-2' /> */}
                 </div>
                 <div className="grid grid-cols-12 mt-32 gap-8 px-4 md:p-0">
                     <div className="col-span-12">
@@ -142,9 +158,9 @@ export default async function page({ params }) {
                                 <p>{producto.ubicacion}</p>
                             </div>
                             <div className="flex gap-1">
-                            <BotonCompartirFacebook url={urlProducto}/>
-                            <BotonCompartirX url={urlProducto} texto={texto}/>
-                            <BotonCompartirWhatsApp url={urlProducto} />
+                                <BotonCompartirFacebook url={urlProducto} />
+                                <BotonCompartirX url={urlProducto} texto={texto} />
+                                <BotonCompartirWhatsApp url={urlProducto} />
                             </div>
                         </div>
 
@@ -415,17 +431,17 @@ export default async function page({ params }) {
                                 </div>
                                 {producto.web != '' ?
                                     <div className="col-span-6 md:col-span-2 border border-gray-200 rounded-xl p-4">
-                                        <a href={`https://${producto.web}`} className='flex items-center justify-between' target="_blank">
-                                            <h1 className='font-semibold text-md mb-2'>
+                                        <a href={`https://${producto.web}`} className='flex items-center ' target="_blank" rel="noopener noreferrer">
+                                            <h1 className='font-semibold text-md'>
                                                 <span className='pe-2'>🌐</span>
-                                                Web
                                             </h1>
-                                            <div className="flex">
-                                                <Web className="w-6 h-6" />
-                                                <p>{producto.web}</p>
+                                            <div className="flex items-center justify-center gap-1">
+                                                {/* <Web className="w-6 h-6" /> */}
+                                                <p className="max-w-[200px] truncate text-sm text-gray-500" title={producto.web}>{producto.web}</p>
                                             </div>
                                         </a>
                                     </div>
+
                                     : ""
                                 }
                             </div>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import logo from '@/public/assets/logo_blue_clubcyt.png'
 import { Input } from '@nextui-org/input';
 import { Spinner } from '@nextui-org/spinner';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const page = () => {
     const [error, setError] = useState(false);
@@ -106,7 +107,7 @@ const page = () => {
             if (password !== password2) {
                 setErrorPassword(true);
                 setLoading(false);
-            }else{
+            } else {
                 try {
                     const res = await fetch('/api/auth/register', {
                         method: 'POST',
@@ -115,32 +116,32 @@ const page = () => {
                         },
                         body: JSON.stringify({ nombre, apellido, email, password, dni }),
                     });
-                
+
                     const data = await res.json();
-                
+
                     // Verifica si el email ya está en uso
                     if (data.emailExists) {
                         setError(true); // o manejar el error de otra manera
                         setLoading(false);
                         return;
                     }
-                
+
                     // Verifica si el dni ya está en uso
                     if (data.dniExists) {
                         setDniExists(true);
                         setLoading(false);
                         return;
                     }
-                
+
                     // Si no hay errores, continuar con el envío del email
                     const id = data._id;
                     sendEmail({ email, nombre, id });
-                
+
                 } catch (error) {
                     setLoading(false);
                     console.log(error);
                 }
-                
+
             }
         }
         else {
@@ -183,7 +184,8 @@ const page = () => {
                                 color={error ? "danger" : ""}
                                 isClearable required onChange={(e) => {
                                     setError(false)
-                                    setEmail(e.target.value)}} />
+                                    setEmail(e.target.value)
+                                }} />
                         </div>
                         <div className='relative w-full'>
                             <Input type="number" label="Numero de DNI"
@@ -191,7 +193,7 @@ const page = () => {
                                 errorMessage={
                                     errorDNI ? "Coloque un DNI valido." : dniExists ? "El DNI ya está registrado." : ""
                                 }
-                                color={ errorDNI || dniExists ? "danger" : ""}
+                                color={errorDNI || dniExists ? "danger" : ""}
                                 isClearable required onChange={(e) => {
                                     setDNI(e.target.value)
                                     setErrorDNI(false)
@@ -210,7 +212,7 @@ const page = () => {
                                 isClearable required onChange={(e) => {
                                     setPassword(e.target.value)
                                     setErrorPassword(false)
-                                    }} />
+                                }} />
                         </div>
                         <div className='relative w-full'>
                             <Input type="password" label="Repite contraseña"
@@ -218,7 +220,7 @@ const page = () => {
                                 isClearable required onChange={(e) => {
                                     setPassword2(e.target.value)
                                     setErrorPassword(false)
-                                    }} />
+                                }} />
                         </div>
                         {
                             errorPassword ?
@@ -240,9 +242,13 @@ const page = () => {
                 </div>
             </div>
             <div className="col-span-6 h-full hidden md:block">
-                <img src="https://th.bing.com/th/id/R.8489b868f5d35b9592690f39a4ed88c8?rik=p1VjMWk0l05IFQ&pid=ImgRaw&r=00"
-                    alt="banner"
-                    className='w-full h-full object-cover' />
+
+                <OptimizedImage
+                    url="https://res.cloudinary.com/dwjhbrsmf/image/upload/v1751437549/clubcyt/kobvsgzkcswpivtdlwko_uxne07.jpg"
+                    alt="register"
+                    crop="fill"
+                    className="h-full w-full object-cover"
+                />
             </div>
         </div>
     )

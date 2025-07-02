@@ -1,6 +1,7 @@
 "use client"
 // components/Slider.js
 import { useState } from 'react';
+import OptimizedImage from './OptimizedImage';
 
 const Slider = ({ fotos }) => {
   const [index, setIndex] = useState(0);
@@ -24,7 +25,15 @@ const Slider = ({ fotos }) => {
             className={`flex-shrink-0 w-full h-full transition-transform transform ${i === index ? 'translate-x-0' : 'translate-x-full'} `}
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
-            <img src={image} className="w-full h-full object-cover" alt={`Slide ${i + 1}`} />
+            {/* <img src={image} className="w-full h-full object-cover" alt={`Slide ${i + 1}`} /> */}
+            <OptimizedImage
+              url={image}
+              alt=""
+              width={600}
+              height={400}
+              crop="fill"
+              className="w-full h-full object-cover"
+            />
           </div>
         ))}
       </div>

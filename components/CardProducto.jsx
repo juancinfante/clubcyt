@@ -5,10 +5,12 @@ import React from 'react'
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import Swal from 'sweetalert2';
+import OptimizedImage from './OptimizedImage';
 
-const CardProducto = ({ producto, loading , email }) => {
+const CardProducto = ({ producto, loading }) => {
   const router = useRouter()
   const pathName = usePathname();
+
   if (loading) {
     // Mostrar skeletons cuando loading sea true
     return (
@@ -19,28 +21,27 @@ const CardProducto = ({ producto, loading , email }) => {
       </div>
     );
   }
-
   const suscribirse = async () => {
     try {
-        const response = await fetch("/api/suscribirse", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, producto}), // Enviamos al backend
-        });
+      const response = await fetch("/api/suscribirse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, producto }), // Enviamos al backend
+      });
 
-        if (!response.ok) {
-            throw new Error("Error al crear la suscripción");
-        }
+      if (!response.ok) {
+        throw new Error("Error al crear la suscripción");
+      }
 
-        const data = await response.json();
-        // Redirigimos al usuario a Mercado Pago
-        window.location.href = data.url;
+      const data = await response.json();
+      // Redirigimos al usuario a Mercado Pago
+      window.location.href = data.url;
     } catch (error) {
-        console.error("Error:", error);
+      console.error("Error:", error);
     }
-};
+  };
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -95,13 +96,13 @@ const CardProducto = ({ producto, loading , email }) => {
           timer: 1500,
           timerProgressBar: true,
           didOpen: () => {
-            localStorage.setItem("id_producto",producto._id);
+            localStorage.setItem("id_producto", producto._id);
             Swal.showLoading();
             const timer = Swal.getPopup().querySelector("b");
             timerInterval = setInterval(() => {
               // timer.textContent = `${Swal.getTimerLeft()}`;
-            // router.push("https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808473dd91620173de7e3e8803d6")
-            suscribirse()
+              // router.push("https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c93808473dd91620173de7e3e8803d6")
+              suscribirse()
             }, 1000);
           },
           willClose: () => {
@@ -121,14 +122,21 @@ const CardProducto = ({ producto, loading , email }) => {
   return (
     <div className={pathName.startsWith("/cuenta") ? "col-span-12 sm:col-span-6 md:col-span-4 rounded-xl overflow-hidden" : "col-span-12 md:col-span-4 rounded-xl overflow-hidden"}>
       <Link href={`/comercio/${producto.slug}`}>
-        <img src={producto.logo} alt="" className='h-56 w-full object-cover rounded-xl' />
+        <OptimizedImage
+          url={producto.logo}
+          alt={producto.nombre}
+          width={300}
+          height={210}
+          crop="fill"
+          className="h-full w-full object-cover"
+        />
         <div className=" pt-3">
           <div className="flex gap-4 pb-2">
             {
-              producto.descuento != "Ninguno" ? 
-              <span className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-md'>{producto.descuento}</span>
-              : 
-              ""
+              producto.descuento != "Ninguno" ?
+                <span className='text-green-700 bg-green-100 px-2 py-1 text-sm font-semibold rounded-md'>{producto.descuento}</span>
+                :
+                ""
             }
             <span className='bg-gray-200 text-gray-500 px-2 py-1 text-sm font-semibold rounded-md'>{producto.categoria}</span>
             {pathName.startsWith("/cuenta") ?
